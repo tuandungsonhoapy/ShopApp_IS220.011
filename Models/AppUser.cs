@@ -9,11 +9,15 @@ namespace DAFW_IS220.Models
     {
         [StringLength(200)]
         [Column(TypeName = "varchar")]
-        public string? TENKH { set; get; }
+        public string TENKH { set; get; }
 
         [StringLength(5)]
         [Column(TypeName = "varchar")]
-        public string? GIOITINH { set; get; }
+        public string GIOITINH { set; get; }
+
+        [StringLength(255)]
+        [Column(TypeName = "varchar")]
+        public string? DIACHI { set; get; }
 
         // [Required]     
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]  

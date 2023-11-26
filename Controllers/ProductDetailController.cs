@@ -6,6 +6,8 @@ using System.Data.Entity;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DAFW_IS220.Controllers
 {
@@ -41,6 +43,7 @@ namespace DAFW_IS220.Controllers
         }
     }
 
+    [Authorize]
     public class ProductDetailController : Controller
     {
         private readonly ILogger<ProductDetailController> _logger;
@@ -114,10 +117,12 @@ namespace DAFW_IS220.Controllers
 
         /// Thêm sản phẩm vào cart
         // [Route("addcart/{productid:int}/", Name = "addcart")]
+
         [HttpPost]
         [Route("/addcart", Name = "addcart")]
         public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
         {
+
             // Lấy đối tượng HttpContext từ Controller
             var httpContext = HttpContext;
 
@@ -184,6 +189,7 @@ namespace DAFW_IS220.Controllers
             // Lưu cart vào Session
             cartService.SaveCartSession(cart);
             // Chuyển đến trang hiện thị Cart
+            TempData["StatusMessage"] = "Đã thêm sản phẩm vào giỏ hàng!";
             return RedirectToAction(nameof(Cart));
         }
 

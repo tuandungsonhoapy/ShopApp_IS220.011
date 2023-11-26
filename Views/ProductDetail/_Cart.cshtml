@@ -83,7 +83,7 @@ else {
             <table class="table table-hover">
                 <thead class="table-header">
                     <tr class="table-header-row">
-                        <th class="header-column0"></th>
+                        @* <th class="header-column0"></th> *@
                         <th class="header-column1">Sản phẩm</th>
                         <th class="header-column2">Giá</th>
                         <th class="header-column3">Số lượng</th>
@@ -99,7 +99,7 @@ else {
 
                         total += thanhtien;
                         <tr class="rowtb">
-                            <td><input type="checkbox" name="" id=""></td>
+                            @* <td><input type="checkbox" name="" id=""></td> *@
                             <td>
                                 <div class="box-rowtb-column1">
                                     <div class="rowtb-column1-item"><img class="img-rowtb" src="http://localhost:5235/contents/Img/Product/@cartitem.product.MainImg"
@@ -165,7 +165,7 @@ else {
                         <p class="total"><b>@(total.ToString())đ</b></p>
                     </div>
                     <div class="box-thanh-toan-button">
-                        <a asp-action="Payment" asp-controller="Cart"><button class="btn-thanh-toan">THANH TOÁN</button></a>
+                        <a asp-action="Index" asp-controller="Order"><button class="btn-thanh-toan">THANH TOÁN</button></a>
                     </div>
                 </div>
             </div>

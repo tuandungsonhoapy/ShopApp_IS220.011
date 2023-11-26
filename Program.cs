@@ -54,6 +54,9 @@ builder.Services.AddSingleton<RegisterViewModel, RegisterViewModel>();
 
 builder.Services.AddScoped<RegisterViewModel>();
 
+builder.Services.AddScoped<UserManager<AppUser>>();
+builder.Services.AddScoped<SignInManager<AppUser>>();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Thiết lập về Password
