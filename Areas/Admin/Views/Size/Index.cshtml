@@ -1,0 +1,38 @@
+@model IEnumerable<App.DBModels.SIZE>
+
+@{
+    ViewData["Title"] = "Index";
+    int i = 0;
+}
+
+<h1>Quản lý size</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @(++i)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.MASIZE">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

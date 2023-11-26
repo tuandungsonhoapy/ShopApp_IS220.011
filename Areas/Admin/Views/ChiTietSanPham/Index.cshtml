@@ -1,0 +1,60 @@
+@model IEnumerable<App.DBModels.CHITIETSANPHAM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Thông tin các mẫu sản phẩm</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SANPHAM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SANPHAM.TENSP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MAUSAC.TENMAU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SIZE)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.SOLUONG)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SANPHAM.MASP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SANPHAM.TENSP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MAUSAC.TENMAU)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SIZE.Size)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.SOLUONG)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MACTSP">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.MACTSP">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

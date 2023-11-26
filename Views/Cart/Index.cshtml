@@ -1,0 +1,108 @@
+<div class="container mt-3 container-content">
+    <h1 class="text-header-content">GIỎ HÀNG</h1>
+    <table class="table table-hover">
+        <thead class="table-header">
+            <tr class="table-header-row">
+                <th class="header-column0"></th>
+                <th class="header-column1">Sản phẩm</th>
+                <th class="header-column2">Giá</th>
+                <th class="header-column3">Số lượng</th>
+                <th class="header-column4">Thành tiền</th>
+                <th class="header-column5"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="rowtb">
+                <td><input type="checkbox" name="" id=""></td>
+                <td>
+                    <div class="box-rowtb-column1">
+                        <div class="rowtb-column1-item"><img class="img-rowtb" src="/img/product/picture2.jpg" alt=""></div>
+                        <div class="rowtb-column1-item">
+                            <p>
+                                Đầm nhung dáng dài <br>
+                                Màu: Đen <br>
+                                Size: S
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column2 box-rowtb">
+                        <b class="">300.000đ</b>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column3 box-rowtb">
+                        <input class="input-number" type="number" name="" id="">
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column4 box-rowtb">
+                        <b>600.000đ</b>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column5 box-rowtb">
+                        <button class="btn-delete"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="rowtb">
+                <td><input type="checkbox" name="" id=""></td>
+                <td>
+                    <div class="box-rowtb-column1">
+                        <div class="rowtb-column1-item"><img class="img-rowtb" src="/img/product/picture2.jpg" alt=""></div>
+                        <div class="rowtb-column1-item">
+                            <p>
+                                Đầm nhung dáng dài <br>
+                                Màu: Đen <br>
+                                Size: S
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column2 box-rowtb">
+                        <b class="">300.000đ</b>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column3 box-rowtb">
+                        <input class="input-number" type="number" name="" id="">
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column4 box-rowtb">
+                        <b>600.000đ</b>
+                    </div>
+                </td>
+                <td>
+                    <div class="box-rowtb-column5 box-rowtb">
+                        <button class="btn-delete"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container mt-5 content-bottom">
+        <div>
+            <button class="btn-continue"><a asp-controller="Home" asp-action="Index">Tiếp tục mua sắm</a></button>
+        </div>
+        <div class="box-thanh-toan">
+            <div class="box-thanh-toan-discount">
+                <p><b>Mã giảm giá</b></p>
+                <p><a href="#">Chọn hoặc nhập mã</a></p>
+            </div>
+            <hr class="line-thanh-toan">
+            <div class="box-thanh-toan-tongtien">
+                <p><b>Tổng tiền</b></p>
+                <p class="total"><b>779.000đ</b></p>
+            </div>
+            <div class="box-thanh-toan-button">
+                <a asp-action="Payment"><button class="btn-thanh-toan">THANH TOÁN</button></a>
+            </div>
+        </div>
+    </div>
+</div>

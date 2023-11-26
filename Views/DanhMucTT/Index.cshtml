@@ -1,0 +1,81 @@
+@* @using DAFW_IS220.Models
+@model IEnumerable<SANPHAMModel>
+
+<h1>Thời trang nữ</h1>
+<div class="container">
+    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+        <!-- Indicators/dots -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+        </div>
+
+        <!-- The slideshow/carousel -->
+        <div class="carousel-inner carousel_img">
+            <div class="carousel-item active">
+                <img src="/img/main_slide/la.jpg" alt="Los Angeles" class="d-block w-100 carousel_img">
+            </div>
+            <div class="carousel-item carousel_img">
+                <img src="/img/main_slide/chicago.jpg" alt="Chicago" class="d-block w-100 carousel_img">
+            </div>
+            <div class="carousel-item carousel_img">
+                <img src="/img/main_slide/ny.jpg" alt="New York" class="d-block w-100 carousel_img">
+            </div>
+        </div>
+
+        <!-- Left and right controls/icons -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
+<h2>Danh mục sản phẩm</h2>
+<div class="home-product">
+    <!-- khung chứa danh mục sản phẩm -->
+    <!-- -- Grid -> row-> column  -->
+    <div class="grid__row">
+        @{
+            foreach (var item in Model)
+            {
+                <div class="grid__colum-2">
+                    <!-- product item -->
+                    <a href="#">
+                        <div class="home-product-item" href="#">
+                            <div class="home-product-item__img"
+                                style="background-image: url(/img/DanhMucTT/dam-yem-nhum-co-xep-ly-tang-2-510x765.jpg);">
+                            </div>
+                            <div style="text-align: center;"><a class="home-product-item__img__name">@item.TENSP</a></div>
+                            <div style="justify-content: center;" class="home-product-item__price">
+                                <span class="home-product-item__img__price-curent">@item.GIABAN đ</span>
+                                <span style="opacity: 0.8; font-size: 20px;" class="home-product-item__img__price-old">@item.GIAGOC</span>
+                            </div>
+                            <div style="justify-content: space-around;" class="home-product-item__action">
+                                <div>
+                                    <span class="home-product-item_like home-product-item_like--liked">
+                                        <i class="home-product-item_like-empty fa-regular fa-heart"></i>
+                                        <i class="home-product-item_like-fill fa-solid fa-heart"></i>
+                                    </span>
+                                </div>
+                                <div class="home-product-item__rating">
+                                    <i class="home-product-item__star--gold fa-regular fa-star"></i>
+                                    <i class="home-product-item__star--gold fa-regular fa-star"></i>
+                                    <i class="home-product-item__star--gold fa-regular fa-star"></i>
+                                    <i class="home-product-item__star--gold fa-regular fa-star"></i>
+                                    <i class="fa-regular fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="home-product-item__sale-of">
+                                <span class="span home-product-item__hot">Yêu thích</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div> *@

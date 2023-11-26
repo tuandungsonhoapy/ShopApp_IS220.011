@@ -1,0 +1,423 @@
+﻿@* @using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Authentication
+@using App.Areas.Identity.Models.AccountViewModels
+@using Microsoft.AspNetCore.Identity
+@using DAFW_IS220.Models
+@model LoginViewModel
+@inject SignInManager<AppUser> SignInManager
+
+
+@{
+ViewData["Title"] = "Đăng nhập";
+}
+
+<h1>@ViewData["Title"].</h1>
+<div class="row">
+<div class="col-md-8">
+<section>
+<form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post"
+class="form-horizontal" role="form">
+<h4>Sử dụng tài khoản đã đăng ký để đăng nhập</h4>
+<hr />
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="form-group">
+<label asp-for="UserNameOrEmail" class="control-label"></label>
+<div class="col-md-10">
+<input asp-for="UserNameOrEmail" class="form-control" />
+<span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+</div>
+</div>
+<div class="form-group">
+<label asp-for="Password" class="control-label"></label>
+<div class="col-md-10">
+<input asp-for="Password" class="form-control" />
+<span asp-validation-for="Password" class="text-danger"></span>
+</div>
+</div>
+<div class="form-group">
+<div class="col-md-offset-2 col-md-10">
+<div class="checkbox">
+<label asp-for="RememberMe">
+<input asp-for="RememberMe" />
+@Html.DisplayNameFor(m => m.RememberMe)
+</label>
+</div>
+</div>
+</div>
+<div class="form-group">
+<div class="col-md-offset-2 col-md-10">
+<button type="submit" class="btn btn-primary">Đăng nhập</button>
+</div>
+</div>
+<p>
+<a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Chưa có tài khoản? Đăng ký</a>
+</p>
+<p>
+<a asp-action="ForgotPassword">Quyên mật khẩu?</a>
+</p>
+</form>
+</section>
+</div>
+<div class="col-md-4">
+<section>
+<h4>Đăng nhập bằng tài khoản.</h4>
+<hr />
+@{
+var schemes = await SignInManager.GetExternalAuthenticationSchemesAsync();
+var loginProviders = schemes.ToList();
+if (loginProviders.Count == 0)
+{
+<div>
+<p>
+Ứng dụng chưa hỗ trợ đăng nhập từ tài khoản ngoài
+</p>
+</div>
+}
+else
+{
+<form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]"
+method="post" class="form-horizontal" role="form">
+<div>
+<p>
+@foreach (var provider in loginProviders)
+
+{
+<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name"
+title="Log in using your @provider.Name account">@provider.Name</button>
+}
+</p>
+</div>
+</form>
+}
+}
+</section>
+</div>
+</div>
+
+@section Scripts {
+@{
+await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+} *@
+
+
+
+
+
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Authentication
+@using App.Areas.Identity.Models.AccountViewModels
+@using Microsoft.AspNetCore.Identity
+@using DAFW_IS220.Models
+@model LoginViewModel
+@inject SignInManager<AppUser> SignInManager
+@inject App.Areas.Identity.Models.AccountViewModels.RegisterViewModel register
+
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/DangNhap.css" />
+    <title>Sign in & Sign up Form</title>
+    <!-- 2 thẻ link và script nhúng vào để sử dụng bootstrap 5-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- link đến cdn fontawesome để sử dụng các icon trên web fontawesome.com -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- link đến cdn normalize để chỉnh sửa lại các thuộc tính cơ bản của một trang html để dễ code hơn -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css?_cacheOverride=1696731791293"
+        integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        .custom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border: 2px solid #000;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .custom-button:hover {
+            background-color: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container_all">
+        <div class="container">
+            <div class="forms-container">
+                <div class="signin-signup">
+                    <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]"
+                        method="post" class="form-horizontal sign-in-form" role="form">
+                        <h2 class="title"> @ViewData["Title"]</h2>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                        <div class="col-md-10 input-field">
+                            <i class="fas fa-lock"></i>
+                            <input asp-for="UserNameOrEmail" class="form-control" placeholder="Username" />
+                            <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                        </div>
+
+
+
+
+                        <div class="col-md-10 input-field">
+                            <i class="fas fa-lock"></i>
+                            <input asp-for="Password" class="form-control" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <div class="checkbox">
+                                    <label asp-for="RememberMe">
+                                        <input asp-for="RememberMe" />
+                                        @Html.DisplayNameFor(m => m.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit"
+                                    style="font-weight: 700; border-color: rgb(11, 11, 11); border-radius: 10px;"
+                                    value="Đăng Nhập" class="btn solid btn_login" />
+                            </div>
+                        </div>
+
+                        <a class="custom-button" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Đăng
+                            Ký</a>
+                        <p>
+                            <a asp-action="ForgotPassword">Quyên mật khẩu?</a>
+                        </p>
+
+                        <p class="social-text">Hoặc đăng nhập với</p>
+                        <div class="social-media">
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-google"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </form>
+
+
+                    @* <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]"
+                    method="post" class="form-horizontal sign-up-form" role="form">
+                    <h2 class="title"> Đăng Ký</h2>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                    <label asp-for="@register.UserName" class="col-md-10 control-label"></label>
+                    <div class="col-md-10 input-field">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="@register.UserName" class="form-control" />
+                    <span asp-validation-for="@register.UserName" class="text-danger"></span>
+                    </div>
+                    </div>
+
+                    <div class="form-group">
+                    <label asp-for="@register.Email" class="col-md-10 control-label"></label>
+                    <div class="col-md-10 input-field">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="@register.Email" class="form-control" />
+                    <span asp-validation-for="@register.Email" class="text-danger"></span>
+                    </div>
+                    </div>
+
+                    <div class="form-group">
+                    <label asp-for="@register.Password" class="col-md-10 control-label"></label>
+                    <div class="col-md-10 input-field">
+                    <i class="fas fa-lock"></i>
+                    <input asp-for="@register.Password" class="form-control" />
+                    <span asp-validation-for="@register.Password" class="text-danger"></span>
+                    </div>
+                    </div>
+
+                    <div class="form-group">
+                    <label asp-for="@register.ConfirmPassword" class="col-md-10 control-label"></label>
+                    <div class="col-md-10 input-field">
+                    <i class="fas fa-lock"></i>
+                    <input asp-for="@register.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="@register.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    </div>
+
+                    <div class="gender-input">
+                    <div id=" male-input">
+
+                    <input type="radio" name="gender" value="male" id="male"
+                    style="transform: scale(1.5);" />
+                    <label for="male">Nam</label>
+                    </div>
+                    <div id="female-input">
+
+                    <input type="radio" name="gender" value="female" id="female"
+                    style="transform: scale(1.5);" />
+                    <label for="female">Nữ</label>
+                    </div>
+                    </div>
+
+                    <div class="input-field">
+                    <i class="fas fa-cake"></i>
+                    <input type="date" placeholder="Birthday" style="color: #aaa;" />
+                    </div>
+                    <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                    <input type="submit"
+                    style="font-weight: 700; border-color: rgb(11, 11, 11); border-radius: 10px;"
+                    class="btn btn_sign_up" value="Đăng Ký" />
+                    </div>
+                    </div>
+                    </form> *@
+
+                </div>
+            </div>
+
+            <div class="panels-container">
+                <div class="panel left-panel">
+                    <div class="content">
+                        <h3> Bạn mới biết đến cửa hàng chúng tôi ?</h3>
+                        <p style="text-align: justify;">
+                            Cửa hàng chúng tôi là điểm đến lý tưởng cho những người yêu thời trang và muốn thể hiện
+                            phong cách cá nhân.
+                            Chúng tôi tự hào là một cửa hàng thời trang chất lượng, mang đến những bộ sưu tập đa dạng về
+                            quần áo, giày
+                            dép và phụ kiện để đáp ứng mọi nhu cầu thời trang của bạn.
+                        </p>
+                        @* <button class="btn transparent" id="sign-up-btn">
+                            Đăng Ký
+                        </button> *@
+                    </div>
+                    <img src="/Users/macbook/Downloads/login/Sliding-Sign-In-Sign-Up-Form/img/log.svg" class="image"
+                        alt="" />
+                </div>
+                <div class="panel right-panel">
+                    <div class="content">
+                        <h3>Đã có tài khoản ?</h3>
+                        <p style="text-align: justify;">
+                            Cửa hàng chúng tôi là điểm đến lý tưởng cho những người yêu thời trang và muốn thể hiện
+                            phong cách cá nhân.
+                            Chúng tôi tự hào là một cửa hàng thời trang chất lượng, mang đến những bộ sưu tập đa dạng về
+                            quần áo, giày
+                            dép và phụ kiện để đáp ứng mọi nhu cầu thời trang của bạn.
+                        </p>
+                        <button class="btn transparent" id="sign-in-btn">
+                            Đăng Nhập
+                        </button>
+                    </div>
+                    <img src="/Users/macbook/Downloads/login/Sliding-Sign-In-Sign-Up-Form/img/register.svg"
+                        class="image" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+    <!--footer-->
+    <footer>
+        <div class="container_footer">
+            <div class="container_footer_in">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h3>Giới thiệu</h3>
+                        <span>Đây là một trang web bán áo quần, phục vụ cho đồ án môn phát triển web của học sinh trường
+                            UIT</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <h3>Thông tin liên hệ</h3>
+                        <ul class="footer__contact_info_ul">
+                            <li class="foooter__contact_info_li">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>25, Nguyễn Du, Khu Phố 6, phường Linh Trung, TP. Thủ Đức</span>
+                            </li>
+                            <li class="foooter__contact_info_li">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>0867474444</span>
+                            </li>
+                            <li class="foooter__contact_info_li">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span>email123@gmail.com</span>
+                            </li>
+                            <li class="foooter__contact_info_li">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>9h-18h từ thứ 2 đến chủ nhật</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3">
+                        <h3>Nội dung chính sách</h3>
+                        <ul class="footer__policy_ul">
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Những câu hỏi
+                                    thường gặp</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách thành
+                                    viên</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách thanh
+                                    toán</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách vận
+                                    chuyển</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách khiếu
+                                    nại</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách đổi
+                                    trả</a></li>
+                            <li class="footer__policy_li"><a class="footer__policy_li_link" href="#">Chính sách bảo
+                                    hành</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3">
+                        <h3>Fanpage</h3>
+                        <a href="#"><i class="contact_info__icon fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="contact_info__icon fa-brands fa-square-instagram"></i></a>
+                        <a href="#"><i class="contact_info__icon fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom_footer">
+                <p>
+                    Copyright © 2023
+                    <a href="">Web_Name</a>
+                    .
+                    <a href="">Powered by Nhom_2</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script src="/js/DangNhap.js"></script>
+
+</body>
+
+</html>

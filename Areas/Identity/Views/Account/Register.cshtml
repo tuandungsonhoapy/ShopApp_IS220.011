@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DAFW_IS220.Models
+@inject SignInManager<AppUser> SignInManager
+
+@model App.Areas.Identity.Models.AccountViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+    Layout = "_MasterLayout";
+}
+
+<h1>@ViewData["Title"].</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <form style="display: flex; flex-direction: column; align-items: center;" asp-controller="Account"
+                asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal"
+                role="form">
+                <h4>Tạo tài khoản mới trên website.</h4>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div style="width: 40%;" class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="UserName" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Email" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 40%;" class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Password" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="ConfirmPassword" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 40%;" class="row">
+                    <div class="form-group">
+                        <label asp-for="TenKH" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="TenKH" class="form-control" />
+                            <span asp-validation-for="TenKH" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SDT" class="col-md-12 control-label"></label>
+                        <div class="col-md-12">
+                            <input asp-for="SDT" class="form-control" />
+                            <span asp-validation-for="SDT" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 40%;" class="row">
+                    <div class="form-group">
+                        <label asp-for="GioiTinh" class="col-md-12 control-label"></label>
+                        <div style="display: flex; justify-content: space-evenly;" class="col-md-12">
+                            <div class="form-check">
+                                <input type="checkbox" asp-for="GioiTinh" value="nam" class="form-check-input" />
+                                <label class="form-check-label" for="GioiTinh">Nam</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" asp-for="GioiTinh" value="nữ" class="form-check-input" />
+                                <label class="form-check-label" for="GioiTinh">Nữ</label>
+                            </div>
+                            <span asp-validation-for="GioiTinh" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="margin-top: 24px; text-align: center;" class="col-md-offset-2 col-md-12">
+                        <button type="submit" class="btn btn-primary">Đăng ký</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+    @* <div class="col-md-4">
+    <section>
+    <h4>Đăng nhập bằng tài khoản.</h4>
+    <hr />
+    @{
+    var schemes = await SignInManager.GetExternalAuthenticationSchemesAsync();
+    var loginProviders = schemes.ToList();
+    if (loginProviders.Count == 0)
+    {
+    <div>
+    <p>
+    Ứng dụng chưa hỗ trợ đăng nhập từ tài khoản ngoài
+    </p>
+    </div>
+    }
+    else
+    {
+    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post"
+    class="form-horizontal" role="form">
+    <div>
+    <p>
+    @foreach (var provider in loginProviders)
+    {
+    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your
+    @provider.Name account">@provider.Name</button>
+    }
+    </p>
+    </div>
+    </form>
+    }
+    }
+    </section>
+    </div> *@
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,245 @@
+@using DAFW_IS220.Models
+@model List<CartItem>
+@*
+<h2>GIỎ HÀNG</h2>
+
+@if (Model.Count > 0) {
+decimal total = 0;
+int stt = 1;
+
+<table class="table">
+<tr>
+<th>#</th>
+<th>Sản phẩm</th>
+<th>Giá</th>
+<th>Số lượng</th>
+<th>Thành tiền</th>
+<th></th>
+</tr>
+@foreach (var cartitem in Model)
+{
+var thanhtien = cartitem.quantity * (cartitem.product != null ? cartitem.product.GIABAN : 0);
+
+total += thanhtien;
+
+<tr>
+<td>@(stt++)</td>
+<td>@cartitem.product.TENSP</td>
+<td>@(cartitem.product.GIABAN.ToString("n0"))</td>
+<td><input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.product.MASP}")"/></td>
+<td>@(thanhtien.ToString("n0"))</td>
+<td>
+<button class="btn btn-success updatecartitem"
+data-productid="@cartitem.product.MASP">Cập nhật</button>
+<a asp-route="removecart" asp-route-productid="@cartitem.product.MASP"
+class="btn btn-danger">Xóa</a>
+</td>
+</tr>
+}
+<tr>
+<td colspan="4" class="text-right">Tổng tiền</td>
+<td>@(total.ToString("n0"))</td>
+<td></td>
+</tr>
+</table>
+
+<a asp-controller="ViewProduct" asp-action="Checkout" class="btn btn-success">Gửi đơn hàng</a>
+
+@section Scripts {
+<script>
+$(document).ready(function () {
+$(".updatecartitem").click(function (event) {
+event.preventDefault();
+var productid = $(this).attr("data-productid");
+var quantity = $("#quantity-" + productid).val();
+$.ajax({
+type: "POST",
+url:"@Url.RouteUrl("updatecart")",
+data: {
+productid: productid,
+quantity:quantity
+},
+success: function (result) {
+window.location.href = "@Url.RouteUrl("cart")";
+}
+});
+});
+});
+</script>
+}
+
+}
+else {
+<p class="alert alert-danger">Giỏ hàng trống</p>
+} *@
+
+<div class="containercart_all">
+    <div class="container mt-3 container-content container-content-productdetail1">
+        <h1 class="text-header-content">GIỎ HÀNG</h1>
+        @if (Model.Count() > 0)
+        {
+            decimal total = 0;
+            @* int stt = 1; *@
+            <table class="table table-hover">
+                <thead class="table-header">
+                    <tr class="table-header-row">
+                        <th class="header-column0"></th>
+                        <th class="header-column1">Sản phẩm</th>
+                        <th class="header-column2">Giá</th>
+                        <th class="header-column3">Số lượng</th>
+                        <th class="header-column4">Thành tiền</th>
+                        <th class="header-column5"></th>
+                        @* <th class="header-column6"></th> *@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cartitem in Model)
+                    {
+                        var thanhtien = cartitem.quantity * (cartitem.product != null ? cartitem.product.GIABAN : 0);
+
+                        total += thanhtien;
+                        <tr class="rowtb">
+                            <td><input type="checkbox" name="" id=""></td>
+                            <td>
+                                <div class="box-rowtb-column1">
+                                    <div class="rowtb-column1-item"><img class="img-rowtb" src="http://localhost:5235/contents/Img/Product/@cartitem.product.MainImg"
+                                            alt="">
+                                    </div>
+                                    <div class="rowtb-column1-item">
+                                        <p>
+                                            @cartitem.product.TENSP <br>
+                                            Màu: @cartitem.product.TENMAU <br>
+                                            Size: @cartitem.product.Size
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-rowtb-column2 box-rowtb">
+                                    <b class="">@cartitem.product.GIABAN</b>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-rowtb-column3 box-rowtb">
+                                    <input min="1" style="width: 80px;" class="inputvaluenumber" asp-for="@cartitem.quantity"
+                                        data-productid="@cartitem.product.MASP" data-colorid="@cartitem.product.MAMAU"
+                                        data-sizeid="@cartitem.product.MASIZE"
+                                        id="@($"quantity-{cartitem.product.MASP}-{cartitem.product.MAMAU}-{cartitem.product.MASIZE}")" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-rowtb-column4 box-rowtb">
+                                    <b>@(cartitem.product.GIABAN * cartitem.quantity)</b>
+                                </div>
+                            </td>
+                            @* <td>
+                    <button style="width: 90px;" class="btn btn-success updatecartitem"
+                    data-productid="@cartitem.product.MASP" data-colorid="@cartitem.product.MAMAU"
+                    data-sizeid="@cartitem.product.MASIZE">Cập
+                    nhật</button>
+                    </td> *@
+                            <td>
+                                <div class="box-rowtb-column5 box-rowtb">
+                                    <a asp-route="removecart" asp-route-productid="@cartitem.product.MASP" class="btn"><i
+                                            class="fa-solid fa-xmark"></i></a>
+                                    @* <button class="btn-delete"></button> *@
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="container mt-5 content-bottom">
+                <div>
+                    <button class="btn-continue"><a asp-controller="Home" asp-action="Index">Tiếp tục mua sắm</a></button>
+                </div>
+                <div class="box-thanh-toan">
+                    <div class="box-thanh-toan-discount">
+                        <p><b>Mã giảm giá</b></p>
+                        <p><a href="#">Chọn hoặc nhập mã</a></p>
+                    </div>
+                    <hr class="line-thanh-toan">
+                    <div class="box-thanh-toan-tongtien">
+                        <p><b>Tổng tiền</b></p>
+                        <p class="total"><b>@(total.ToString())đ</b></p>
+                    </div>
+                    <div class="box-thanh-toan-button">
+                        <a asp-action="Payment" asp-controller="Cart"><button class="btn-thanh-toan">THANH TOÁN</button></a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".updatecartitem").click(function (event) {
+                event.preventDefault();
+                var productid = $(this).attr("data-productid");
+                var colorid = $(this).attr("data-colorid");
+                var sizeid = $(this).attr("data-sizeid");
+                var quantity = $("#quantity-" + productid + "-" + colorid + "-" + sizeid).val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.RouteUrl("updatecart")",
+                    data: {
+                        productid: productid,
+                        quantity: quantity,
+                        colorid: colorid,
+                        sizeid: sizeid
+                    },
+                    success: function (result) {
+                        $(".container-content").html(result);
+                    }
+                });
+            });
+
+            $(document).on('change', '.inputvaluenumber', function (event) {
+                    event.preventDefault();
+                    var productid = $(this).attr("data-productid");
+                    var colorid = $(this).attr("data-colorid");
+                    var sizeid = $(this).attr("data-sizeid");
+                    var quantity = $("#quantity-" + productid + "-" + colorid + "-" + sizeid).val();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.RouteUrl("changequantity")",
+                        data: {
+                            productid: productid,
+                            quantity: quantity,
+                            colorid: colorid,
+                            sizeid: sizeid
+                        },
+                        success: function (result) {
+                            $(".containercart_all").html(result);
+                        }
+                    });
+                    return false;
+                });
+
+
+
+        @* var product = $(this).attr("data-productid");
+            var element = "#quantity-" + product;
+            $(document).on('input', element, function () {
+            var productid = $(this).attr("data-productid");
+            var colorid = $(this).attr("data-colorid");
+            var sizeid = $(this).attr("data-sizeid");
+            $.ajax({
+            type: "POST",
+            url: "@Url.RouteUrl("increase")",
+            data: {
+            productid: productid,
+            colorid: colorid,
+            sizeid: sizeid
+            },
+            success: function (result) {
+            window.location.href = "@Url.RouteUrl("cart")";
+            }
+            });
+            }); *@
+                    });
+    </script>
+}

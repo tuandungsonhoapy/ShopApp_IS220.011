@@ -1,0 +1,72 @@
+<div class="content container mt-3">
+        <div class="header-content">
+            <div class="header-content-box-icon"><a class="header-content-icon" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-circle-arrow-left fa-xl"></i></a></div>
+            <div class="box-title"><h2 class="title">Thông tin đơn hàng</h2></div>
+        </div>   
+        <div class="main-content m-5">
+            <section class="main-content-product">
+                <div class="main-content-product-box">
+                    <div class="main-content-product-info">
+                        <div><img class="img-row" src="/img/product/picture1.jpg" alt=""></div>
+                        <div class="box-info-product"><p class="info-product">
+                            <a class="title-info-product" href="#">Đầm cổ yếm xòe</a> <br>
+                            Màu sắc: Hồng <br>
+                            size: M <br>
+                            x1
+                        </p></div>
+                    </div>
+                    <div class="main-content-product-price">
+                        <span class="price price-remove">230.000đ</span>
+                        <span class="price">179.000đ</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="main-content-product">
+                <div class="main-content-product-box">
+                    <div class="main-content-product-info">
+                        <div><img class="img-row" src="/img/product/picture2.jpg" alt=""></div>
+                        <div class="box-info-product"><p class="info-product">
+                            <a class="title-info-product" href="#">Đầm nhung dáng dài</a> <br>
+                            Màu sắc: Đen <br>
+                            size: S <br>
+                            x2
+                        </p></div>
+                    </div>
+                    <div class="main-content-product-price">
+                        <span class="price">300.000đ</span>
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <div class="box-thanh-tien">
+                <div class="tong-tien-hang box-thanh-tien-item">
+                    <p>Tổng tiền hàng:</p>
+                    <p>779.000đ</p>
+                </div>
+                <div class="phi-van-chuyen box-thanh-tien-item">
+                    <p>Phí vận chuyển:</p>
+                    <p>30.000đ</p>
+                </div>
+                <div class="discount box-thanh-tien-item">
+                    <p>Giảm giá phí vận chuyển:</p>
+                    <p>15.000đ</p>
+                </div>
+                <div class="thanh-tien box-thanh-tien-item">
+                    <p>Thành tiền:</p>
+                    <p class="thanh-tien-total">974.000đ</p>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-content mt-3">
+            <h4>Địa chỉ nhận hàng</h4>
+            <div class="info-address">
+                <p>
+                    Trần Thị Mỹ Xoan <br>
+                    SĐT: 0123456789 <br>
+                    Địa chỉ: đường 1A, phường B, Tp.HCM <br>
+                    <a class="link-info-van-chuyen" asp-controller="Delivery" asp-action="DangGiao">Thông tin vận chuyển</a>
+                </p>
+            </div>
+        </div>
+    </div>

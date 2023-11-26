@@ -1,0 +1,27 @@
+@{
+    Layout = "_MasterLayout";
+}
+    <!-- body -->
+    <div class="order_info_body container">
+        <div class="heading text-uppercase text-center">
+            <h1>Đơn hàng</h1>
+        </div>
+        <!-- nav bar trạng thái đơn hàng -->
+        <ul class="nav nav-underline justify-content-center">
+            <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" href="dang_giao.html">Đang giao</a>
+            </li>
+            <li class="nav-item col-auto p-2">
+            <a class="nav-link active" aria-current="page" href="#">Đã giao</a>
+            </li>
+            <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" href="da_huy.html">Đã hủy</a>
+            </li>
+            <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" href="#">Trả hàng</a>
+            </li>
+        </ul>
+        <div>
+            @RenderBody()
+        </div>
+    </div>

@@ -1,0 +1,387 @@
+@using App.DBModels
+@using DAFW_IS220.Models
+@model SANPHAM
+@{
+    var danhGiaList = ViewBag.DanhGia as IEnumerable<DANHGIA>;
+    var phanTramGiam = Math.Round(((Model.GIAGOC - Model.GIABAN) / Model.GIAGOC) * 100, 2);
+    var sodanhgia = danhGiaList != null ? danhGiaList.Count() : 0;
+    var somausp = ViewBag.ProductDetail as IEnumerable<ProductDetailModel>;
+    var tbsosao = danhGiaList != null && danhGiaList.Any() ? danhGiaList.Average(dg => dg.SOSAO) : 0;
+    var trungBinhSaoLamTron = (int)Math.Round(tbsosao);
+    var ImgList = ViewBag.Img as IEnumerable<HINHANH>;
+    @* var img_main = ImgList != null && ImgList.Any() ? ImgList.FirstOrDefault()?.LINK :
+    "Hinh-Nen-Trang-10.jpg"; *@
+    var so_img = ImgList != null ? ImgList.Count() : 0;
+    HashSet<int> seenSizes = new HashSet<int>();
+    HashSet<int> seencolors = new HashSet<int>();
+    var result = somausp != null && somausp.Any() ? somausp.FirstOrDefault()?.SoLuong : 0;
+    var pnumber = somausp != null ? (from sample in somausp
+                             select new {
+                                mamau = (int)sample.MAMAU,
+                                masize = (int)sample.MASIZE,
+                                soluong = sample.SoLuong
+                             }).ToList() : null;     
+    var otherproduct = ViewBag.otherProduct as IEnumerable<SANPHAMModel>;                      
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+<div class="container col-sm-12 ">
+    <div class="container-fluid">
+        <div class="container_info_product">
+
+            <div style="text-align: right;" class="product_image col-sm-6">
+                <div style="" class="product_image__list_mini_image">
+                    @{
+                        if (ImgList != null)
+                        {
+                            foreach (var item in ImgList)
+                            {
+                                <div class="product_image__list_mini_image__item">
+                                    <img src="http://localhost:5235/contents/Img/Product/@item.LINK" alt=""
+                                        class="product_image__list_mini_image__item__img">
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div style="flex: 1; max-width: 400px;" class="product_image__main_image">
+                    <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                        class="product_image__main_image__img">
+                </div>
+            </div>
+            <div class="detail_info_product col-sm-6">
+                <div class="detail_info_product__title">
+                    <h4>@Model.TENSP</h4>
+                </div>
+                <div class="detail_info_product__price detail_info_product__price__css_chung">
+                    <div class="detail_info_product__price__info_price">
+                        <span class="detail_info_product__price__info_price__sell "
+                            style="font-weight: bold; font-size: 30px;">@Model.GIABAN ₫</span>
+                        <span class="detail_info_product__price__info_price__origin"
+                            style="font-weight: 500;opacity: 0.5; text-decoration: line-through;">@Model.GIAGOC ₫</span>
+                        <span class="detail_info_product__price__info_price__decrease_percent" style="color: red;">Giảm
+                            @phanTramGiam%</span>
+                    </div>
+                    <div class="detail_info_product__price__review_quanlity">
+                        <div class="product-content-right-product-rating" style="display: flex; align-items: center;">
+                            @{
+                                var saoxam = 5 - trungBinhSaoLamTron;
+                                for (var i = 1; i <= trungBinhSaoLamTron; i++)
+                                {
+                                    <i class="fa-solid fa-star" style="color: #f3b335;"></i>
+                                }
+                                for (var j = trungBinhSaoLamTron + 1; j <= 5; j++)
+                                {
+                                    <i class="fa-solid fa-star" style="color: #808080;"></i>
+                                }
+                            }
+                            <span>(@sodanhgia đánh giá)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail_info_product__color detail_info_product__price__css_chung">
+                    <div class="detail_info_product__color__text">
+                        Màu sắc
+                    </div>
+                    <div class="detail_info_product__color__choose">
+                        @{
+                            if (somausp != null)
+                            {
+                                foreach (var item in somausp)
+                                {
+                                    if (seencolors.Add(item.MAMAU))
+                                    {
+                                        <div style="height: 33px;" class="detail_info_product__color__item">
+                                        <input style="cursor: pointer;" type="radio" class="check_color" name="colorcheckGroup" id="@item.MAMAU">
+                                        <label style="background-color: @(item.HEX != null ? item.HEX : "")" for="@item.MAMAU" class="color_icon"
+                                            id=""></label>
+                                        </div>
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="detail_info_product__size detail_info_product__price__css_chung">
+                    <div class="detail_info_product__size__text">
+                        Kích thước
+                    </div>
+                    <div class="detail_info_product__size__choose">
+                        @{
+                            if (somausp != null)
+                            {
+                                foreach (var item in somausp)
+                                {
+                                    if (seenSizes.Add(item.MASIZE))
+                                    {
+                                        <div class="detail_info_product__size__item">
+                                        <input style="cursor: pointer;" type="radio" name="sizecheckGroup" class="check_size" id="@item.MASIZE">
+                                        <label for="@item.MASIZE" class="size_icon" id="">
+                                            <span class="detail_info_product__size__item__text">@if (item != null && item.Size != null)
+                                            {
+                                                @item.Size
+                                            }</span>
+                                        </label>
+                                        </div>
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div style="display: flex;" class="detail_info_product__quantity detail_info_product__price__css_chung">
+                    <div class="detail_info_product__quantity__div-small">
+                        <input type="button" value="-" class="detail_info_product__quantity__adjust" onclick="decreaseQuantity()">
+                        <input type="text" value="1" min="1" name="detail_info_product__quantity__number"
+                            class="detail_info_product__quantity__input_text">
+                        <input type="button" value="+" class="detail_info_product__quantity__adjust" onclick="increaseQuantity()">
+                    </div>
+                    <div style="margin-left: 15px;"><span id="Show_numberproduct"></span></div>
+                </div>
+                <div class="detail_info_product_button ">
+                    <div class="detail_info_product_button_detail " style="">
+                        <div style="display: flex;">
+                            <a id="formaddtocart" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
+                            <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='black'" id="them_hang"><i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i>
+                                <p class="addcart" style="margin-bottom: 0;">THÊM VÀO GIỎ HÀNG</p>
+                            </button>
+                            </a>
+                            <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="mua_hang">MUA NGAY</button>
+                            <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="fav"><i class="fa-solid fa-heart" style="color:red;"></i></button>
+                        </div>
+                        <div style="margin-top: 7px;"><p class="confirm_addtocart"></p></div>
+                    </div>
+                    
+                </div>
+                <div class="detail_info_product_tab_header" style="display: flex; ">
+                    <ul class="nav nav-underline">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#" style='color:black'> Mô tả</a>
+                        </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link" href="#">Chi tiết sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Hướng dẫn bảo quản</a>
+                        </li> *@
+                    </ul>
+                </div>
+                <div class="detail_info_product_tab_body">
+                    <div class="detail_info_product_tab_body_gioi-thieu">
+                        <p>@Model.MOTA </p> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section ProductDetailScripts
+{
+    <script>
+    var arrayFromCSharp = @Html.Raw(Json.Serialize(pnumber));
+    var shownumber = document.querySelector('#Show_numberproduct'); 
+    var formaddtocart = document.querySelector('#formaddtocart');
+    formaddtocart.setAttribute('data-quantity', 1);
+    function Tinh_numberproduct(mamau, masize, arraypro){
+        var length = parseInt(arraypro.length);
+        if(length > 0)
+        {
+            for(var i=0; i< length;i++)
+            {
+                var item = arraypro[i];
+                var itemmau = parseInt(item.mamau);
+                var itemsize = parseInt(item.masize);
+                if(itemmau==mamau && itemsize==masize) return parseInt(item.soluong);
+            }
+        }
+        
+        return 0;
+    }
+    // Lắng nghe sự kiện click trên các radio
+    document.addEventListener("DOMContentLoaded", function () {
+    var colorRadios = document.querySelectorAll('.check_color');
+    var sizeRadios = document.querySelectorAll('.check_size');
+    colorRadios.forEach(function (radio) {
+        radio.addEventListener('click', function () {
+            handleRadioClick(this, '.check_color');
+        });
+    });
+
+    sizeRadios.forEach(function (radio) {
+        radio.addEventListener('click', function () {
+            handleRadioClick(this, '.check_size');
+        });
+    });
+});
+
+function handleRadioClick(clickedRadio, groupSelector) {
+    console.log("Sự kiện click đã được kích hoạt.");
+    // Lấy danh sách các radio trong nhóm
+    var radiosInGroup = document.querySelectorAll(groupSelector);
+
+    // Xóa lớp 'selected' cho tất cả các radio trong nhóm
+    radiosInGroup.forEach(function (radio) {
+        radio.parentElement.classList.remove('selected');
+    });
+
+    // Thêm lớp 'selected' cho radio hiện tại
+    clickedRadio.parentElement.classList.add('selected');
+    
+    // Lấy danh sách các radio màu được chọn
+    var selectedColorRadios = document.querySelectorAll('.detail_info_product__color__item.selected');
+
+    // Lấy danh sách các radio size được chọn
+    var selectedSizeRadios = document.querySelectorAll('.detail_info_product__size__item.selected');
+
+    // Kiểm tra nếu có một radio màu và một radio size được chọn cùng lúc
+    if (selectedColorRadios.length === 1 && selectedSizeRadios.length === 1) {
+        // Gửi yêu cầu đến controller với MAMAU và MASIZE
+       // confirm = true;
+        var selectedColorInputId = selectedColorRadios[0].querySelector('.check_color').id;
+        var selectedSizeInputId = selectedSizeRadios[0].querySelector('.check_size').id;
+        var color_id = parseInt(selectedColorInputId);
+        var size_id = parseInt(selectedSizeInputId);
+        var inputElement = document.querySelector('.detail_info_product__quantity__input_text');
+        var currentValue = parseInt(inputElement.value);
+        // Thực hiện các hành động khác (ví dụ: gửi yêu cầu đến controller)
+        console.log("Thông tin đã chọn: MAMAU -> " + selectedColorInputId + "; MASIZE -> " + selectedSizeInputId);
+        var result_number = Tinh_numberproduct(color_id,size_id,arrayFromCSharp);
+        shownumber.textContent = result_number.toString() + " sản phẩm"; 
+        formaddtocart.setAttribute('data-colorid', color_id);
+        formaddtocart.setAttribute('data-sizeid', size_id);
+        console.log('Color ID:', formaddtocart.getAttribute('data-colorid'));
+        console.log('Size ID:', formaddtocart.getAttribute('data-sizeid'));
+        console.log('Quantity:', formaddtocart.getAttribute('data-quantity'));
+        console.log("current:" , currentValue);
+        console.log("result_number: ", result_number);
+        if (currentValue == 0)
+        {
+            formaddtocart.setAttribute('data-quantity', 1);
+            inputElement.value = 1;
+        }
+        if(currentValue> result_number)
+        {
+            formaddtocart.setAttribute('data-quantity', result_number);
+            inputElement.value = result_number;
+        }
+        console.log('Quantity:', formaddtocart.getAttribute('data-quantity'));
+    }
+}
+
+
+function decreaseQuantity() {
+        var inputElement = document.querySelector('.detail_info_product__quantity__input_text');
+        var currentValue = parseInt(inputElement.value);
+
+        if (currentValue > 1) {
+            inputElement.value = currentValue - 1;
+        }
+        formaddtocart.setAttribute('data-quantity', inputElement.value);
+        console.log('Quantity:', formaddtocart.getAttribute('data-quantity'));
+    }
+
+
+function increaseQuantity() {
+    // Lấy danh sách các radio màu được chọn
+    var selectedColorRadios = document.querySelectorAll('.detail_info_product__color__item.selected');
+
+    // Lấy danh sách các radio size được chọn
+    var selectedSizeRadios = document.querySelectorAll('.detail_info_product__size__item.selected');
+
+    // Kiểm tra nếu có một radio màu và một radio size được chọn cùng lúc
+    if (selectedColorRadios.length === 1 && selectedSizeRadios.length === 1)
+    {
+        var inputElement = document.querySelector('.detail_info_product__quantity__input_text');
+        var currentValue = parseInt(inputElement.value);
+        var selectedColorInputId = selectedColorRadios[0].querySelector('.check_color').id;
+        var selectedSizeInputId = selectedSizeRadios[0].querySelector('.check_size').id;
+        var color_id = parseInt(selectedColorInputId);
+        var size_id = parseInt(selectedSizeInputId);
+        var result_number = Tinh_numberproduct(color_id,size_id,arrayFromCSharp);
+        if(currentValue < result_number)
+        {
+            inputElement.value = currentValue + 1;
+        } 
+        formaddtocart.setAttribute('data-quantity', inputElement.value);
+        console.log('Quantity:', formaddtocart.getAttribute('data-quantity'));
+    }
+}
+</script>
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function()
+        {
+            $("#formaddtocart").click(function (event){
+                event.preventDefault();
+                var productid = $(this).attr("data-productid");
+                var colorid = $(this).attr("data-colorid");
+                var sizeid = $(this).attr("data-sizeid");
+                var quantity = $(this).attr("data-quantity");
+                if(colorid > 0 && sizeid > 0)
+                {
+                    if(quantity > 0)
+                    {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.RouteUrl("addcart")",
+                            data: {
+                                productid: productid,
+                                colorid: colorid,
+                                sizeid: sizeid,
+                                quantity: quantity
+                            },
+                            success: function (result) {
+                                window.location.href = "@Url.RouteUrl("cart")";
+                            }
+                        });
+                    }
+                    else{
+                        console.log('\x1b[31m%s\x1b[0m',"Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!");
+                        @* $(".confirm_addtocart").text("Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!").css("color", "red"); *@
+                        $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red");
+                    }
+                }
+                else{
+                    console.log('\x1b[31m%s\x1b[0m',"Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!");
+                    @* $(".confirm_addtocart").text("Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!").css("color", "red"); *@
+                    $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red");
+                    @* if(quantity < 1){
+                        console.log("Sản phẩm đã hết hàng. Vui lòng chọn sản pha")
+                    } *@
+                }
+            });
+        });
+    </script>
+}
+<!--PRODUCT RELATED-->
+
+<section class="product-related">
+    <div class="product-related-title">
+        <p>SẢN PHẨM LIÊN QUAN</p>
+    </div>
+    <div class="product-content" style="display: flex;">
+        @{
+            if(otherproduct != null)
+            {
+                foreach(var pro in otherproduct.Take(5))
+                {
+                    <div class="product-related-item">
+                        <a asp-action="Index" asp-route-id="@pro.MASP"><img src="http://localhost:5235/contents/Img/Product/@pro.HINHANH" alt=""></a>
+                        <p style="font-weight: 500; font-size: 18px; padding-top: 14px;" id="item-name">@pro.TENSP</p>
+                        <p style="font-weight: 500; font-size: 16px;">@pro.GIABAN<sup>đ</sup></p>
+                    </div>
+                }
+            }
+        }
+    </div>
+</section>
+
+
