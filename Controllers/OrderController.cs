@@ -62,16 +62,18 @@ namespace DAFW_IS220.Controllers
         public IActionResult Index()
         {
             var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
             if(user!=null)
             {
                 ViewBag.userID = user.Id;
+                userID = user.Id;
                 var userAddress = user.DIACHI;
                 if(userAddress != null) ViewBag.userAddress = userAddress;
                 else ViewBag.userAddress = "NoAddress";
                 ViewBag.userPhone = user.PhoneNumber;
                 ViewBag.TENKH = user.TENKH;
             }
-            var cart = cartService.GetCartItems();
+            var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
             return View(cart);
         }
 

@@ -345,17 +345,14 @@ function increaseQuantity() {
                     }
                     else{
                         console.log('\x1b[31m%s\x1b[0m',"Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!");
-                        @* $(".confirm_addtocart").text("Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!").css("color", "red"); *@
-                        $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red");
+                        $(".confirm_addtocart").text("Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!").css("color", "red");
+                        @* $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red"); *@
                     }
                 }
                 else{
                     console.log('\x1b[31m%s\x1b[0m',"Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!");
-                    @* $(".confirm_addtocart").text("Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!").css("color", "red"); *@
-                    $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red");
-                    @* if(quantity < 1){
-                        console.log("Sản phẩm đã hết hàng. Vui lòng chọn sản pha")
-                    } *@
+                    $(".confirm_addtocart").text("Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!").css("color", "red");
+                    @* $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red"); *@
                 }
             });
         });

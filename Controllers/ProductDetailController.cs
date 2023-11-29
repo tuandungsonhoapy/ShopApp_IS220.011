@@ -52,11 +52,14 @@ namespace DAFW_IS220.Controllers
 
         private readonly CartService cartService;
 
-        public ProductDetailController(ILogger<ProductDetailController> logger, MyShopContext _myshopcontext, CartService _carservice)
+        private readonly UserManager<AppUser> userManager;
+
+        public ProductDetailController(ILogger<ProductDetailController> logger, MyShopContext _myshopcontext, CartService _carservice, UserManager<AppUser> user)
         {
             _logger = logger;
             myShopContext = _myshopcontext;
             cartService = _carservice;
+            userManager = user;
         }
 
         //[Route("chitietsanpham")]
@@ -122,7 +125,12 @@ namespace DAFW_IS220.Controllers
         [Route("/addcart", Name = "addcart")]
         public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
         {
-
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
             // Lấy đối tượng HttpContext từ Controller
             var httpContext = HttpContext;
 
@@ -150,7 +158,7 @@ namespace DAFW_IS220.Controllers
                               MASIZE = size.MASIZE,
                               Size = size.Size,
                               SoLuong = quantity,
-                              MainImg = p.MainImg
+                              MainImg = p.MainImg,
                           })
                           .FirstOrDefault();
 
@@ -174,7 +182,7 @@ namespace DAFW_IS220.Controllers
             // Xử lý đưa vào Cart ...
             var cart = cartService.GetCartItems();
             var cartitem = cart.Find(p => p.product.MASP == productid);
-            var car_item = cart.Where(p => p.product.MASP == productid && p.product.MAMAU == colorid && p.product.MASIZE == sizeid).FirstOrDefault();
+            var car_item = cart.Where(p => p.product.MASP == productid && p.product.MAMAU == colorid && p.product.MASIZE == sizeid && p.userid.Equals(userID)).FirstOrDefault();
             if (car_item != null)
             {
                 // Đã tồn tại, tăng thêm 1
@@ -183,13 +191,12 @@ namespace DAFW_IS220.Controllers
             else
             {
                 //  Thêm mới
-                cart.Add(new CartItem() { quantity = product.SoLuong, product = product });
+                cart.Add(new CartItem() { quantity = product.SoLuong, product = product, userid = userID });
             }
 
             // Lưu cart vào Session
             cartService.SaveCartSession(cart);
             // Chuyển đến trang hiện thị Cart
-            TempData["StatusMessage"] = "Đã thêm sản phẩm vào giỏ hàng!";
             return RedirectToAction(nameof(Cart));
         }
 
@@ -197,15 +204,30 @@ namespace DAFW_IS220.Controllers
         [Route("/cart", Name = "cart")]
         public IActionResult Cart()
         {
-            return View(cartService.GetCartItems());
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+            var cart = cartService.GetCartItems();
+            var cart_list = new List<CartItem>();
+            cart_list = cart.Where(p => p.userid.Equals(userID)).ToList();
+            return View(cart_list);
         }
 
         /// xóa item trong cart
         [Route("/removecart/{productid:int}", Name = "removecart")]
         public IActionResult RemoveCart([FromRoute] int productid)
         {
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
             var cart = cartService.GetCartItems();
-            var cartitem = cart.Find(p => p.product.MASP == productid);
+            var cartitem = cart.Where(p => p.product.MASP == productid && p.userid.Equals(userID)).FirstOrDefault();
             if (cartitem != null)
             {
                 // Đã tồn tại, tăng thêm 1
@@ -242,8 +264,14 @@ namespace DAFW_IS220.Controllers
         [Route("/changequantity", Name = "changequantity")]
         public IActionResult Increase([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
         {
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
             var cart = cartService.GetCartItems();
-            var cartItem = cart.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid).FirstOrDefault();
+            var cartItem = cart.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid && c.userid.Equals(userID)).FirstOrDefault();
 
             if (cartItem != null)
             {

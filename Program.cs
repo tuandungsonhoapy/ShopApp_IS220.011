@@ -29,7 +29,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(cfg =>
 {                    // Đăng ký dịch vụ Session
     cfg.Cookie.Name = "appclothingshop";                 // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
-    cfg.IdleTimeout = new TimeSpan(0, 30, 0);    // Thời gian tồn tại của Session
+    cfg.IdleTimeout = new TimeSpan(1, 30, 0);    // Thời gian tồn tại của Session
 });
 
 builder.Services.AddTransient<CartService>();
@@ -75,7 +75,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     // Cấu hình về User.
     options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = true;  // Email là duy nhất
+    options.User.RequireUniqueEmail = false;  // Email là duy nhất
 
 
     // Cấu hình đăng nhập.
