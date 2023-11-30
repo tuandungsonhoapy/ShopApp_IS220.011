@@ -259,7 +259,7 @@ function handleRadioClick(clickedRadio, groupSelector) {
         console.log('Quantity:', formaddtocart.getAttribute('data-quantity'));
         console.log("current:" , currentValue);
         console.log("result_number: ", result_number);
-        if (currentValue == 0)
+        if (currentValue == 0 && result_number > 0)
         {
             formaddtocart.setAttribute('data-quantity', 1);
             inputElement.value = 1;

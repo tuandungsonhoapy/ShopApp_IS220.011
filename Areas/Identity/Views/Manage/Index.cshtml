@@ -2,12 +2,6 @@
 @{
     ViewData["Title"] = "Quản lý tài khoản của bạn";
 
-
-
-
-
-
-
     Layout = "_MasterLayout";
 }
 
@@ -134,7 +128,7 @@
             }
         </dd>
 
-        <dt class="col-sm-4">Xác thực ứng dụng:</dt>
+        @* <dt class="col-sm-4">Xác thực ứng dụng:</dt>
         <dd class="col-sm-6">
             @if (Model.AuthenticatorKey == null)
             {
@@ -153,6 +147,6 @@
                     <p>Mã phục hồi sử dụng để xác thực hai yếu tố</p>
                 </form>
             }
-        </dd>
+        </dd> *@
     </dl>
 </div>

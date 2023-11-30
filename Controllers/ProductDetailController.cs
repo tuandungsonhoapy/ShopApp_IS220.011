@@ -271,7 +271,8 @@ namespace DAFW_IS220.Controllers
                 userID = user.Id;
             }
             var cart = cartService.GetCartItems();
-            var cartItem = cart.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid && c.userid.Equals(userID)).FirstOrDefault();
+            var cart_list = cart.Where(c => c.userid.Equals(userID)).ToList();
+            var cartItem = cart_list.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid).FirstOrDefault();
 
             if (cartItem != null)
             {
@@ -282,8 +283,8 @@ namespace DAFW_IS220.Controllers
                 TempData["StatusDangerMessage"] = "cartitem null";
             }
             cartService.SaveCartSession(cart);
-            // Trả về mã thành công (không có nội dung gì - chỉ để Ajax gọi)
-            var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart);
+            
+            var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart_list);
             return Content(updatedCartHtml);
 
             // if (cart.Count == 0)
