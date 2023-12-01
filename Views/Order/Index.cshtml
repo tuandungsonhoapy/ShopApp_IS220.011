@@ -17,223 +17,319 @@
 
 
 <!-- body -->
-<div class="col-auto container_all_payment"></div>
-<div class="body_box container col-lg-7 body_payment_content">
-    <div class="address_box">
-        <div class="address_title row text-start">
-            <div>
-                <i class="fa-solid fa-location-dot"></i>
-                <span>Địa chỉ nhận hàng</span>
+<div class="Contain_all_payment">
+    <div class="col-auto container_all_payment"></div>
+    <div class="body_box container col-lg-7 body_payment_content">
+        <div class="address_box">
+            <div class="address_title row text-start">
+                <div>
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Địa chỉ nhận hàng</span>
+                </div>
             </div>
-        </div>
-        <div class="address_info row justify-content-between">
-            <div class="col-auto fw-bold">
-                <span>@TENKH</span>
-                <span>(+84)@phonenumber</span>
-            </div>
-            @{
-                if (address == "NoAddress")
-                {
-                    <div class="col-auto">
-                        <span style="color: red;">Chưa có địa chỉ nhận hàng</span>
-                    </div>
-                    <div class="col-auto">
-                        <a class="link-dark" data-bs-toggle="collapse" href="#address_change">Thêm địa chỉ mới</a>
-                    </div>
+            <div class="address_info row justify-content-between">
+                <div class="col-auto fw-bold">
+                    <span>@TENKH</span>
+                    <span>(+84)@phonenumber</span>
+                </div>
+                @{
+                    if (address == "NoAddress")
+                    {
+                        <div class="col-auto">
+                            <span style="color: red;">Chưa có địa chỉ nhận hàng</span>
+                        </div>
+                        <div class="col-auto">
+                            <a class="link-dark" data-bs-toggle="collapse" href="" id="add_address">Thêm địa chỉ mới</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-auto">
+                            <span>@address</span>
+                        </div>
+                        <div class="col-auto">
+                            <a class="link-dark" data-bs-toggle="collapse" href="" id="change_address">Thay đổi</a>
+                        </div>
+                    }
                 }
-                else
-                {
-                    <div class="col-auto">
-                        <span>@address</span>
-                    </div>
-                    <div class="col-auto">
-                        <a class="link-dark" data-bs-toggle="collapse" href="#address_change">Thay đổi</a>
-                    </div>
-                }
-            }
 
+            </div>
         </div>
-    </div>
-    @* <div class="address_change collapse" id="address_change">
-    <div class="address_box_container">
-    <div class="address_box">
-    <div class="address_info row">
-    <div class="col-1">
-    <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-    checked>
-    </div>
-    <div class="col-5 fw-bold">
-    <span>Nguyễn Văn A</span>
-    <span>(+84)123456789</span>
-    </div>
-    <div class="col-6">
-    <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-    </div>
-    </div>
-    </div>
-    <div class="address_box">
-    <div class="address_info row">
-    <div class="col-1">
-    <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-    checked>
-    </div>
-    <div class="col-5 fw-bold">
-    <span>Nguyễn Văn A</span>
-    <span>(+84)123456789</span>
-    </div>
-    <div class="col-6">
-    <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-    </div>
-    </div>
-    </div>
-    <div class="address_box">
-    <div class="address_info row">
-    <div class="col-1">
-    <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-    checked>
-    </div>
-    <div class="col-5 fw-bold">
-    <span>Nguyễn Văn A</span>
-    <span>(+84)123456789</span>
-    </div>
-    <div class="col-6">
-    <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-    </div>
-    </div>
-    </div>
-    <button type="button" class="address_add_button">+ Thêm địa chỉ mới</button>
-    </div>
-    </div> *@
-    <div style="display: none;" class="address_update" id="address_update">
-        <div class="row mb-2">
+        @* <div class="address_change collapse" id="address_change">
+        <div class="address_box_container">
+        <div class="address_box">
+        <div class="address_info row">
+        <div class="col-1">
+        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
+        checked>
+        </div>
+        <div class="col-5 fw-bold">
+        <span>Nguyễn Văn A</span>
+        <span>(+84)123456789</span>
+        </div>
+        <div class="col-6">
+        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
+        </div>
+        </div>
+        </div>
+        <div class="address_box">
+        <div class="address_info row">
+        <div class="col-1">
+        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
+        checked>
+        </div>
+        <div class="col-5 fw-bold">
+        <span>Nguyễn Văn A</span>
+        <span>(+84)123456789</span>
+        </div>
+        <div class="col-6">
+        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
+        </div>
+        </div>
+        </div>
+        <div class="address_box">
+        <div class="address_info row">
+        <div class="col-1">
+        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
+        checked>
+        </div>
+        <div class="col-5 fw-bold">
+        <span>Nguyễn Văn A</span>
+        <span>(+84)123456789</span>
+        </div>
+        <div class="col-6">
+        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
+        </div>
+        </div>
+        </div>
+        <button type="button" class="address_add_button">+ Thêm địa chỉ mới</button>
+        </div>
+        </div> *@
+        <div style="display: none;" class="address_update" id="address_update">
+            @* <div class="row mb-2">
             <div class="col-12">
-                <label for="#" class="form-label">Tên người nhận hàng</label>
-                <input type="text" class="form-control" value="Nguyễn Văn A">
+            <label for="#" class="form-label">Tên người nhận hàng</label>
+            <input type="text" class="form-control" value="Nguyễn Văn A">
             </div>
-        </div>
-        <div class="row mb-2">
+            </div> *@
+            <div class="row mb-2">
+                <div class="col-12">
+                    <label class="form-label">Địa chỉ</label>
+                    <input id="value_address" type="text" class="form-control" value="">
+                </div>
+            </div>
+            @* <div class="row mb-2">
             <div class="col-12">
-                <label for="#" class="form-label">Địa chỉ</label>
-                <input type="text" class="form-control" value="1 đường A">
+            <label for="#" class="form-label">SĐT</label>
+            <input type="text" class="form-control" value="094xxxxxxx">
             </div>
-        </div>
-        <div class="row mb-3">
+            </div> *@
+            @* <div class="row mb-3">
             <div class="col-4">
-                <label for="#" class="form-label">Thành phố</label>
-                <select class="form-select" required>
-                    <option selected value="">Tp.HCM</option>
-                    <option value="">Hà Nội</option>
-                    <option value="">Đà Nẵng</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <label for="#" class="form-label">Quận</label>
-                <select class="form-select" required>
-                    <option selected value="">Quận 1</option>
-                    <option value="">Quận 2</option>
-                    <option value="">Quận 3</option>
-                    <option value="">Quận 4</option>
-                    <option value="">Quận 5</option>
-                </select>
+            <label for="#" class="form-label">Thành phố</label>
+            <select class="form-select" required>
+            <option selected value="">Tp.HCM</option>
+            <option value="">Hà Nội</option>
+            <option value="">Đà Nẵng</option>
+            </select>
             </div>
             <div class="col-4">
-                <label for="#" class="form-label">Phường</label>
-                <select class="form-select" required>
-                    <option selected value="">Phường A</option>
-                    <option value="">Phường B</option>
-                    <option value="">Phường C</option>
-                    <option value="">Phường D</option>
-                    <option value="">Phường E</option>
-                </select>
+            <label for="#" class="form-label">Quận</label>
+            <select class="form-select" required>
+            <option selected value="">Quận 1</option>
+            <option value="">Quận 2</option>
+            <option value="">Quận 3</option>
+            <option value="">Quận 4</option>
+            <option value="">Quận 5</option>
+            </select>
             </div>
-        </div>
-        <div class="address_update_button_contain row">
-            <div>
-                <button class="address_confirm_button btn btn-dark">Xác nhận</button>
-                <button class="address_cancel_button btn btn-outline-secondary">Hủy</button>
+            <div class="col-4">
+            <label for="#" class="form-label">Phường</label>
+            <select class="form-select" required>
+            <option selected value="">Phường A</option>
+            <option value="">Phường B</option>
+            <option value="">Phường C</option>
+            <option value="">Phường D</option>
+            <option value="">Phường E</option>
+            </select>
             </div>
+            </div> *@
+            <div class="address_update_button_contain row">
+                <div>
+                    <button class="address_confirm_button btn btn-dark" id="confirm_address">Xác nhận</button>
+                    <button class="address_cancel_button btn btn-outline-secondary">Hủy</button>
+                </div>
 
+            </div>
         </div>
-    </div>
-    <div class="product_list">
-        <table>
-            <tr>
-                <th class="ps-5" colspan="2">Sản phẩm</th>
-                <th>Đơn giá</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
-            </tr>
-            @{
-                foreach (var item in Model)
-                {
-                    var thanhtien = item.quantity * (item.product != null ? item.product.GIABAN : 0);
-                    total += thanhtien;
-                    <tr>
-                        <td class="col-2">
-                            <img class="payment_product rounded mx-auto d-block" src="/img/product/picture1.jpg" alt="">
-                        </td>
-                        <td class="col-4">
-                            <span class="fw-bold">@item.product.TENSP</span>
-                            <br />
-                            <span>màu: @item.product.TENMAU, size: @item.product.Size</span>
-                        </td>
-                        <td class="col-2">@item.product.GIABAN</td>
-                        <td class="col-2">@item.quantity</td>
-                        <td class="col-2">@(item.product.GIABAN * item.quantity)</td>
-                    </tr>
+        <div class="product_list">
+            <table>
+                <tr>
+                    <th class="ps-5" colspan="2">Sản phẩm</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+                @{
+                    foreach (var item in Model)
+                    {
+                        var thanhtien = item.quantity * (item.product != null ? item.product.GIABAN : 0);
+                        total += thanhtien;
+                        <tr>
+                            <td class="col-2">
+                                <img class="payment_product rounded mx-auto d-block"
+                                    src="http://localhost:5235/contents/Img/Product/@item.product.MainImg" alt="">
+                            </td>
+                            <td class="col-4">
+                                <span class="fw-bold">@item.product.TENSP</span>
+                                <br />
+                                <span>màu: @item.product.TENMAU, size: @item.product.Size</span>
+                            </td>
+                            <td class="col-2">@item.product.GIABAN</td>
+                            <td class="col-2">@item.quantity</td>
+                            <td class="col-2">@(item.product.GIABAN * item.quantity)</td>
+                        </tr>
+                    }
                 }
-            }
-        </table>
+            </table>
+        </div>
+        <div class="payment_info">
+            <div class="row justify-content-end">
+                <div class="col-3">
+                    <span>Voucher của shop:</span>
+                </div>
+                <div class="col-4"></div>
+                <div class="col-2 text-end">
+                    <span class="discount_price">0 đ</span>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="vertical_align_center col-3">
+                    <span>Phí vận chuyển:</span>
+                </div>
+                <div class="col-4">
+                    <select class="form-select" required>
+                        <option selected value="">Giao hàng tiêu chuẩn</option>
+                        <option value="">Giao hàng hỏa tốc</option>
+                    </select>
+                </div>
+                <div class="vertical_align_center horizontal_align_right col-2 text-end">
+                    <span>@shipping_costs đ</span>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="vertical_align_center col-3">
+                    <span>Phương thức thanh toán</span>
+                </div>
+                <div class="col-4">
+                    <select class="form-select" required id="TypePayment">
+                        <option selected value="1">Thanh toán khi nhận hàng</option>
+                        <option value="2">Chuyển khoản</option>
+                    </select>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row justify-content-end ">
+                <div class="form-group col-9" id="load_form_payment" style="display:none;">
+                    <h4> <label>Chọn phương thức thanh toán:</label><br /></h4>
+                    <h5>Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>
+                    <label><input type="radio" name="TypePaymentVN" value="0" checked /> Cổng thanh toán VNPAYQR
+                    </label>
+                    <h5>Cách 2: Tách phương thức thanh toán tại site của Merchant</h5>
+                    <label><input type="radio" name="TypePaymentVN" value="1" /> Thanh toán qua ứng dụng hỗ trợ VNPAYQR
+                    </label><br />
+                    <label><input type="radio" name="TypePaymentVN" value="2" /> ATM-Tài khoản ngân hàng nội địa
+                    </label><br />
+                    <label><input type="radio" name="TypePaymentVN" value="3" /> Thanh toán qua thẻ quốc tế
+                    </label><br />
+                </div>
+            </div>
+            <div class="form-group" id="load_send"></div>
+            <div class="row justify-content-end">
+                <div class="col-7 text-end">
+                    <span class="fs-4">Tổng số tiền:</span>
+                </div>
+                <div class="col-2 text-end">
+                    <span id="Total_price" data-total="@(total + shipping_costs)"
+                        class="discount_price fs-4 fw-bold">@((total + shipping_costs).ToString())đ</span>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <label for="Note">Ghi chú: </label>
+                <input type="text" name="Note" id="input_note">
+            </div>
+        </div>
+
+        <div class="payment_confirm justify-content-end">
+            <button class="button_confirm float-end" id="btn_checkout">Thanh toán</button>
+        </div>
     </div>
-    <div class="payment_info">
-        <div class="row justify-content-end">
-            <div class="col-3">
-                <span>Voucher của shop:</span>
-            </div>
-            <div class="col-4"></div>
-            <div class="col-2 text-end">
-                <span class="discount_price">0 đ</span>
-            </div>
-        </div>
-        <div class="row justify-content-end">
-            <div class="vertical_align_center col-3">
-                <span>Phí vận chuyển:</span>
-            </div>
-            <div class="col-4">
-                <select class="form-select" required>
-                    <option selected value="">Giao hàng tiêu chuẩn</option>
-                    <option value="">Giao hàng hỏa tốc</option>
-                </select>
-            </div>
-            <div class="vertical_align_center horizontal_align_right col-2 text-end">
-                <span>@shipping_costs đ</span>
-            </div>
-        </div>
-        <div class="row justify-content-end">
-            <div class="vertical_align_center col-3">
-                <span>Phương thức thanh toán</span>
-            </div>
-            <div class="col-4">
-                <select class="form-select" required>
-                    <option selected value="">Thanh toán khi nhận hàng</option>
-                    <option value="">Chuyển khoản</option>
-                </select>
-            </div>
-            <div class="col-2"></div>
-        </div>
-        <div class="row justify-content-end">
-            <div class="col-7 text-end">
-                <span class="fs-4">Tổng số tiền:</span>
-            </div>
-            <div class="col-2 text-end">
-                <span class="discount_price fs-4 fw-bold">@((total+shipping_costs).ToString())đ</span>
-            </div>
-        </div>
-    </div>
-    <div class="payment_confirm justify-content-end">
-        <a asp-action="DangGiao" asp-controller="Delivery">
-            <button class="button_confirm float-end">Thanh toán</button>
-        </a>
-    </div>
+    <div style="height: 150px;" class="col-auto"></div>
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $("#add_address").click(function () {
+                    $("#address_update").toggle();
+                });
+
+                $("#change_address").click(function () {
+                    $("#address_update").toggle();
+                });
+
+                $("#confirm_address").click(function (event) {
+                    event.preventDefault();
+                    var addressValue = $("#value_address").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.RouteUrl("changeaddress")",
+                        data: {
+                            newaddress: addressValue
+                        },
+                        success: function (result) {
+            @* $(".Contain_all_payment").html(result); *@
+                                window.location.href = "@Url.RouteUrl("index")";
+                        }
+                    });
+                });
+
+                $("body").on("change", "#TypePayment", function () {
+                    var type = $(this).val();
+                    $("#load_form_payment").hide();
+                    if (type == 2) {
+                        $("#load_form_payment").show();
+                    }
+                });
+
+                $("#btn_checkout").click(function (event) {
+                    event.preventDefault();
+                    var TypePayment = $("#TypePayment").val();
+                    var TypePaymentVN = $("input[name='TypePaymentVN']:checked").val();
+                    var Price = $("#Total_price").attr("data-total");
+                    var Note = $("#input_note").val();
+                    var model = {
+                        TypePayment: TypePayment,
+                        TypePaymentVN: TypePaymentVN,
+                        Price: Price,
+                        Note: Note
+                    }
+                    $.ajax({
+                        url: "@Url.RouteUrl("checkout")",
+                        type: "POST",
+                        data: model,
+                        success: function (result) {
+                            if (result.success) {
+                                if (result.code == 1) {
+                                    window.location.href = "/Delivery/DangGiao";
+                                }
+                                else {
+                                    window.location.href = result.url;
+                                }
+                            }
+                        }
+                    });
+                });
+            });    
+        </script>
+    }
 </div>
-<div class="col-auto"></div>

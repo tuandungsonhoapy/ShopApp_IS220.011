@@ -8,9 +8,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace DAFW_IS220.Controllers
 {
+    public class VnpConfig
+    {
+        public string ReturnUrl { get; set; }
+        public string Url { get; set; }
+        public string TmnCode { get; set; }
+        public string HashSecret { get; set; }
+    }
     public static class ControllerExtensionsOrder
     {
         public static string RenderPartialViewToString(this OrderController controller, string viewName, object model)
@@ -52,23 +60,30 @@ namespace DAFW_IS220.Controllers
 
         private readonly CartService cartService;
 
-        public OrderController(ILogger<OrderController> logger, UserManager<AppUser> user, CartService _cartService)
+        private readonly MyShopContext myShopContext;
+
+        private readonly IConfiguration configuration;
+
+        public OrderController(ILogger<OrderController> logger, UserManager<AppUser> user, CartService _cartService, MyShopContext dbcontext, IConfiguration _config)
         {
             _logger = logger;
             userManager = user;
             cartService = _cartService;
+            myShopContext = dbcontext;
+            configuration = _config;
         }
 
-        public IActionResult Index()
+        [Route("/index", Name = "index")]
+        public async Task<IActionResult> Index()
         {
-            var user = userManager.GetUserAsync(User).Result;
+            var user = await userManager.GetUserAsync(User);
             var userID = "null";
-            if(user!=null)
+            if (user != null)
             {
                 ViewBag.userID = user.Id;
                 userID = user.Id;
                 var userAddress = user.DIACHI;
-                if(userAddress != null) ViewBag.userAddress = userAddress;
+                if (userAddress != null) ViewBag.userAddress = userAddress;
                 else ViewBag.userAddress = "NoAddress";
                 ViewBag.userPhone = user.PhoneNumber;
                 ViewBag.TENKH = user.TENKH;
@@ -78,15 +93,35 @@ namespace DAFW_IS220.Controllers
         }
 
         [Route("/changeaddress", Name = "changeaddress")]
-        public IActionResult ChangeAddress()
+        public async Task<IActionResult> ChangeAddress([FromForm] string newaddress)
         {
-            var user = userManager.GetUserAsync(User).Result;
-            if(user!=null)
+            var user = await userManager.GetUserAsync(User);
+            var userID = "null";
+            if (user.DIACHI == null)
             {
-                var userID = user.Id;
-                TempData["StatusMessage"] = userID;
+                TempData["StatusMessage"] = "Thêm địa chỉ thành công!";
             }
-            return View();
+            else TempData["StatusMessage"] = "Thay đổi địa chỉ thành công!";
+
+            if (user != null)
+            {
+                ViewBag.userID = user.Id;
+                userID = user.Id;
+                ViewBag.userAddress = newaddress;
+                // var userAddress = user.DIACHI;
+                // if(userAddress != null) ViewBag.userAddress = userAddress;
+                // else ViewBag.userAddress = "NoAddress";
+                ViewBag.userPhone = user.PhoneNumber;
+                ViewBag.TENKH = user.TENKH;
+                user.DIACHI = newaddress;
+                myShopContext.Update(user);
+                await myShopContext.SaveChangesAsync();
+            }
+
+
+            var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
+            // var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart);
+            return Ok();
         }
 
 
@@ -94,12 +129,117 @@ namespace DAFW_IS220.Controllers
         public IActionResult Payment()
         {
             var user = userManager.GetUserAsync(User).Result;
-            if(user!=null)
+            if (user != null)
             {
                 var userID = user.Id;
                 TempData["StatusMessage"] = userID;
             }
             return View();
         }
+
+        [Route("/checkout", Name = "checkout")]
+        public async Task<IActionResult> CheckOut(OrderModel orderModel)
+        {
+            var code = new { success = false, Code = -1, Url = "" };
+            var user = await userManager.GetUserAsync(User);
+            string CustomerName = "";
+            string Phone = "";
+            string Address = "";
+            string Email = "";
+            string userID = "";
+            DONHANG dONHANG = new DONHANG();
+            if (user != null)
+            {
+                userID = user.Id;
+                CustomerName = user.TENKH;
+                Phone = user.PhoneNumber ?? "";
+                Address = user.DIACHI ?? "";
+                Email = user.Email ?? "";
+            }
+            dONHANG.MATK = userID;
+            dONHANG.NGAYMUA = DateTime.Now;
+            orderModel.TENKH = CustomerName;
+            orderModel.Phone = Phone;
+            orderModel.Email = Email;
+            orderModel.Address = Address;
+            if (orderModel.TypePayment == 1)
+            {
+                dONHANG.HINHTHUCTHANHTOAN = "COD";
+                dONHANG.TRANGTHAITHANHTOAN = "Chưa thanh toán";
+            }
+            else if (orderModel.TypePayment == 2)
+            {
+                dONHANG.HINHTHUCTHANHTOAN = "Chuyển khoản";
+                dONHANG.TRANGTHAITHANHTOAN = "Chưa thanh toán";
+            }
+            dONHANG.TONGTIEN = orderModel.Price;
+            dONHANG.TRANGTHAIDONHANG = "Chờ xử lý";
+            dONHANG.GHICHU = orderModel.Note ?? "";
+            myShopContext.Add(dONHANG);
+            await myShopContext.SaveChangesAsync();
+            cartService.ClearCart();
+            if(orderModel.TypePayment==2)
+            {
+                var url = UrlPayment(orderModel.TypePaymentVN, dONHANG.MADH);
+                // code = new { success = true, Code = orderModel.TypePayment, Url = url };
+                return Ok(new { success = true, code = orderModel.TypePayment, url = url });
+            }
+            else return Ok(new { success = true, Code = orderModel.TypePayment, Url = "" });
+        }
+
+        #region Thanh toán vnpay
+        public string UrlPayment(int TypePaymentVN, int orderCode)
+        {
+            var urlPayment = "";
+            //var sorder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
+            var order = myShopContext.DONHANGs.FirstOrDefault(o => o.MADH == orderCode);
+            var vnpConfig = configuration.GetSection("VNPAY_SETTINGS");
+            //Get Config Info
+            // string vnp_Returnurl = ConfigurationManager.AppSettings["vnp_Returnurl"]; //URL nhan ket qua tra ve 
+            // string vnp_Url = ConfigurationManager.AppSettings["vnp_Url"]; //URL thanh toan cua VNPAY 
+            // string vnp_TmnCode = ConfigurationManager.AppSettings["vnp_TmnCode"]; //Ma định danh merchant kết nối (Terminal Id)
+            // string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"]; //Secret Key
+            string vnp_Returnurl = vnpConfig["vnp_Returnurl"] ?? "";
+            string vnp_Url = vnpConfig["vnp_Url"] ?? "";
+            string vnp_TmnCode = vnpConfig["vnp_TmnCode"] ?? "";
+            string vnp_HashSecret = vnpConfig["vnp_HashSecret"] ?? "";
+            //Build URL for VNPAY
+            VnPayLibrary vnpay = new VnPayLibrary();
+            var Price = (long)order.TONGTIEN * 100;
+            vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+            vnpay.AddRequestData("vnp_Command", "pay");
+            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+            vnpay.AddRequestData("vnp_Amount", Price.ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
+            if (TypePaymentVN == 1)
+            {
+                vnpay.AddRequestData("vnp_BankCode", "VNPAYQR");
+            }
+            else if (TypePaymentVN == 2)
+            {
+                vnpay.AddRequestData("vnp_BankCode", "VNBANK");
+            }
+            else if (TypePaymentVN == 3)
+            {
+                vnpay.AddRequestData("vnp_BankCode", "INTCARD");
+            }
+
+            vnpay.AddRequestData("vnp_CreateDate", order.NGAYMUA.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CurrCode", "VND");
+            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress());
+            vnpay.AddRequestData("vnp_Locale", "vn");
+            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán đơn hàng :" + order.MADH);
+            vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
+
+            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+            vnpay.AddRequestData("vnp_TxnRef", order.MADH.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+
+            //Add Params of 2.1.0 Version
+            //Billing
+
+            urlPayment = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+            //log.InfoFormat("VNPAY URL: {0}", paymentUrl);
+            return urlPayment;
+        }
+        #endregion
     }
 }

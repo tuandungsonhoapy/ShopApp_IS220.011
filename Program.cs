@@ -11,6 +11,7 @@ using App.Menu;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using App.Data;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,11 @@ builder.Services.AddScoped<RegisterViewModel>();
 
 builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<SignInManager<AppUser>>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

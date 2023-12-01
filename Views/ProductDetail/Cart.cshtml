@@ -242,27 +242,30 @@ else {
                     });
                     return false;
                 });
-
-
-        @* var product = $(this).attr("data-productid");
-            var element = "#quantity-" + product;
-            $(document).on('input', element, function () {
-            var productid = $(this).attr("data-productid");
-            var colorid = $(this).attr("data-colorid");
-            var sizeid = $(this).attr("data-sizeid");
-            $.ajax({
-            type: "POST",
-            url: "@Url.RouteUrl("increase")",
-            data: {
-            productid: productid,
-            colorid: colorid,
-            sizeid: sizeid
-            },
-            success: function (result) {
-            window.location.href = "@Url.RouteUrl("cart")";
-            }
-            });
-            }); *@
         });
     </script>
 }
+
+
+@* <script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/GetData", // Điều chỉnh URL tương ứng với đường dẫn của bạn --- url: /controller/action
+            success: function (result) {
+                // Xử lý kết quả thành công và truyền đối tượng nhận được
+                handleSuccess(result);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+
+        function handleSuccess(data) {
+            // Xử lý dữ liệu nhận được ở đây
+            console.log("Name:", data.Name);
+            console.log("Age:", data.Age);
+            console.log("City:", data.City);
+        }
+    });
+</script> *@

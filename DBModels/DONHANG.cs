@@ -21,7 +21,7 @@ namespace App.DBModels
         public decimal TONGTIEN {set;get;}
 
         [DataType(DataType.Date)]
-        public DateTime NGAYGIAO {set;get;}
+        public DateTime? NGAYGIAO {set;get;}
 
         [StringLength(100)]
         [Column(TypeName = "varchar")]
@@ -35,9 +35,9 @@ namespace App.DBModels
         [Column(TypeName = "varchar")]
         public string TRANGTHAIDONHANG {set;get;}
 
-        public int MATTGH {set;get;}
+        public int? MATTGH {set;get;}
         [ForeignKey("MATTGH")]
-        public THONGTINGIAOHANG THONGTINGIAOHANG {set;get;}
+        public THONGTINGIAOHANG? THONGTINGIAOHANG {set;get;}
         
         [Column(TypeName = "text")]
         public string GHICHU {set;get;}
