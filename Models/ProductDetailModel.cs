@@ -4,6 +4,8 @@ namespace DAFW_IS220.Models
     {
         public int MASP {set;get;}
 
+        public int MACTSP {set;get;}
+
         public string TENSP {set;get;}
 
         public string HINHANH {set;get;}

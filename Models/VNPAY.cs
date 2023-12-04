@@ -115,11 +115,11 @@ namespace DAFW_IS220.Models
 
     public class Utils
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor httpContext;
 
         public Utils(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            httpContext = httpContextAccessor;
         }
         public static String HmacSHA512(string key, String inputData)
         {
@@ -137,16 +137,20 @@ namespace DAFW_IS220.Models
 
             return hash.ToString();
         }
-        public static string GetIpAddress()
+        public string GetIpAddress()
         {
             string ipAddress;
             try
             {               
-                HttpContextAccessor httpContextAccessor = new HttpContextAccessor(); 
-                ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+                // HttpContextAccessor httpContextAccessor = new HttpContextAccessor(); 
+                ipAddress = httpContext.HttpContext.Connection.RemoteIpAddress?.ToString();
+                // ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
                 if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown") || ipAddress.Length > 45)
+                {
+                    ipAddress = httpContext.HttpContext.Connection.RemoteIpAddress?.ToString();
+                }
                     // ipAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
-                    ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+                    // ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
             }
             catch (Exception ex)
             {

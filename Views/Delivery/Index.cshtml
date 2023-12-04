@@ -9,10 +9,10 @@
     <!-- nav bar trạng thái đơn hàng -->
     <ul class="nav nav-underline justify-content-center">
         <li class="nav-item col-auto p-2">
-            <a class="nav-link text-decoration-none text-black" asp-action="Index">Chuẩn bị hàng</a>
-        </li>
+            <a class="nav-link active" aria-current="page" asp-action="Index">Chuẩn bị hàng</a>
+            </li>
         <li class="nav-item col-auto p-2">
-            <a class="nav-link active" aria-current="page" asp-action="DangGiao">Đang giao</a>
+            <a class="nav-link text-decoration-none text-black" asp-action="DangGiao">Đang giao</a>
         </li>
         <li class="nav-item col-auto p-2">
             <a class="nav-link text-decoration-none text-black" asp-action="DaGiao">Đã giao</a>
@@ -34,8 +34,7 @@
                         foreach (var item in order.OrderDetails)
                         {
                             <div class="row p-2">
-                                <img src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg"
-                                    class="col-2 p-2 float-start" alt="">
+                                <img src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg" class="col-2 p-2 float-start" alt="">
                                 <div style="display: flex; align-items: center;" class="info1 col-5 p-2">
                                     <span>
                                         @item.sANPHAM.TENSP <br>
@@ -46,8 +45,8 @@
                                 <div class="info2 col-5 p-3 text-end d-flex" style="display: flex; align-items: center;">
                                     <div class="col p-0">
                                         <span>
-                                            x @(item.SoLuong) <br>
-                                            <del>@(item.sANPHAM.GIAGOC)đ</del> @(item.sANPHAM.GIABAN)đ
+                                            x @item.SoLuong <br>
+                                            <del style="opacity: 0.5;">@(item.sANPHAM.GIAGOC)đ</del> @(item.sANPHAM.GIABAN)đ
                                         </span>
                                     </div>
 
@@ -55,8 +54,7 @@
                             </div>
                         }
                     }
-
-                    @* -------------------------- *@
+                    @* -------------------------------- *@
                     <div class="sub_info_1 row p-2 text-sm-center">
                         <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
                     </div>
@@ -72,15 +70,10 @@
                     <div class="sub_info_2 row p-2 justify-content-between">
                         <div class="col-auto text-start">
                             <i class="fa-solid fa-truck-fast"></i>
-                            <span>Đơn hàng đang trên đường giao đến bạn</span>
+                            <span>Đơn hàng đang được chuẩn bị</span>
                         </div>
                         <div class="col-auto text-end">
                             <a class="text-decoration-none bland" href="#">Chi tiết</a>
-                        </div>
-                    </div>
-                    <div class="row p-2">
-                        <div>
-                            <button type="button" class="btn_black float-end">Đã nhận hàng</button>
                         </div>
                     </div>
                 </div>
@@ -177,15 +170,10 @@
             <div class="sub_info_2 row p-2 justify-content-between">
                 <div class="col-auto text-start">
                     <i class="fa-solid fa-truck-fast"></i>
-                    <span>Đơn hàng đang trên đường giao đến bạn</span>
+                    <span>Đơn hàng đang được chuẩn bị</span>
                 </div>
                 <div class="col-auto text-end">
                     <a class="text-decoration-none bland" href="#">Chi tiết</a>
-                </div>
-            </div>
-            <div class="row p-2">
-                <div>
-                    <button type="button" class="btn_black float-end" disabled>Đã nhận hàng</button>
                 </div>
             </div>
         </div>

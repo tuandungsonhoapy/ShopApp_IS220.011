@@ -7,10 +7,13 @@
         <!-- nav bar trạng thái đơn hàng -->
         <ul class="nav nav-underline justify-content-center">
             <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" asp-action="Index">Chuẩn bị hàng</a>
+            </li>
+            <li class="nav-item col-auto p-2">
             <a class="nav-link text-decoration-none text-black" asp-action="DangGiao">Đang giao</a>
             </li>
             <li class="nav-item col-auto p-2">
-            <a class="nav-link active" aria-current="page" href="#">Đã giao</a>
+            <a class="nav-link active" aria-current="page" asp-action="DaGiao">Đã giao</a>
             </li>
             <li class="nav-item col-auto p-2">
             <a class="nav-link text-decoration-none text-black" asp-action="DaHuy">Đã hủy</a>

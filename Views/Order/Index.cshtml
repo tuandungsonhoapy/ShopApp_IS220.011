@@ -11,7 +11,7 @@
     var TENKH = ViewBag.TENKH;
     var phonenumber = ViewBag.userPhone;
     var address = ViewBag.userAddress;
-    decimal shipping_costs = 35;
+    decimal shipping_costs = 35000;
     decimal total = 0;
 }
 
@@ -320,7 +320,7 @@
                         success: function (result) {
                             if (result.success) {
                                 if (result.code == 1) {
-                                    window.location.href = "/Delivery/DangGiao";
+                                    window.location.href = "/Delivery/Index";
                                 }
                                 else {
                                     window.location.href = result.url;

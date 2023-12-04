@@ -92,6 +92,7 @@ namespace DAFW_IS220.Controllers
                                      select new ProductDetailModel()
                                      {
                                          MASP = pd.MASP,
+                                         MACTSP = pd.MACTSP,
                                          MAMAU = pd.MAMAU,
                                          MASIZE = pd.MASIZE,
                                          HEX = color.HEX,
@@ -123,7 +124,7 @@ namespace DAFW_IS220.Controllers
 
         [HttpPost]
         [Route("/addcart", Name = "addcart")]
-        public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
+        public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity, [FromForm] int orderid)
         {
             var user = userManager.GetUserAsync(User).Result;
             var userID = "null";
@@ -149,6 +150,7 @@ namespace DAFW_IS220.Controllers
                           .Select(p => new ProductDetailModel()
                           {
                               MASP = p.MASP,
+                              MACTSP = orderid,
                               TENSP = p.TENSP,
                               GIABAN = p.GIABAN,
                               GIAGOC = p.GIAGOC,

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 
 namespace DAFW_IS220.Controllers
 {
@@ -64,13 +65,16 @@ namespace DAFW_IS220.Controllers
 
         private readonly IConfiguration configuration;
 
-        public OrderController(ILogger<OrderController> logger, UserManager<AppUser> user, CartService _cartService, MyShopContext dbcontext, IConfiguration _config)
+        private readonly IHttpContextAccessor httpContext;
+
+        public OrderController(ILogger<OrderController> logger, UserManager<AppUser> user, CartService _cartService, MyShopContext dbcontext, IConfiguration _config, IHttpContextAccessor _httpContext)
         {
             _logger = logger;
             userManager = user;
             cartService = _cartService;
             myShopContext = dbcontext;
             configuration = _config;
+            httpContext = _httpContext;
         }
 
         [Route("/index", Name = "index")]
@@ -148,6 +152,7 @@ namespace DAFW_IS220.Controllers
             string Email = "";
             string userID = "";
             DONHANG dONHANG = new DONHANG();
+            var cart = cartService.GetCartItems();
             if (user != null)
             {
                 userID = user.Id;
@@ -173,12 +178,23 @@ namespace DAFW_IS220.Controllers
                 dONHANG.TRANGTHAITHANHTOAN = "Chưa thanh toán";
             }
             dONHANG.TONGTIEN = orderModel.Price;
-            dONHANG.TRANGTHAIDONHANG = "Chờ xử lý";
+            dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";
             dONHANG.GHICHU = orderModel.Note ?? "";
+            dONHANG.NGAYSUADOI = DateTime.Now;
             myShopContext.Add(dONHANG);
             await myShopContext.SaveChangesAsync();
+            foreach (var item in cart)
+            {
+                CTDH cTDH = new CTDH();
+                cTDH.MADH = dONHANG.MADH;
+                cTDH.MACTSP = item.product.MACTSP;
+                cTDH.TONGGIA = item.quantity * item.product.GIABAN;
+                cTDH.SOLUONG = item.quantity;
+                myShopContext.Add(cTDH);
+                await myShopContext.SaveChangesAsync();
+            }
             cartService.ClearCart();
-            if(orderModel.TypePayment==2)
+            if (orderModel.TypePayment == 2)
             {
                 var url = UrlPayment(orderModel.TypePaymentVN, dONHANG.MADH);
                 // code = new { success = true, Code = orderModel.TypePayment, Url = url };
@@ -192,7 +208,12 @@ namespace DAFW_IS220.Controllers
         {
             var urlPayment = "";
             //var sorder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
-            var order = myShopContext.DONHANGs.FirstOrDefault(o => o.MADH == orderCode);
+            var donhang = myShopContext.DONHANGs.FirstOrDefault(o => o.MADH == orderCode);
+            OrderInfo order = new OrderInfo();
+            order.OrderId = donhang != null ? donhang.MADH : 0;
+            order.Amount = donhang != null ? (long)donhang.TONGTIEN * 100 : 0;
+            order.Status = "0";
+            order.CreatedDate = DateTime.Now;
             var vnpConfig = configuration.GetSection("VNPAY_SETTINGS");
             //Get Config Info
             // string vnp_Returnurl = ConfigurationManager.AppSettings["vnp_Returnurl"]; //URL nhan ket qua tra ve 
@@ -205,11 +226,11 @@ namespace DAFW_IS220.Controllers
             string vnp_HashSecret = vnpConfig["vnp_HashSecret"] ?? "";
             //Build URL for VNPAY
             VnPayLibrary vnpay = new VnPayLibrary();
-            var Price = (long)order.TONGTIEN * 100;
+            var Price = (long)donhang.TONGTIEN * 100;
             vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
             vnpay.AddRequestData("vnp_Command", "pay");
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", Price.ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
+            vnpay.AddRequestData("vnp_Amount", order.Amount.ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
             if (TypePaymentVN == 1)
             {
                 vnpay.AddRequestData("vnp_BankCode", "VNPAYQR");
@@ -223,21 +244,21 @@ namespace DAFW_IS220.Controllers
                 vnpay.AddRequestData("vnp_BankCode", "INTCARD");
             }
 
-            vnpay.AddRequestData("vnp_CreateDate", order.NGAYMUA.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CreateDate", order.CreatedDate.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", "VND");
-            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress());
+            vnpay.AddRequestData("vnp_IpAddr", new Utils(httpContext).GetIpAddress());
             vnpay.AddRequestData("vnp_Locale", "vn");
-            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán đơn hàng :" + order.MADH);
+            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán đơn hàng :" + order.OrderId);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-            vnpay.AddRequestData("vnp_TxnRef", order.MADH.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+            vnpay.AddRequestData("vnp_TxnRef", order.OrderId.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
             //Add Params of 2.1.0 Version
             //Billing
 
             urlPayment = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-            //log.InfoFormat("VNPAY URL: {0}", paymentUrl);
+            _logger.LogInformation("VNPAY URL: {0}", urlPayment);
             return urlPayment;
         }
         #endregion

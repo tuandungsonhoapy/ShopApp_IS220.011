@@ -44,6 +44,7 @@
 
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="/css/sb-admin-2.min.css">
+    @RenderSection("css", required: false)
 
 </head>
 
@@ -130,13 +131,11 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Hóa đơn:</h6>
-                        <a class="collapse-item" href="login.html">Chi đó</a>
-                        <a class="collapse-item" href="login.html">Chi đó</a>
-                        <a class="collapse-item" href="login.html">Chi đó</a>
+                        <a class="collapse-item" asp-action="Index" asp-controller="OrderManaging" asp-area="Admin">Quản lý đơn hàng</a>
+                        <a class="collapse-item" asp-action="DangGiao" asp-controller="Delivery">Đơn hàng đã trả</a>
                     </div>
                 </div>
             </li>
-
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">

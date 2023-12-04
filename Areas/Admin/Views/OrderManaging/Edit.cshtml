@@ -1,0 +1,34 @@
+@model App.DBModels.DONHANG
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Cập nhật trang thái đơn hàng</h1>
+
+<h4>Đơn hàng: @Model.MADH</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-route-id="@Model.MADH" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MADH" />
+            <div class="form-group">
+                <label asp-for="TRANGTHAIDONHANG" class="control-label"></label>
+                <select asp-for="TRANGTHAIDONHANG" class="form-control" asp-items="@(new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Giao hàng", Value = "Đang giao" },
+                    new SelectListItem { Text = "Chờ xác nhận", Value = "Chờ xác nhận" }
+                }, "Value", "Text"))"></select>
+                <span asp-validation-for=" TRANGTHAIDONHANG" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>

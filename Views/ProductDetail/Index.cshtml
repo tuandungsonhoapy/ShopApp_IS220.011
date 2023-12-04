@@ -19,7 +19,8 @@
                              select new {
                                 mamau = (int)sample.MAMAU,
                                 masize = (int)sample.MASIZE,
-                                soluong = sample.SoLuong
+                                soluong = sample.SoLuong,
+                                mactsp = sample.MACTSP
                              }).ToList() : null;     
     var otherproduct = ViewBag.otherProduct as IEnumerable<SANPHAMModel>;                      
 }
@@ -145,7 +146,7 @@
                 <div class="detail_info_product_button ">
                     <div class="detail_info_product_button_detail " style="">
                         <div style="display: flex;">
-                            <a id="formaddtocart" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
+                            <a id="formaddtocart" data-orderid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
                             <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='black'" id="them_hang"><i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i>
                                 <p class="addcart" style="margin-bottom: 0;">THÊM VÀO GIỎ HÀNG</p>
                             </button>
@@ -196,7 +197,11 @@
                 var item = arraypro[i];
                 var itemmau = parseInt(item.mamau);
                 var itemsize = parseInt(item.masize);
-                if(itemmau==mamau && itemsize==masize) return parseInt(item.soluong);
+                if(itemmau==mamau && itemsize==masize) 
+                {
+                    formaddtocart.setAttribute('data-orderid', item.mactsp);
+                    return parseInt(item.soluong);
+                }
             }
         }
         
@@ -325,6 +330,7 @@ function increaseQuantity() {
                 var colorid = $(this).attr("data-colorid");
                 var sizeid = $(this).attr("data-sizeid");
                 var quantity = $(this).attr("data-quantity");
+                var orderid = $(this).attr("data-orderid");
                 if(colorid > 0 && sizeid > 0)
                 {
                     if(quantity > 0)
@@ -336,7 +342,8 @@ function increaseQuantity() {
                                 productid: productid,
                                 colorid: colorid,
                                 sizeid: sizeid,
-                                quantity: quantity
+                                quantity: quantity,
+                                orderid: orderid
                             },
                             success: function (result) {
                                 window.location.href = "@Url.RouteUrl("cart")";
