@@ -31,7 +31,7 @@ namespace App.Areas.Admin.Controllers
         // GET: ChiTietSanPham
         public async Task<IActionResult> Index()
         {
-            var myShopContext = _context.CHITIETSANPHAMs.Include(c => c.MAUSAC).Include(c => c.SANPHAM).Include(c => c.SIZE);
+            var myShopContext = _context.CHITIETSANPHAMs.Include(c => c.MAUSAC).Include(c => c.SANPHAM).Include(c => c.SIZE).OrderBy(c => c.MASP);
             return View(await myShopContext.ToListAsync());
         }
 

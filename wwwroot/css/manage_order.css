@@ -140,6 +140,16 @@ body {
     border-radius: 10px;
     border: 1px solid #30A52D;
 }
+
+#btn-payment-finished {
+    width: 100px;
+    background-color: #30A52D;
+    padding: 6px;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    border: 1px solid #30A52D;
+}
 #btn-status-waiting {
     width: 100px;
     background-color: #3765DC;
@@ -177,7 +187,7 @@ body {
     border: 1px solid #F47F7F;
 }
 #btn-payment-after {
-    width: 70px;
+    width: 90px;
     background-color: #A5ADA5;
     padding: 6px;
     color: #fff;

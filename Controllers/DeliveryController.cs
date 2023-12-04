@@ -97,7 +97,7 @@ namespace DAFW_IS220.Controllers
                                        mAUSAC = color,
                                        sIZE = size
                                    }).ToList();
-            var orders = myShopContext.DONHANGs.Where(dh => dh.MATK.Equals(userID) && dh.TRANGTHAIDONHANG.Equals("Đang giao")).OrderByDescending(dh => dh.NGAYSUADOI).ToList();
+            var orders = myShopContext.DONHANGs.Where(dh => dh.MATK.Equals(userID) && (dh.TRANGTHAIDONHANG.Equals("Đang giao") || dh.TRANGTHAIDONHANG.Equals("Chờ xác nhận"))).OrderByDescending(dh => dh.NGAYSUADOI).ToList();
             var orderList = orders.ToList().GroupJoin(orderdetailList, o => o.MADH, od => od.MADH, (o, ods) =>
         {
             return new OrderListModel
@@ -193,6 +193,17 @@ namespace DAFW_IS220.Controllers
             };
         }).ToList();
             return View(orderList);
+        }
+
+        public async Task<IActionResult> HoanThanh(int id)
+        {
+            var order = await myShopContext.DONHANGs.FindAsync(id);
+            order.TRANGTHAIDONHANG = "Đã giao";
+            order.TRANGTHAITHANHTOAN = "Đã thanh toán";
+            order.NGAYSUADOI = DateTime.Now;
+            myShopContext.Update(order);
+            await myShopContext.SaveChangesAsync();
+            return RedirectToAction(nameof(DaGiao));
         }
 
         public IActionResult FeedBack()

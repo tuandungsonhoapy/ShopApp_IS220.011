@@ -191,6 +191,10 @@ namespace DAFW_IS220.Controllers
                 cTDH.TONGGIA = item.quantity * item.product.GIABAN;
                 cTDH.SOLUONG = item.quantity;
                 myShopContext.Add(cTDH);
+                //Cập nhật lại số lượng sản phẩm
+                CHITIETSANPHAM cHITIETSANPHAM = await myShopContext.CHITIETSANPHAMs.FindAsync(cTDH.MACTSP) ?? new CHITIETSANPHAM();
+                cHITIETSANPHAM.SOLUONG = cHITIETSANPHAM.SOLUONG - cTDH.SOLUONG;
+                myShopContext.Update(cHITIETSANPHAM);
                 await myShopContext.SaveChangesAsync();
             }
             cartService.ClearCart();
