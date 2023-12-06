@@ -267,10 +267,38 @@ namespace DAFW_IS220.Controllers
             dANHGIA.MASP = productdetail.MASP;
             dANHGIA.SOSAO = rating;
             dANHGIA.NOIDUNG = feedback;
+            dANHGIA.MADH = orderid;
             myShopContext.Add(dANHGIA);
             await myShopContext.SaveChangesAsync();
             TempData["StatusMessage"] = "Đánh giá thành công!";
             return Ok(new { success = true, orderid });
+        }
+
+
+        [Route("/updatefeedback", Name = "updatefeedback")]
+        public async Task<IActionResult> UpdateFeedback([FromForm] int productdetailid, [FromForm] int rating, [FromForm] string feedback, [FromForm] int orderid, [FromForm] int productid)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+            DANHGIA dANHGIA = myShopContext.DANHGIAs.Where(fb => fb.MASP == productid && fb.MADH == orderid && fb.MATK.Equals(userID)).FirstOrDefault();
+            if (dANHGIA == null)
+            {
+                TempData["StatusMessage"] = "Không có đánh giá cần cập nhật!";
+                return Ok(new { success = true, orderid });
+            }
+            else
+            {
+                dANHGIA.SOSAO = rating;
+                dANHGIA.NOIDUNG = feedback;
+                myShopContext.Update(dANHGIA);
+                await myShopContext.SaveChangesAsync();
+                TempData["StatusMessage"] = "Cập nhật đánh giá thành công!";
+                return Ok(new { success = true, orderid });
+            }
         }
     }
 }

@@ -78,7 +78,8 @@
                                 @{
                                     for (int i = 0; i < rating; i++)
                                     {
-                                        <i class="fa-solid fa-star rating-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                        <i class="fa-solid fa-star rating-star"
+                                            id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
                                             data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
                                     }
                                     for (int j = rating; j < 5; j++)
@@ -91,8 +92,8 @@
                             <textarea name="review-content" id="review-content@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
                                 cols="30" rows="5" placeholder="">@feedback</textarea>
                             <div class="btn-send">
-                                <button data-orderid="@item.orderDetailModel.MADH" class="button_feedback"
-                                    style="color: white;">Cập nhật</button>
+                                <button data-orderid="@item.orderDetailModel.MADH" data-productid="@item.orderDetailModel.sANPHAM.MASP"
+                                    class="button_update_feedback" style="color: white;">Cập nhật</button>
                             </div>
                             <div>
                                 <span id="notify_error" style="color: red;"></span>
@@ -149,6 +150,37 @@
                             rating: rating,
                             feedback: feedback,
                             orderid: orderid
+                        },
+                        success: function (result) {
+                            if (result.success) {
+                                window.location.href = "/Delivery/FeedBack/" + result.orderid;
+                            } else {
+                                console.error("Đã xảy ra lỗi!");
+                            }
+
+                        }
+                    });
+                }
+            });
+
+
+            $(".button_update_feedback").click(function (event) {
+                event.preventDefault();
+                var feedback = $("#review-content" + productdetailid).val();
+                var orderid = $(this).attr("data-orderid");
+                var productid = $(this).attr("data-productid");
+                if (productdetailid == 0) {
+                    $("#notify_error").text("Vui lòng chọn số sao đánh giá");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.RouteUrl("updatefeedback")",
+                        data: {
+                            productdetailid: productdetailid,
+                            rating: rating,
+                            feedback: feedback,
+                            orderid: orderid,
+                            productid: productid
                         },
                         success: function (result) {
                             if (result.success) {
