@@ -44,6 +44,24 @@
 
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" />
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
     @RenderSection("css", required: false)
 
 </head>
@@ -59,7 +77,8 @@
 
             <!-- Sidebar - Brand -->
             <a style="justify-content: space-between;"
-                class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
+                class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home"
+                asp-action="Index">
                 <div><i class="fa-solid fa-shop fa-2xl" style="color: #e6e9ef;"></i></div>
             </a>
 
@@ -116,7 +135,8 @@
                             hình ảnh</a>
                         <a class="collapse-item" asp-controller="PL_SP" asp-action="Index" asp-area="Admin">Quản lý phân
                             loại</a>
-                        <a class="collapse-item" asp-controller="Size" asp-action="Index" asp-area="Admin">Quản lý size</a>
+                        <a class="collapse-item" asp-controller="Size" asp-action="Index" asp-area="Admin">Quản lý
+                            size</a>
                     </div>
                 </div>
             </li>
@@ -131,10 +151,14 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Quản lý hóa đơn:</h6>
-                        <a class="collapse-item" asp-action="Index" asp-controller="OrderManaging" asp-area="Admin">Chờ chuẩn bị</a>
-                        <a class="collapse-item" asp-action="DangGiao" asp-controller="OrderManaging" asp-area="Admin">Đang giao</a>
-                        <a class="collapse-item" asp-action="DaGiao" asp-controller="OrderManaging" asp-area="Admin">Đã giao</a>
-                        <a class="collapse-item" asp-action="DaHuy" asp-controller="OrderManaging" asp-area="Admin">Đã hủy</a>
+                        <a class="collapse-item" asp-action="Index" asp-controller="OrderManaging" asp-area="Admin">Chờ
+                            chuẩn bị</a>
+                        <a class="collapse-item" asp-action="DangGiao" asp-controller="OrderManaging"
+                            asp-area="Admin">Đang giao</a>
+                        <a class="collapse-item" asp-action="DaGiao" asp-controller="OrderManaging" asp-area="Admin">Đã
+                            giao</a>
+                        <a class="collapse-item" asp-action="DaHuy" asp-controller="OrderManaging" asp-area="Admin">Đã
+                            hủy</a>
                         <a class="collapse-item" asp-action="DangGiao" asp-controller="Delivery">Đơn hàng đã trả</a>
                     </div>
                 </div>
@@ -151,7 +175,7 @@
                 <a class="nav-link" asp-action="Index" asp-controller="FileManager" asp-area="Files" target="_blank">
                     <i class="fas fa-fw fa-table"></i>
                     <span style="font-size: 20px;">Files</span></a>
-            </li> 
+            </li>
 
             <!-- Divider -->
 
@@ -465,6 +489,20 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+    <!-- Thêm link đến DataTables và các plugin liên quan -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+
     @RenderSection("Scripts", required: false)
     @await RenderSectionAsync("Sidebar", false)
 

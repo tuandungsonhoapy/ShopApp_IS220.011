@@ -5,6 +5,7 @@ using App.DBModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using App.Models;
 
 namespace DAFW_IS220.Controllers;
 
@@ -20,9 +21,41 @@ public class HomeController : Controller
         myshopcontext = myShopContext;
     }
 
-    public IActionResult Index()
+    [HttpGet]
+    public IActionResult Index([FromQuery(Name = "p")] int currentPage, int pagesize)
     {
-        return View(myshopcontext.SANPHAMs);
+        IEnumerable<SANPHAM> productinpage;
+        int totalOrder;
+        totalOrder = myshopcontext.SANPHAMs.Count();
+        if (pagesize <= 0) { pagesize = 20; }
+        int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
+
+
+        if (currentPage > countPages) currentPage = countPages;
+        if (currentPage < 1) currentPage = 1;
+
+        var pagingmodel = new PagingModel()
+        {
+            countpages = countPages,
+            currentpage = currentPage,
+            generateUrl = (pageNumber) =>
+            {
+                string? v = Url.Action("Index", new
+                {
+                    p = pageNumber,
+                    pagesize = pagesize,
+                });
+                return v;
+            }
+        };
+        ViewData["currentpage_product"] = currentPage;
+        ViewData["pagesize_product"] = pagesize;
+
+        ViewBag.pagingmodel = pagingmodel;
+        productinpage = myshopcontext.SANPHAMs.Skip((currentPage - 1) * pagesize)
+                                                      .Take(pagesize)
+                                                      .ToList();
+        return View(productinpage);
     }
 
     public IActionResult TTNAM()

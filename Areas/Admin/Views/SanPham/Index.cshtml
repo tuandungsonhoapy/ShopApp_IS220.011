@@ -9,16 +9,16 @@
 }
 
 <h1>Quản lý sản phẩm</h1>
-<form asp-action="Index" method="get" id="searchForm">
+@* <form asp-action="Index" method="get" id="searchForm">
     <label for="SearchString">Tìm kiếm sản phẩm:</label>
     <input type="search" name="SearchString" id="searchInput">
     <input type="submit" value="Tìm kiếm" class="btn btn-primary">
-</form>
+</form> *@
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Tạo mới sản phẩm</a>
 </p>
-<table class="table">
+<table class="table" id="example">
     <thead>
         <tr>
             <th>STT</th>
@@ -55,11 +55,13 @@
                     @Html.DisplayFor(modelItem => item.PLTHOITRANG)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.MASP">Cập nhật</a> |
-                    <a asp-action="Details" asp-route-id="@item.MASP">Xem</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MASP">Xóa</a> |
-                    <a asp-action="CreateSample" asp-route-id="@item.MASP">Thêm mẫu sản phẩm</a> |
-                    <a asp-action="CreateImg" asp-route-id="@item.MASP">Thêm hình ảnh</a>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@item.MASP">Cập nhật</a> |
+                        <a asp-action="Details" asp-route-id="@item.MASP">Xem</a> |
+                        <a asp-action="Delete" asp-route-id="@item.MASP">Xóa</a> |
+                        <a asp-action="CreateSample" asp-route-id="@item.MASP">Thêm mẫu sản phẩm</a> |
+                        <a asp-action="CreateImg" asp-route-id="@item.MASP">Thêm hình ảnh</a>
+                    </div>
                 </td>
             </tr>
         }
@@ -67,3 +69,14 @@
 </table>
 
 <partial name="_PagingXTL" model="@ViewBag.pagingmodel" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>

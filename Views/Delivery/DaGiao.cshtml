@@ -36,14 +36,14 @@
                         {
                             <div class="row p-2">
                                 <img src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg" class="col-2 p-2 float-start" alt="">
-                                <div class="info1 col-5 p-2">
+                                <div style="display: flex; align-items: center;" class="info1 col-5 p-2">
                                     <span>
                                         @item.sANPHAM.TENSP<br>
                                         Màu: @item.mAUSAC.TENMAU <br>
                                         Size: @item.sIZE.Size
                                     </span>
                                 </div>
-                                <div class="info2 col-5 p-3 text-end d-flex align-items-end">
+                                <div class="info2 col-5 p-3 text-end d-flex" style="display: flex; align-items: center;">
                                     <div class="col p-0">
                                         <span>
                                             x @item.SoLuong<br>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="row p-2">
                         <div>
-                            <a asp-action="FeedBack"><button type="button" class="btn_black float-end">Đánh giá</button></a>
+                            <a asp-action="FeedBack" asp-route-id="@order.MADH"><button type="button" class="btn_black float-end">Đánh giá</button></a>
                         </div>
                     </div>
                 </div>

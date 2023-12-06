@@ -23,5 +23,9 @@ namespace App.DBModels
 
         [Column(TypeName = "text")]
         public string NOIDUNG {set;get;}
+
+        public int MADH {set;get;}
+        [ForeignKey("MADH")]
+        public DONHANG DONHANG {set;get;}
     }
 }

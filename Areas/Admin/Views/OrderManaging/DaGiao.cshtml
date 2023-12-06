@@ -12,7 +12,7 @@
         <div class="content_chart_heading">
             <h3>Hoá đơn</h3>
         </div>
-
+@* 
         <div class="content_chart_condition row justify-content-evenly">
             <div class="content_chart_condition_input col-sm-6 col-md-3">
 
@@ -26,7 +26,7 @@
                 <label for="#" class="form-label">Đến ngày</label>
                 <input type="text" class="form-control">
             </div>
-            @* <div class="content_chart_condition_input col-sm-5 col-md-2">
+            <div class="content_chart_condition_input col-sm-5 col-md-2">
                 <label for="#" class="form-label">Trạng thái đơn</label>
                 <select class="form-select">
                     <option selected value="">Chờ xác nhận</option>
@@ -34,14 +34,14 @@
                     <option value="">Đang giao</option>
                     <option value="">Đã huỷ</option>
                 </select>
-            </div> *@
+            </div>
             <div class="content_chart_condition_btn col-sm-5 col-md-auto">
                 <i class="fa-solid fa-magnifying-glass custom-icon" style="font-size: 30;"></i>
             </div>
-        </div>
+        </div> *@
 
         <div class="content_list_order">
-            <table class="table">
+            <table class="table" id="example">
                 <thead>
                     <tr>
                         <th scope="col">Mã đơn hàng</th>
@@ -163,3 +163,14 @@
         })
     </script>
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>

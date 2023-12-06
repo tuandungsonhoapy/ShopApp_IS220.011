@@ -12,6 +12,10 @@ using App.Models;
 using App.Areas.Identity.Models.ManageViewModels;
 using App.Areas.Identity.Models.RoleViewModels;
 using App.Data;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System.Text.Json.Serialization;
+
 
 namespace App.Areas.Admin.Controllers
 {
@@ -31,7 +35,7 @@ namespace App.Areas.Admin.Controllers
         {
             IEnumerable<DONHANG> orderinpage;
             int totalOrder;
-            totalOrder = await myShopContext.DONHANGs.CountAsync();
+            totalOrder = await myShopContext.DONHANGs.Where(dh => dh.TRANGTHAIDONHANG.Equals("Chờ lấy hàng")).CountAsync();
             if (pagesize <= 0) { pagesize = 10; }
             int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
 
@@ -59,11 +63,11 @@ namespace App.Areas.Admin.Controllers
             ViewBag.pagingmodel = pagingmodel;
 
             var orders = await myShopContext.DONHANGs.Include(o => o.TAIKHOAN).ToListAsync();
-            orderinpage = await myShopContext.DONHANGs.Skip((currentPage - 1) * pagesize)
+            orderinpage = await myShopContext.DONHANGs.OrderByDescending(o => o.NGAYSUADOI)
+                                                          .Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
                                                           .Include(o => o.TAIKHOAN)
                                                           .Where(o => o.TRANGTHAIDONHANG.Equals("Chờ lấy hàng"))
-                                                          .OrderByDescending(o => o.NGAYSUADOI)
                                                           .ToListAsync();
             return View(orderinpage);
         }
@@ -73,7 +77,7 @@ namespace App.Areas.Admin.Controllers
         {
             IEnumerable<DONHANG> orderinpage;
             int totalOrder;
-            totalOrder = await myShopContext.DONHANGs.CountAsync();
+            totalOrder = await myShopContext.DONHANGs.Where(dh => dh.TRANGTHAIDONHANG.Equals("Đang giao") || dh.TRANGTHAIDONHANG.Equals("Chờ xác nhận")).CountAsync();
             if (pagesize <= 0) { pagesize = 10; }
             int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
 
@@ -87,7 +91,7 @@ namespace App.Areas.Admin.Controllers
                 currentpage = currentPage,
                 generateUrl = (pageNumber) =>
                 {
-                    string? v = Url.Action("Index", new
+                    string? v = Url.Action("DangGiao", new
                     {
                         p = pageNumber,
                         pagesize = pagesize,
@@ -101,11 +105,11 @@ namespace App.Areas.Admin.Controllers
             ViewBag.pagingmodel = pagingmodel;
 
             var orders = await myShopContext.DONHANGs.Include(o => o.TAIKHOAN).ToListAsync();
-            orderinpage = await myShopContext.DONHANGs.Skip((currentPage - 1) * pagesize)
+            orderinpage = await myShopContext.DONHANGs.OrderByDescending(o => o.NGAYSUADOI).Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
                                                           .Include(o => o.TAIKHOAN)
                                                           .Where(o => o.TRANGTHAIDONHANG.Equals("Đang giao") || o.TRANGTHAIDONHANG.Equals("Chờ xác nhận"))
-                                                          .OrderByDescending(o => o.NGAYSUADOI)
+
                                                           .ToListAsync();
             return View(orderinpage);
         }
@@ -115,7 +119,7 @@ namespace App.Areas.Admin.Controllers
         {
             IEnumerable<DONHANG> orderinpage;
             int totalOrder;
-            totalOrder = await myShopContext.DONHANGs.CountAsync();
+            totalOrder = await myShopContext.DONHANGs.Where(dh => dh.TRANGTHAIDONHANG.Equals("Đã giao")).CountAsync();
             if (pagesize <= 0) { pagesize = 10; }
             int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
 
@@ -129,7 +133,7 @@ namespace App.Areas.Admin.Controllers
                 currentpage = currentPage,
                 generateUrl = (pageNumber) =>
                 {
-                    string? v = Url.Action("Index", new
+                    string? v = Url.Action("DaGiao", new
                     {
                         p = pageNumber,
                         pagesize = pagesize,
@@ -142,12 +146,11 @@ namespace App.Areas.Admin.Controllers
 
             ViewBag.pagingmodel = pagingmodel;
 
-            var orders = await myShopContext.DONHANGs.Include(o => o.TAIKHOAN).ToListAsync();
-            orderinpage = await myShopContext.DONHANGs.Skip((currentPage - 1) * pagesize)
+            orderinpage = await myShopContext.DONHANGs.Where(o => o.TRANGTHAIDONHANG.Equals("Đã giao"))
+                                                        .OrderByDescending(o => o.NGAYSUADOI)
+                                                          .Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
                                                           .Include(o => o.TAIKHOAN)
-                                                          .Where(o => o.TRANGTHAIDONHANG.Equals("Đã giao"))
-                                                          .OrderByDescending(o => o.NGAYSUADOI)
                                                           .ToListAsync();
             return View(orderinpage);
         }
@@ -167,6 +170,7 @@ namespace App.Areas.Admin.Controllers
             var order = await myShopContext.DONHANGs.FindAsync(id);
             order.TRANGTHAIDONHANG = donhang.TRANGTHAIDONHANG;
             order.NGAYSUADOI = DateTime.Now;
+            if(order.TRANGTHAIDONHANG.Equals("Đang giao")) order.NGAYGIAO = DateTime.Now;
             // var orderdetails = await (from ord in myShopContext.DONHANGs
             //                           join ordetail in myShopContext.CTDHs
             //                           on ord.MADH equals ordetail.MADH
@@ -199,6 +203,12 @@ namespace App.Areas.Admin.Controllers
             if (order.TRANGTHAIDONHANG.Equals("Đang giao") || order.TRANGTHAIDONHANG.Equals("Chờ xác nhận")) return RedirectToAction(nameof(DangGiao));
             else if (order.TRANGTHAIDONHANG.Equals("Đã giao")) return RedirectToAction(nameof(DaGiao));
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult GetOrderChuanBi()
+        {
+            var orders = myShopContext.DONHANGs.Where(o => o.Equals("Chờ lấy hàng")).ToList();
+            return Json(new { data = orders });
         }
     }
 }

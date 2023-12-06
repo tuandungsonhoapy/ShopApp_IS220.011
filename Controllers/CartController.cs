@@ -1,8 +1,11 @@
+
 using App.DBModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DAFW_IS220.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly ILogger<CartController> _logger;

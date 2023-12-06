@@ -23,6 +23,7 @@ namespace App.DBModels
         [DisplayName("Phân loại")]
         public int MAPL {set;get;}
         [ForeignKey("MAPL")]
+        [DisplayName("Phân loại")]
         public PL_SP? PL_SP {set;get;}
 
         [StringLength(30)]
