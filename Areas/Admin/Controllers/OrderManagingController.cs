@@ -105,11 +105,9 @@ namespace App.Areas.Admin.Controllers
             ViewBag.pagingmodel = pagingmodel;
 
             var orders = await myShopContext.DONHANGs.Include(o => o.TAIKHOAN).ToListAsync();
-            orderinpage = await myShopContext.DONHANGs.OrderByDescending(o => o.NGAYSUADOI).Skip((currentPage - 1) * pagesize)
+            orderinpage = await myShopContext.DONHANGs.Where(o => o.TRANGTHAIDONHANG.Equals("Đang giao") || o.TRANGTHAIDONHANG.Equals("Chờ xác nhận")).OrderByDescending(o => o.NGAYSUADOI).Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
                                                           .Include(o => o.TAIKHOAN)
-                                                          .Where(o => o.TRANGTHAIDONHANG.Equals("Đang giao") || o.TRANGTHAIDONHANG.Equals("Chờ xác nhận"))
-
                                                           .ToListAsync();
             return View(orderinpage);
         }
@@ -170,7 +168,7 @@ namespace App.Areas.Admin.Controllers
             var order = await myShopContext.DONHANGs.FindAsync(id);
             order.TRANGTHAIDONHANG = donhang.TRANGTHAIDONHANG;
             order.NGAYSUADOI = DateTime.Now;
-            if(order.TRANGTHAIDONHANG.Equals("Đang giao")) order.NGAYGIAO = DateTime.Now;
+            if (order.TRANGTHAIDONHANG.Equals("Đang giao")) order.NGAYGIAO = DateTime.Now;
             // var orderdetails = await (from ord in myShopContext.DONHANGs
             //                           join ordetail in myShopContext.CTDHs
             //                           on ord.MADH equals ordetail.MADH
@@ -202,6 +200,26 @@ namespace App.Areas.Admin.Controllers
             TempData["StatusMessage"] = "Thay đổi trạng thái đơn hàng thành công!";
             if (order.TRANGTHAIDONHANG.Equals("Đang giao") || order.TRANGTHAIDONHANG.Equals("Chờ xác nhận")) return RedirectToAction(nameof(DangGiao));
             else if (order.TRANGTHAIDONHANG.Equals("Đã giao")) return RedirectToAction(nameof(DaGiao));
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var Order = await myShopContext.DONHANGs.FindAsync(id);
+            if (Order != null)
+            {
+                myShopContext.DONHANGs.Remove(Order);
+            }
+            var orderdetails = await myShopContext.CTDHs.Where(o => o.MADH == id).Include(o => o.CHITIETSANPHAM).ToListAsync();
+            foreach(var item in orderdetails){
+                CHITIETSANPHAM cHITIETSANPHAM = item.CHITIETSANPHAM;
+                cHITIETSANPHAM.SOLUONG = cHITIETSANPHAM.SOLUONG + item.SOLUONG;
+                myShopContext.Update(cHITIETSANPHAM);
+            }
+            await myShopContext.SaveChangesAsync();
+            TempData["StatusMessage"] = "Xóa đơn hàng thành công!";
+            if (Order.TRANGTHAIDONHANG.Equals("Đang giao") || Order.TRANGTHAIDONHANG.Equals("Chờ xác nhận")) return RedirectToAction(nameof(DangGiao));
+            else if (Order.TRANGTHAIDONHANG.Equals("Đã giao")) return RedirectToAction(nameof(DaGiao));
             return RedirectToAction(nameof(Index));
         }
 

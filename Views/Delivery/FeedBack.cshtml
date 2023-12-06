@@ -1,5 +1,5 @@
 @using DAFW_IS220.Models;
-@model List<OrderDetailModel>
+@model List<OrderFeedback>
 
 @section css {
     <link rel="stylesheet" href="/css/feedback.css">
@@ -12,47 +12,97 @@
 </div>
 
 <div class="row justify-content-center">
-    @* <h5 style="text-align: center;">Đánh giá sản phẩm đơn hàng @order.MADH</h5> *@
+    <h5 style="text-align: center;">Đánh giá sản phẩm đơn hàng @ViewBag.MADH</h5>
     @foreach (var item in Model)
     {
-        <div id="review">
+        if (item.dANHGIA == null)
+        {
+            <div id="review">
 
-            <div class="review-box-container">
-                <div class="review-box">
+                <div class="review-box-container">
+                    <div class="review-box">
 
-                    <div class="profile-image">
-                        <img src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg" alt="">
+                        <div class="profile-image">
+                            <img src="http://localhost:5235/contents/Img/Product/@item.orderDetailModel.sANPHAM.MainImg" alt="">
+                        </div>
+
+                        <div class="product-name">
+                            <span id="header-product-name">@item.orderDetailModel.sANPHAM.TENSP</span>
+                            <span>Màu: @item.orderDetailModel.mAUSAC.TENMAU</span>
+                            <span>Size: @item.orderDetailModel.sIZE.Size</span>
+                            <div class="reviews">
+                                <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                    data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                    data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                    data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                    data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                    data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                            </div>
+                            <textarea name="review-content" id="review-content@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                cols="30" rows="5" placeholder="Viết đánh giá"></textarea>
+                            <div class="btn-send">
+                                <button data-orderid="@item.orderDetailModel.MADH" class="button_feedback"
+                                    style="color: white;">Đánh giá</button>
+                            </div>
+                            <div>
+                                <span id="notify_error" style="color: red;"></span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="product-name">
-                        <span id="header-product-name">@item.sANPHAM.TENSP</span>
-                        <span>Màu: @item.mAUSAC.TENMAU</span>
-                        <span>Size: @item.sIZE.Size</span>
-                        <div class="reviews">
-                            <i class="fa-solid fa-star" id="feedback@(item.cHITIETSANPHAM.MACTSP)"
-                                data-productdetailid="@item.cHITIETSANPHAM.MACTSP"></i>
-                            <i class="fa-solid fa-star" id="feedback@(item.cHITIETSANPHAM.MACTSP)"
-                                data-productdetailid="@item.cHITIETSANPHAM.MACTSP"></i>
-                            <i class="fa-solid fa-star" id="feedback@(item.cHITIETSANPHAM.MACTSP)"
-                                data-productdetailid="@item.cHITIETSANPHAM.MACTSP"></i>
-                            <i class="fa-solid fa-star" id="feedback@(item.cHITIETSANPHAM.MACTSP)"
-                                data-productdetailid="@item.cHITIETSANPHAM.MACTSP"></i>
-                            <i class="fa-solid fa-star" id="feedback@(item.cHITIETSANPHAM.MACTSP)"
-                                data-productdetailid="@item.cHITIETSANPHAM.MACTSP"></i>
-                        </div>
-                        <textarea name="review-content" id="review-content@(item.cHITIETSANPHAM.MACTSP)" cols="30" rows="5"
-                            placeholder="Viet danh gia"></textarea>
-                        <div class="btn-send">
-                            <button data-orderid="@item.MADH" class="button_feedback" style="color: white;">Đánh giá</button>
-                        </div>
-                        <div>
-                            <span id="notify_error" style="color: red;"></span>
-                        </div>
-                    </div>
                 </div>
-
             </div>
-        </div>
+        }
+        else
+        {
+            var rating = item.dANHGIA.SOSAO;
+            var feedback = item.dANHGIA.NOIDUNG;
+            <div id="review">
+
+                <div class="review-box-container">
+                    <div class="review-box">
+
+                        <div class="profile-image">
+                            <img src="http://localhost:5235/contents/Img/Product/@item.orderDetailModel.sANPHAM.MainImg" alt="">
+                        </div>
+
+                        <div class="product-name">
+                            <span id="header-product-name">@item.orderDetailModel.sANPHAM.TENSP</span>
+                            <span>Màu: @item.orderDetailModel.mAUSAC.TENMAU</span>
+                            <span>Size: @item.orderDetailModel.sIZE.Size</span>
+                            <div class="reviews">
+                                @{
+                                    for (int i = 0; i < rating; i++)
+                                    {
+                                        <i class="fa-solid fa-star rating-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                            data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                    }
+                                    for (int j = rating; j < 5; j++)
+                                    {
+                                        <i class="fa-solid fa-star" id="feedback@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                            data-productdetailid="@item.orderDetailModel.cHITIETSANPHAM.MACTSP"></i>
+                                    }
+                                }
+                            </div>
+                            <textarea name="review-content" id="review-content@(item.orderDetailModel.cHITIETSANPHAM.MACTSP)"
+                                cols="30" rows="5" placeholder="">@feedback</textarea>
+                            <div class="btn-send">
+                                <button data-orderid="@item.orderDetailModel.MADH" class="button_feedback"
+                                    style="color: white;">Cập nhật</button>
+                            </div>
+                            <div>
+                                <span id="notify_error" style="color: red;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
     }
 </div>
 
@@ -60,6 +110,10 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var rating_stars = document.querySelectorAll(".rating-star");
+            rating_stars.forEach(star => {
+                star.style.color = "#ffd93b";
+            })
             var stars = document.querySelectorAll(".fa-star");
             var rating;
             var productdetailid = 0;
@@ -97,12 +151,12 @@
                             orderid: orderid
                         },
                         success: function (result) {
-                            if(result.success){
+                            if (result.success) {
                                 window.location.href = "/Delivery/FeedBack/" + result.orderid;
-                            }else{
+                            } else {
                                 console.error("Đã xảy ra lỗi!");
                             }
-                            
+
                         }
                     });
                 }

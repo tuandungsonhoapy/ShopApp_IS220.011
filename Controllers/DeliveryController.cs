@@ -216,7 +216,10 @@ namespace DAFW_IS220.Controllers
             {
                 userID = user.Id;
             }
+            ViewBag.MADH = id;
+            var feedbacks = myShopContext.DANHGIAs.Where(fb => fb.MADH == id).ToList();
             var orderdetailList = (from orderdetail in myShopContext.CTDHs
+                                   where orderdetail.MADH == id
                                    join productdetail in myShopContext.CHITIETSANPHAMs
                                    on orderdetail.MACTSP equals productdetail.MACTSP
                                    join product in myShopContext.SANPHAMs
@@ -225,7 +228,6 @@ namespace DAFW_IS220.Controllers
                                    on productdetail.MAMAU equals color.MAMAU
                                    join size in myShopContext.SIZEs
                                    on productdetail.MASIZE equals size.MASIZE
-                                   where orderdetail.MADH == id
                                    select new OrderDetailModel()
                                    {
                                        MADH = orderdetail.MADH,
@@ -236,7 +238,18 @@ namespace DAFW_IS220.Controllers
                                        mAUSAC = color,
                                        sIZE = size
                                    }).ToList();
-            return View(orderdetailList);
+            var combinedList = from orderdetail in orderdetailList
+                               join feedback in feedbacks
+                               on orderdetail.sANPHAM.MASP equals feedback.MASP
+                               into feedbackGroup
+                               from feedback in feedbackGroup.DefaultIfEmpty() // Left join
+                               select new OrderFeedback()
+                               {
+                                   orderDetailModel = orderdetail,
+                                   dANHGIA = feedback
+                               };
+            var result = combinedList.ToList();
+            return View(result);
         }
 
         [Route("/confirmfeedback", Name = "confirmfeedback")]
