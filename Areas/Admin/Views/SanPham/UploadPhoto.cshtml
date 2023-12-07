@@ -1,0 +1,15 @@
+@using App.DBModels
+@model App.Areas.Admin.Controllers.SanPhamController.UploadFile
+@{
+    SANPHAM product = ViewBag.Product as SANPHAM;
+}
+
+<h1>Thêm ảnh cho sản phẩm ID: @product.MASP - @product.TENSP</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <label asp-for="@Model.FileUpload"></label>
+    <input asp-for="@Model.FileUpload" />
+    <span asp-validation-for="@Model.FileUpload"></span>
+
+    <button type="submit" class="btn btn-primary" asp-action="UploadPhoto" asp-route-id="@product.MASP">Upload</button>
+</form>

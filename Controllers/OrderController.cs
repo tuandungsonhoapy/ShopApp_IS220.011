@@ -13,13 +13,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace DAFW_IS220.Controllers
 {
-    public class VnpConfig
-    {
-        public string ReturnUrl { get; set; }
-        public string Url { get; set; }
-        public string TmnCode { get; set; }
-        public string HashSecret { get; set; }
-    }
     public static class ControllerExtensionsOrder
     {
         public static string RenderPartialViewToString(this OrderController controller, string viewName, object model)
@@ -175,7 +168,7 @@ namespace DAFW_IS220.Controllers
             else if (orderModel.TypePayment == 2)
             {
                 dONHANG.HINHTHUCTHANHTOAN = "Chuyển khoản";
-                dONHANG.TRANGTHAITHANHTOAN = "Chưa thanh toán";
+                dONHANG.TRANGTHAITHANHTOAN = "Đã thanh toán";
             }
             dONHANG.TONGTIEN = orderModel.Price;
             dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";

@@ -44,5 +44,7 @@ namespace App.DBModels
         [Required]
         [Column(TypeName = "varchar")]
         public string MainImg {set;get;}
+
+        public List<HINHANH> Image {set;get;}
     }
 }

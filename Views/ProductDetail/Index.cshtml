@@ -114,7 +114,8 @@
                         @{
                             if (somausp != null)
                             {
-                                foreach (var item in somausp)
+                                var sizelist = somausp.OrderBy(sp => sp.MASIZE).ToList();
+                                foreach (var item in sizelist)
                                 {
                                     if (seenSizes.Add(item.MASIZE))
                                     {

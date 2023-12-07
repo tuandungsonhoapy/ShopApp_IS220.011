@@ -63,11 +63,10 @@ namespace App.Areas.Admin.Controllers
             ViewBag.pagingmodel = pagingmodel;
 
             var orders = await myShopContext.DONHANGs.Include(o => o.TAIKHOAN).ToListAsync();
-            orderinpage = await myShopContext.DONHANGs.OrderByDescending(o => o.NGAYSUADOI)
+            orderinpage = await myShopContext.DONHANGs.Where(o => o.TRANGTHAIDONHANG.Equals("Chờ lấy hàng")).OrderByDescending(o => o.NGAYSUADOI)
                                                           .Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
-                                                          .Include(o => o.TAIKHOAN)
-                                                          .Where(o => o.TRANGTHAIDONHANG.Equals("Chờ lấy hàng"))
+                                                          .Include(o => o.TAIKHOAN)                                                        
                                                           .ToListAsync();
             return View(orderinpage);
         }
