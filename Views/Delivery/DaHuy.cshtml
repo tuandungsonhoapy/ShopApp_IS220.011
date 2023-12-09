@@ -1,161 +1,173 @@
-@using App.DBModels;
+@using DAFW_IS220.Models;
+@model List<OrderListModel>
 
-    <!-- body -->
-    <div class="order_info_body container">
-        <div class="heading text-uppercase text-center">
-            <h1>Đơn hàng</h1>
-        </div>
-        <!-- nav bar trạng thái đơn hàng -->
-        <ul class="nav nav-underline justify-content-center">
-            <li class="nav-item col-auto p-2">
-            <a class="nav-link text-decoration-none text-black" asp-action="Index">Chuẩn bị hàng</a>
-            </li>
-            <li class="nav-item col-auto p-2">
-            <a class="nav-link text-decoration-none text-black" asp-action="DangGiao">Đang giao</a>
-            </li>
-            <li class="nav-item col-auto p-2">
-            <a class="nav-link text-decoration-none text-black" asp-action="DaGiao">Đã giao</a>
-            </li>
-            <li class="nav-item col-auto p-2">
-            <a class="nav-link active" aria-current="page" asp-action="DaHuy">Đã hủy</a>
-            </li>
-            <li class="nav-item col-auto p-2">
-            <a class="nav-link text-decoration-none text-black" href="#">Trả hàng</a>
-            </li>
-        </ul>
-        <!--1 đơn hàng đã hủy -->
-        <div class="row justify-content-center">
-            <div class="order_status_cover col-8">
-                <div class="row p-2">
-                    <img src="./img/dam-yem-nhum-co-xep-ly-tang-2-510x765 1.png" class="col-2 p-2 float-start" alt="">
-                    <div class="info1 col-5 p-2">
-                        <span>
-                            Đầm cổ yếm xòe <br>
-                            Màu: Hồng <br>
-                            Size: M
-                        </span>
-                    </div>
-                    <div class="info2 col-5 p-3 text-end d-flex align-items-end">
-                        <div class="col p-0">
-                            <span>
-                                x1 <br>
-                                <del>230.000đ</del> 179.000đ
-                            </span>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="sub_info_1 row p-2 text-sm-center">
-                    <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
-                </div>
-                <div class="sub_info_2 row p-2 justify-content-between">
-                    <div class="col-auto text-start bland">
-                        <span>3 sản phẩm</span>
-                    </div>
-                    <div class="col-auto text-end">
-                        <span>Thành tiền: </span>
-                        <span class="color_red">749.000đ</span>
-                    </div>
-                </div>
-                <div class="row p-2">
-                    <div class="col-auto">
-                        <span class="bland">Đã hủy bởi bạn</span>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn_black float-end">Mua lại</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end 1 đơn hàng đã hủy -->
-        <!--1 đơn hàng đã hủy -->
-        <div class="row justify-content-center">
-            <div class="order_status_cover col-8">
-                <div class="row p-2">
-                    <img src="./img/dam-yem-nhum-co-xep-ly-tang-2-510x765 1.png" class="col-2 p-2 float-start" alt="">
-                    <div class="info1 col-5 p-2">
-                        <span>
-                            Đầm cổ yếm xòe <br>
-                            Màu: Hồng <br>
-                            Size: M
-                        </span>
-                    </div>
-                    <div class="info2 col-5 p-3 text-end d-flex align-items-end">
-                        <div class="col p-0">
-                            <span>
-                                x1 <br>
-                                <del>230.000đ</del> 179.000đ
-                            </span>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="sub_info_1 row p-2 text-sm-center">
-                    <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
-                </div>
-                <div class="sub_info_2 row p-2 justify-content-between">
-                    <div class="col-auto text-start bland">
-                        <span>3 sản phẩm</span>
-                    </div>
-                    <div class="col-auto text-end">
-                        <span>Thành tiền: </span>
-                        <span class="color_red">749.000đ</span>
-                    </div>
-                </div>
-                <div class="row p-2">
-                    <div class="col-auto">
-                        <span class="bland">Đã hủy bởi bạn</span>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn_black float-end">Mua lại</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end 1 đơn hàng đã hủy -->
-        <!--1 đơn hàng đã hủy -->
-        <div class="row justify-content-center">
-            <div class="order_status_cover col-8">
-                <div class="row p-2">
-                    <img src="./img/dam-yem-nhum-co-xep-ly-tang-2-510x765 1.png" class="col-2 p-2 float-start" alt="">
-                    <div class="info1 col-5 p-2">
-                        <span>
-                            Đầm cổ yếm xòe <br>
-                            Màu: Hồng <br>
-                            Size: M
-                        </span>
-                    </div>
-                    <div class="info2 col-5 p-3 text-end d-flex align-items-end">
-                        <div class="col p-0">
-                            <span>
-                                x1 <br>
-                                <del>230.000đ</del> 179.000đ
-                            </span>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="sub_info_1 row p-2 text-sm-center">
-                    <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
-                </div>
-                <div class="sub_info_2 row p-2 justify-content-between">
-                    <div class="col-auto text-start bland">
-                        <span>3 sản phẩm</span>
-                    </div>
-                    <div class="col-auto text-end">
-                        <span>Thành tiền: </span>
-                        <span class="color_red">749.000đ</span>
-                    </div>
-                </div>
-                <div class="row p-2">
-                    <div class="col-auto">
-                        <span class="bland">Đã hủy bởi bạn</span>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn_black float-end">Mua lại</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end 1 đơn hàng đã hủy -->
+<!-- body -->
+<div class="order_info_body container">
+    <div class="heading text-uppercase text-center">
+        <h1>Đơn hàng</h1>
     </div>
+    <!-- nav bar trạng thái đơn hàng -->
+    <ul class="nav nav-underline justify-content-center">
+        <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" asp-action="Index">Chuẩn bị hàng</a>
+        </li>
+        <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" asp-action="DangGiao">Đang giao</a>
+        </li>
+        <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" asp-action="DaGiao">Đã giao</a>
+        </li>
+        <li class="nav-item col-auto p-2">
+            <a class="nav-link active" aria-current="page" asp-action="DaHuy">Đã hủy</a>
+        </li>
+        @* <li class="nav-item col-auto p-2">
+            <a class="nav-link text-decoration-none text-black" href="#">Trả hàng</a>
+        </li> *@
+    </ul>
+    @{
+        foreach (var order in Model)
+        {
+            <!--1 đơn hàng đã hủy -->
+            <div class="row justify-content-center">
+                <div class="order_status_cover col-8">
+                    @{
+                        foreach (var item in order.OrderDetails)
+                        {
+                            <div class="row p-2">
+                                <img src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg" class="col-2 p-2 float-start" alt="">
+                                <div style="display: flex; align-items: center;" class="info1 col-5 p-2">
+                                    <span>
+                                        @item.sANPHAM.TENSP<br>
+                                        Màu: @item.mAUSAC.TENMAU <br>
+                                        Size: @item.sIZE.Size
+                                    </span>
+                                </div>
+                                <div style="display: flex; align-items: center;" class="info2 col-5 p-3 text-end d-flex">
+                                    <div class="col p-0">
+                                        <span>
+                                            x @item.SoLuong<br>
+                                            <del style="opacity: 0.5;">@(item.sANPHAM.GIAGOC)đ</del> @(item.sANPHAM.GIABAN)đ
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="sub_info_1 row p-2 text-sm-center">
+                        <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
+                    </div>
+                    <div class="sub_info_2 row p-2 justify-content-between">
+                        <div class="col-auto text-start bland">
+                            <span>Mã đơn hàng: @order.MADH</span>
+                        </div>
+                        <div class="col-auto text-end">
+                            <span>Thành tiền: </span>
+                            <span class="color_red">@(order.TONGTIEN)đ</span>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-auto">
+                            <span class="bland">Đã hủy bởi bạn</span>
+                        </div>
+                        <div class="col">
+                            <a asp-action="buyAgain" asp-route-id="@order.MADH"><button type="button" class="btn_black float-end">Mua lại</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end 1 đơn hàng đã hủy -->
+        }
+    }
+
+    <!--1 đơn hàng đã hủy -->
+    @* <div class="row justify-content-center">
+        <div class="order_status_cover col-8">
+            <div class="row p-2">
+                <img src="./img/dam-yem-nhum-co-xep-ly-tang-2-510x765 1.png" class="col-2 p-2 float-start" alt="">
+                <div class="info1 col-5 p-2">
+                    <span>
+                        Đầm cổ yếm xòe <br>
+                        Màu: Hồng <br>
+                        Size: M
+                    </span>
+                </div>
+                <div class="info2 col-5 p-3 text-end d-flex align-items-end">
+                    <div class="col p-0">
+                        <span>
+                            x1 <br>
+                            <del>230.000đ</del> 179.000đ
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="sub_info_1 row p-2 text-sm-center">
+                <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
+            </div>
+            <div class="sub_info_2 row p-2 justify-content-between">
+                <div class="col-auto text-start bland">
+                    <span>3 sản phẩm</span>
+                </div>
+                <div class="col-auto text-end">
+                    <span>Thành tiền: </span>
+                    <span class="color_red">749.000đ</span>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class="col-auto">
+                    <span class="bland">Đã hủy bởi bạn</span>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn_black float-end">Mua lại</button>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <!-- end 1 đơn hàng đã hủy -->
+    <!--1 đơn hàng đã hủy -->
+    @* <div class="row justify-content-center">
+        <div class="order_status_cover col-8">
+            <div class="row p-2">
+                <img src="./img/dam-yem-nhum-co-xep-ly-tang-2-510x765 1.png" class="col-2 p-2 float-start" alt="">
+                <div class="info1 col-5 p-2">
+                    <span>
+                        Đầm cổ yếm xòe <br>
+                        Màu: Hồng <br>
+                        Size: M
+                    </span>
+                </div>
+                <div class="info2 col-5 p-3 text-end d-flex align-items-end">
+                    <div class="col p-0">
+                        <span>
+                            x1 <br>
+                            <del>230.000đ</del> 179.000đ
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="sub_info_1 row p-2 text-sm-center">
+                <a class="text-decoration-none bland" href="#">Xem thêm sản phẩm</a>
+            </div>
+            <div class="sub_info_2 row p-2 justify-content-between">
+                <div class="col-auto text-start bland">
+                    <span>3 sản phẩm</span>
+                </div>
+                <div class="col-auto text-end">
+                    <span>Thành tiền: </span>
+                    <span class="color_red">749.000đ</span>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class="col-auto">
+                    <span class="bland">Đã hủy bởi bạn</span>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn_black float-end">Mua lại</button>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <!-- end 1 đơn hàng đã hủy -->
+</div>

@@ -66,7 +66,7 @@ namespace App.Areas.Admin.Controllers
             orderinpage = await myShopContext.DONHANGs.Where(o => o.TRANGTHAIDONHANG.Equals("Chờ lấy hàng")).OrderByDescending(o => o.NGAYSUADOI)
                                                           .Skip((currentPage - 1) * pagesize)
                                                           .Take(pagesize)
-                                                          .Include(o => o.TAIKHOAN)                                                        
+                                                          .Include(o => o.TAIKHOAN)
                                                           .ToListAsync();
             return View(orderinpage);
         }
@@ -152,6 +152,47 @@ namespace App.Areas.Admin.Controllers
             return View(orderinpage);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DaHuy([FromQuery(Name = "p")] int currentPage, int pagesize)
+        {
+            IEnumerable<DONHANG> orderinpage;
+            int totalOrder;
+            totalOrder = await myShopContext.DONHANGs.Where(dh => dh.TRANGTHAIDONHANG.Equals("Đã hủy")).CountAsync();
+            if (pagesize <= 0) { pagesize = 10; }
+            int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
+
+
+            if (currentPage > countPages) currentPage = countPages;
+            if (currentPage < 1) currentPage = 1;
+
+            var pagingmodel = new PagingModel()
+            {
+                countpages = countPages,
+                currentpage = currentPage,
+                generateUrl = (pageNumber) =>
+                {
+                    string? v = Url.Action("DaHuy", new
+                    {
+                        p = pageNumber,
+                        pagesize = pagesize,
+                    });
+                    return v;
+                }
+            };
+            ViewData["currentpage_product"] = currentPage;
+            ViewData["pagesize_product"] = pagesize;
+
+            ViewBag.pagingmodel = pagingmodel;
+
+            orderinpage = await myShopContext.DONHANGs.Where(o => o.TRANGTHAIDONHANG.Equals("Đã hủy"))
+                                                        .OrderByDescending(o => o.NGAYSUADOI)
+                                                          .Skip((currentPage - 1) * pagesize)
+                                                          .Take(pagesize)
+                                                          .Include(o => o.TAIKHOAN)
+                                                          .ToListAsync();
+            return View(orderinpage);
+        }
+
         [HttpGet("/admin/order/edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -210,7 +251,8 @@ namespace App.Areas.Admin.Controllers
                 myShopContext.DONHANGs.Remove(Order);
             }
             var orderdetails = await myShopContext.CTDHs.Where(o => o.MADH == id).Include(o => o.CHITIETSANPHAM).ToListAsync();
-            foreach(var item in orderdetails){
+            foreach (var item in orderdetails)
+            {
                 CHITIETSANPHAM cHITIETSANPHAM = item.CHITIETSANPHAM;
                 cHITIETSANPHAM.SOLUONG = cHITIETSANPHAM.SOLUONG + item.SOLUONG;
                 myShopContext.Update(cHITIETSANPHAM);
@@ -219,6 +261,7 @@ namespace App.Areas.Admin.Controllers
             TempData["StatusMessage"] = "Xóa đơn hàng thành công!";
             if (Order.TRANGTHAIDONHANG.Equals("Đang giao") || Order.TRANGTHAIDONHANG.Equals("Chờ xác nhận")) return RedirectToAction(nameof(DangGiao));
             else if (Order.TRANGTHAIDONHANG.Equals("Đã giao")) return RedirectToAction(nameof(DaGiao));
+            else if (Order.TRANGTHAIDONHANG.Equals("Đã hủy")) return RedirectToAction(nameof(DaHuy));
             return RedirectToAction(nameof(Index));
         }
 

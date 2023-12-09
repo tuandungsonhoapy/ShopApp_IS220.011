@@ -159,7 +159,7 @@
                             giao</a>
                         <a class="collapse-item" asp-action="DaHuy" asp-controller="OrderManaging" asp-area="Admin">Đã
                             hủy</a>
-                        <a class="collapse-item" asp-action="DangGiao" asp-controller="Delivery">Đơn hàng đã trả</a>
+                        @* <a class="collapse-item" asp-action="DangGiao" asp-controller="Delivery">Đơn hàng đã trả</a> *@
                     </div>
                 </div>
             </li>
@@ -175,6 +175,13 @@
                 <a class="nav-link" asp-action="Index" asp-controller="FileManager" asp-area="Files" target="_blank">
                     <i class="fas fa-fw fa-table"></i>
                     <span style="font-size: 20px;">Files</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="Voucher" asp-area="Admin">
+                    <i class="fa-solid fa-ticket"></i>
+                    <span style="font-size: 20px;">Quản lý voucher</span></a>
             </li>
 
             <!-- Divider -->

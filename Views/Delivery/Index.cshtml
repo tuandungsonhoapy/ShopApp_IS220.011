@@ -20,9 +20,9 @@
         <li class="nav-item col-auto p-2">
             <a class="nav-link text-decoration-none text-black" asp-action="DaHuy">Đã hủy</a>
         </li>
-        <li class="nav-item col-auto p-2">
+        @* <li class="nav-item col-auto p-2">
             <a class="nav-link text-decoration-none text-black" href="#">Trả hàng</a>
-        </li>
+        </li> *@
     </ul>
     <!--1 đơn hàng đang giao -->
     @{
@@ -73,6 +73,7 @@
                             <span>Đơn hàng đang được chuẩn bị</span>
                         </div>
                         <div class="col-auto text-end">
+                            <a  asp-action="Delete" asp-route-id="@order.MADH" ><button style="margin-right: 20px;" class="btn btn-danger">Hủy đơn hàng</button></a>
                             <a class="text-decoration-none bland" href="#">Chi tiết</a>
                         </div>
                     </div>

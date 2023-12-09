@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using App.Data;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Configuration;
+using System.Net;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,24 @@ builder.Services.AddDbContext<MyShopContext>(options =>
     string connectString = configuration.GetConnectionString("MyShopContext") ?? "";
     options.UseMySql(connectString, ServerVersion.AutoDetect(connectString));
 
+});
+
+// builder.WebHost.UseKestrel(kestrelServerOptions => {
+
+//     // Thiết lập lắng nghe trên cổng 8090 với IP bất kỳ
+//     kestrelServerOptions.Listen(IPAddress.Any, 8090);
+
+//     // Lắng nghe trên cổng 8091 trên server chạy ứng dụng
+//     kestrelServerOptions.ListenLocalhost(8091);
+
+
+// });
+
+builder.WebHost.UseUrls("http://localhost:5235");
+
+builder.WebHost.UseKestrel(kestrelServerOptions => {
+
+    kestrelServerOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
 });
 
 builder.Services.AddDistributedMemoryCache();
@@ -158,6 +178,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.MapRazorPages();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    });
 
 app.UseHttpsRedirection();
 

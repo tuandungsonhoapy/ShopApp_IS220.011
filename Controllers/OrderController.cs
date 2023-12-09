@@ -169,6 +169,11 @@ namespace DAFW_IS220.Controllers
             {
                 dONHANG.HINHTHUCTHANHTOAN = "Chuyển khoản";
                 dONHANG.TRANGTHAITHANHTOAN = "Đã thanh toán";
+                THANHTOAN tHANHTOAN = new THANHTOAN();
+                tHANHTOAN.MADH = dONHANG.MADH;
+                tHANHTOAN.SOTIEN = orderModel.Price;
+                tHANHTOAN.NGAYTHANHTOAN = DateTime.Now;
+                myShopContext.Add(tHANHTOAN);
             }
             dONHANG.TONGTIEN = orderModel.Price;
             dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";

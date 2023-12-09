@@ -1,0 +1,53 @@
+@model App.DBModels.VOUCHER
+
+@{
+    ViewData["Title"] = "Tạo mới voucher";
+}
+
+<h1>Tạo mới voucher</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Voucher" asp-area="Admin" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TENVOUCHER" class="control-label"></label>
+                <input asp-for="TENVOUCHER" class="form-control" />
+                <span asp-validation-for="TENVOUCHER" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="THOIGIANBD" class="control-label"></label>
+                <input asp-for="THOIGIANBD" class="form-control" type="datetime-local" />
+                <span asp-validation-for="THOIGIANBD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="THOIGIANKT" class="control-label"></label>
+                <input asp-for="THOIGIANKT" class="form-control" type="datetime-local" />
+                <span asp-validation-for="THOIGIANKT" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SOLUONG" class="control-label"></label>
+                <input asp-for="SOLUONG" class="form-control" />
+                <span asp-validation-for="SOLUONG" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MOTA" class="control-label"></label>
+                <textarea rows="5" asp-for="MOTA" class="form-control"></textarea>
+                <span asp-validation-for="MOTA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GIATRIGIAM" class="control-label"></label>
+                <input asp-for="GIATRIGIAM" class="form-control" />
+                <span asp-validation-for="GIATRIGIAM" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

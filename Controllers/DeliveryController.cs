@@ -202,6 +202,11 @@ namespace DAFW_IS220.Controllers
             order.TRANGTHAIDONHANG = "Đã giao";
             order.TRANGTHAITHANHTOAN = "Đã thanh toán";
             order.NGAYSUADOI = DateTime.Now;
+            THANHTOAN tHANHTOAN = new THANHTOAN();
+            tHANHTOAN.MADH = order.MADH;
+            tHANHTOAN.SOTIEN = order.TONGTIEN;
+            tHANHTOAN.NGAYTHANHTOAN = DateTime.Now;
+            myShopContext.Add(tHANHTOAN);
             myShopContext.Update(order);
             await myShopContext.SaveChangesAsync();
             return RedirectToAction(nameof(DaGiao));
@@ -284,7 +289,7 @@ namespace DAFW_IS220.Controllers
             {
                 userID = user.Id;
             }
-            DANHGIA dANHGIA = myShopContext.DANHGIAs.Where(fb => fb.MASP == productid && fb.MADH == orderid && fb.MATK.Equals(userID)).FirstOrDefault();
+            DANHGIA dANHGIA = myShopContext.DANHGIAs.Where(fb => fb.MASP == productid && fb.MADH == orderid && fb.MATK.Equals(userID)).FirstOrDefault() ?? new DANHGIA();
             if (dANHGIA == null)
             {
                 TempData["StatusMessage"] = "Không có đánh giá cần cập nhật!";
@@ -299,6 +304,70 @@ namespace DAFW_IS220.Controllers
                 TempData["StatusMessage"] = "Cập nhật đánh giá thành công!";
                 return Ok(new { success = true, orderid });
             }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var Order = await myShopContext.DONHANGs.FindAsync(id);
+            if (Order != null)
+            {
+                Order.TRANGTHAIDONHANG = "Đã hủy";
+                Order.NGAYSUADOI = DateTime.Now;
+                myShopContext.Update(Order);
+            }
+
+            var orderdetailList = (from ctdh in myShopContext.CTDHs
+                                   join ctsp in myShopContext.CHITIETSANPHAMs
+                                   on ctdh.MACTSP equals ctsp.MACTSP
+                                   where ctdh.MADH == id
+                                   select new CTDH(){
+                                    MADH = ctdh.MADH,
+                                    MACTSP = ctdh.MACTSP,
+                                    TONGGIA = ctdh.TONGGIA,
+                                    SOLUONG = ctdh.SOLUONG,
+                                    CHITIETSANPHAM = ctsp
+                                   }).ToList();
+            foreach (var item in orderdetailList)
+            {
+                CHITIETSANPHAM cHITIETSANPHAM = item.CHITIETSANPHAM;
+                cHITIETSANPHAM.SOLUONG = cHITIETSANPHAM.SOLUONG + item.SOLUONG;
+                myShopContext.Update(cHITIETSANPHAM);
+            }
+            await myShopContext.SaveChangesAsync();
+            TempData["StatusMessage"] = "Hủy đơn hàng thành công!";
+            return RedirectToAction(nameof(DaHuy));
+        }
+
+        public async Task<IActionResult> buyAgain(int id)
+        {
+            var Order = await myShopContext.DONHANGs.FindAsync(id);
+            if (Order != null)
+            {
+                Order.TRANGTHAIDONHANG = "Chờ lấy hàng";
+                Order.NGAYSUADOI = DateTime.Now;
+                myShopContext.Update(Order);
+            }
+
+            var orderdetailList = (from ctdh in myShopContext.CTDHs
+                                   join ctsp in myShopContext.CHITIETSANPHAMs
+                                   on ctdh.MACTSP equals ctsp.MACTSP
+                                   where ctdh.MADH == id
+                                   select new CTDH(){
+                                    MADH = ctdh.MADH,
+                                    MACTSP = ctdh.MACTSP,
+                                    TONGGIA = ctdh.TONGGIA,
+                                    SOLUONG = ctdh.SOLUONG,
+                                    CHITIETSANPHAM = ctsp
+                                   }).ToList();
+            foreach (var item in orderdetailList)
+            {
+                CHITIETSANPHAM cHITIETSANPHAM = item.CHITIETSANPHAM;
+                cHITIETSANPHAM.SOLUONG = cHITIETSANPHAM.SOLUONG - item.SOLUONG;
+                myShopContext.Update(cHITIETSANPHAM);
+            }
+            await myShopContext.SaveChangesAsync();
+            TempData["StatusMessage"] = "Đặt lại đơn hàng thành công!";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

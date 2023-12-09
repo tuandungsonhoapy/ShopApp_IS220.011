@@ -393,7 +393,7 @@ namespace App.Areas.Identity.Controllers
             var user = await GetCurrentUserAsync();
 
             user.TENKH = model.TenKH;
-            user.GIOITINH = model.GioiTinh;
+            // user.GIOITINH = model.GioiTinh;
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             return RedirectToAction(nameof(Index), "Manage");

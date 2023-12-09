@@ -1,0 +1,183 @@
+@using App.DBModels
+@model IEnumerable<VOUCHER>
+
+@section css {
+    <link rel="stylesheet" href="/css/manage_order.css">
+    <style>
+        #confirmDeleteModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            /* Đặt kích thước popup theo nhu cầu của bạn */
+            height: 130px;
+            /* Đặt kích thước popup theo nhu cầu của bạn */
+            background-color: #fff;
+            /* Đặt màu nền của popup */
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #confirmDelete {
+
+            display: block;
+        }
+    </style>
+}
+
+<div class="container_ordermanaging">
+    <!-- content: start -->
+    <div style="margin-left: 0px;" class="content">
+        <!-- chart -->
+        <div class="content_chart_heading">
+            <h3>Quản lý voucher</h3>
+        </div>
+
+        @* <div class="content_chart_condition row justify-content-evenly">
+        <div class="content_chart_condition_input col-sm-6 col-md-3">
+
+        <input type="text" class="form-control" placeholder="Tìm theo tên khách hàng, mã hoá đơn,...">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Từ ngày</label>
+        <input type="text" class="form-control">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Đến ngày</label>
+        <input type="text" class="form-control">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Trạng thái đơn</label>
+        <select class="form-select">
+        <option selected value="">Chờ xác nhận</option>
+        <option value="">Chờ lấy hàng</option>
+        <option value="">Đang giao</option>
+        <option value="">Đã huỷ</option>
+        </select>
+        </div>
+        <div class="content_chart_condition_btn col-sm-5 col-md-auto">
+        <i class="fa-solid fa-magnifying-glass custom-icon" style="font-size: 30;"></i>
+        </div>
+        </div> *@
+
+        <div class="content_list_order">
+            <p>
+                <a asp-action="Create" class="btn btn-primary">Tạo mới voucher</a>
+            </p>
+            <table class="table" id="example">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã số voucher</th>
+                        <th scope="col">Mã code voucher</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Ngày bắt đầu</th>
+                        <th scope="col">Ngày kết thúc</th>
+                        <th scope="col">Giá trị giảm(%)</th>
+                        <th scope="col"></th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td data-label="Order-code">@item.MAVOUCHER</td>
+                                <td data-label="Name">@item.TENVOUCHER</td>
+                                <td data-label="Phone-number">@item.SOLUONG</td>
+                                <td data-label="Address">@item.THOIGIANBD</td>
+                                <td data-label="Day">@item.THOIGIANKT</td>
+                                <td>@(item.GIATRIGIAM)%</td>
+                                <td data-label="update">
+                                    <div class="icon-update">
+                                        <i class="fa-solid fa-eye" style="color: #4656aa;"></i>
+                                        <a style="cursor: pointer;" id="deleteButton" data-voucherid="@item.MAVOUCHER"><i class="fa-solid fa-eraser"
+                                                style="color: red;"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.MAVOUCHER"><i class="fa-solid fa-pen-to-square"
+                                                style="color: #12f33f;"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- content: end -->
+</div>
+
+<partial name="_PagingXTL" model="@ViewBag.pagingmodel" />
+
+<!-- Modal xác nhận xóa -->
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div><span class="close">&times;</span></div>
+        <div style="margin-top: 25px; display: flex; flex-direction: column;">
+            <p style="text-align: center; color: red;">Bạn có chắc chắn muốn xóa voucher này không?</p>
+            <button class="btn btn-danger" id="confirmDelete">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Hiển thị modal khi click vào nút xóa
+        document.getElementById('deleteButton').addEventListener('click', function () {
+            var modal = document.getElementById('confirmDeleteModal');
+            modal.style.display = 'block';
+        });
+
+        // Đóng modal khi click vào nút đóng hoặc nút xác nhận
+        document.getElementById('confirmDeleteModal').addEventListener('click', function (event) {
+            if (event.target === this || event.target.className === 'close') {
+                this.style.display = 'none';
+            } else if (event.target.id === 'confirmDelete') {
+                // Lấy ID voucher và gọi đến controller để xóa
+                var voucherid = document.getElementById('deleteButton').getAttribute('data-voucherid');
+                deleteVoucher(voucherid);
+                this.style.display = 'none';
+            }
+        });
+
+        // Hàm gọi đến controller để xóa voucher
+        function deleteVoucher(voucherid) {
+            $.ajax({
+                type: 'POST',
+                url: '/Voucher/Delete',
+                data: { voucherid: voucherid },
+                success: function (result) {
+                    if (result.success) {
+                        // Xóa thành công, thực hiện các hành động khác nếu cần
+                        window.location.href = "@Url.RouteUrl("/Voucher")";
+                    } else {
+                        // Xóa thất bại, xử lý nếu cần
+                        alert('Xóa voucher thất bại: ' + result.message);
+                    }
+                },
+                error: function () {
+                    // Xử lý lỗi khi gửi yêu cầu
+                    alert('Đã xảy ra lỗi khi xóa voucher.');
+                }
+            });
+        }
+    </script>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>

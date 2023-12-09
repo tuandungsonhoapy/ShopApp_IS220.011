@@ -14,41 +14,41 @@
         </div>
 
         @* <div class="content_chart_condition row justify-content-evenly">
-            <div class="content_chart_condition_input col-sm-6 col-md-3">
+        <div class="content_chart_condition_input col-sm-6 col-md-3">
 
-                <input type="text" class="form-control" placeholder="Tìm theo tên khách hàng, mã hoá đơn,...">
-            </div>
-            <div class="content_chart_condition_input col-sm-5 col-md-2">
-                <label for="#" class="form-label">Từ ngày</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="content_chart_condition_input col-sm-5 col-md-2">
-                <label for="#" class="form-label">Đến ngày</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="content_chart_condition_input col-sm-5 col-md-2">
-            <label for="#" class="form-label">Trạng thái đơn</label>
-            <select class="form-select">
-            <option selected value="">Chờ xác nhận</option>
-            <option value="">Chờ lấy hàng</option>
-            <option value="">Đang giao</option>
-            <option value="">Đã huỷ</option>
-            </select>
-            </div>
-            <div class="content_chart_condition_btn col-sm-5 col-md-auto">
-                <i class="fa-solid fa-magnifying-glass custom-icon" style="font-size: 30;"></i>
-            </div>
+        <input type="text" class="form-control" placeholder="Tìm theo tên khách hàng, mã hoá đơn,...">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Từ ngày</label>
+        <input type="text" class="form-control">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Đến ngày</label>
+        <input type="text" class="form-control">
+        </div>
+        <div class="content_chart_condition_input col-sm-5 col-md-2">
+        <label for="#" class="form-label">Trạng thái đơn</label>
+        <select class="form-select">
+        <option selected value="">Chờ xác nhận</option>
+        <option value="">Chờ lấy hàng</option>
+        <option value="">Đang giao</option>
+        <option value="">Đã huỷ</option>
+        </select>
+        </div>
+        <div class="content_chart_condition_btn col-sm-5 col-md-auto">
+        <i class="fa-solid fa-magnifying-glass custom-icon" style="font-size: 30;"></i>
+        </div>
         </div> *@
 
         <div class="content_list_order">
-            <table class="table" id="example" >
+            <table class="table" id="example">
                 <thead>
                     <tr>
                         <th scope="col">Mã đơn hàng</th>
                         <th scope="col">Tên khách hàng</th>
                         <th scope="col">SĐT</th>
                         <th scope="col">Địa chỉ</th>
-                        <th scope="col">Ngày hoá đơn</th>
+                        <th scope="col">Ngày cập nhật</th>
                         <th scope="col">Trạng thái</th>
                         <th style="" scope="col">Thanh toán</th>
                         <th scope="col">Tổng tiền</th>
@@ -65,17 +65,28 @@
                                 <td data-label="Name">@item.TAIKHOAN.TENKH</td>
                                 <td data-label="Phone-number">@item.TAIKHOAN.PhoneNumber</td>
                                 <td data-label="Address">@item.TAIKHOAN.DIACHI</td>
-                                <td data-label="Day">@item.NGAYMUA</td>
+                                <td data-label="Day">@item.NGAYSUADOI</td>
                                 <td><button type="button" class="btn_status"
                                         id="btn-status-deliveried">@item.TRANGTHAIDONHANG</button>
                                 </td>
-                                <td><button type="button" id="btn-payment-after">@item.TRANGTHAITHANHTOAN</button>
-                                </td>
+                                @{
+                                    if (item.TRANGTHAITHANHTOAN.Equals("Chưa thanh toán"))
+                                    {
+                                        <td><button type="button" id="btn-payment-after">@item.TRANGTHAITHANHTOAN</button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td><button type="button" id="btn-payment-finished">@item.TRANGTHAITHANHTOAN</button>
+                                        </td>
+                                    }
+                                }
                                 <td data-label="Subtotal">@item.TONGTIEN</td>
                                 <td data-label="update">
                                     <div class="icon-update">
                                         <i class="fa-solid fa-eye" style="color: #4656aa;"></i>
-                                        <a asp-action="Delete" asp-route-id="@item.MADH"><i class="fa-solid fa-eraser" style="color: red;"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.MADH"><i class="fa-solid fa-eraser"
+                                                style="color: red;"></i></a>
                                         <a asp-action="Edit" asp-route-id="@item.MADH"><i class="fa-solid fa-pen-to-square"
                                                 style="color: #12f33f;"></i></a>
                                     </div>
