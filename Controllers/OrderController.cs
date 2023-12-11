@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace DAFW_IS220.Controllers
 {
@@ -70,9 +71,19 @@ namespace DAFW_IS220.Controllers
             httpContext = _httpContext;
         }
 
-        [Route("/index", Name = "index")]
-        public async Task<IActionResult> Index()
+        // [Route("/index", Name = "index")]
+        public async Task<IActionResult> Index(string cartItems)
         {
+            if (cartItems != null)
+            {
+                List<CartItem> cartItemList = JsonConvert.DeserializeObject<List<CartItem>>(cartItems);
+
+                // Xử lý logic tại trang Order với danh sách cartItems nhận được
+                // ...
+
+                // Trả về view Order/Index với danh sách cartItems
+                return View(cartItemList);
+            }
             var user = await userManager.GetUserAsync(User);
             var userID = "null";
             if (user != null)
@@ -87,6 +98,54 @@ namespace DAFW_IS220.Controllers
             }
             var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
             return View(cart);
+        }
+
+        [HttpPost]
+        [Route("/buynow", Name = "buynow")]
+        public IActionResult BuyNow([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity, [FromForm] int orderid)
+        {
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+
+            var color = myShopContext.MAUSACs
+                        .Where(c => c.MAMAU == colorid)
+                        .FirstOrDefault();
+            var size = myShopContext.SIZEs
+                       .Where(s => s.MASIZE == sizeid)
+                       .FirstOrDefault();
+            var product = myShopContext.SANPHAMs
+                          .Where(p => p.MASP == productid)
+                          .Select(p => new ProductDetailModel()
+                          {
+                              MASP = p.MASP,
+                              MACTSP = orderid,
+                              TENSP = p.TENSP,
+                              GIABAN = p.GIABAN,
+                              GIAGOC = p.GIAGOC,
+                              MAMAU = color.MAMAU,
+                              TENMAU = color.TENMAU,
+                              HEX = color.HEX,
+                              MASIZE = size.MASIZE,
+                              Size = size.Size,
+                              SoLuong = quantity,
+                              MainImg = p.MainImg,
+                          })
+                          .FirstOrDefault();
+            if (product == null)
+                return NotFound("Không có sản phẩm");
+
+            // Xử lý thanh toán
+            CartItem cartItem = new CartItem();
+            cartItem.userid = userID;
+            cartItem.quantity = quantity;
+            cartItem.product = product;
+            List<CartItem> cartItems = new List<CartItem>();
+            cartItems.Add(cartItem);
+            return View("Index", cartItems);
         }
 
         [Route("/changeaddress", Name = "changeaddress")]
@@ -169,11 +228,6 @@ namespace DAFW_IS220.Controllers
             {
                 dONHANG.HINHTHUCTHANHTOAN = "Chuyển khoản";
                 dONHANG.TRANGTHAITHANHTOAN = "Đã thanh toán";
-                THANHTOAN tHANHTOAN = new THANHTOAN();
-                tHANHTOAN.MADH = dONHANG.MADH;
-                tHANHTOAN.SOTIEN = orderModel.Price;
-                tHANHTOAN.NGAYTHANHTOAN = DateTime.Now;
-                myShopContext.Add(tHANHTOAN);
             }
             dONHANG.TONGTIEN = orderModel.Price;
             dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";
@@ -181,6 +235,15 @@ namespace DAFW_IS220.Controllers
             dONHANG.NGAYSUADOI = DateTime.Now;
             myShopContext.Add(dONHANG);
             await myShopContext.SaveChangesAsync();
+            if(orderModel.TypePayment == 2)
+            {
+                THANHTOAN tHANHTOAN = new THANHTOAN();
+                tHANHTOAN.MADH = dONHANG.MADH;
+                tHANHTOAN.SOTIEN = orderModel.Price;
+                tHANHTOAN.NGAYTHANHTOAN = DateTime.Now;
+                myShopContext.Add(tHANHTOAN);
+                await myShopContext.SaveChangesAsync();
+            }
             foreach (var item in cart)
             {
                 CTDH cTDH = new CTDH();

@@ -3,6 +3,7 @@
 @model SANPHAM
 @{
     var danhGiaList = ViewBag.DanhGia as IEnumerable<DANHGIA>;
+    var feedbackList = ViewBag.FeedBacks as List<DANHGIA>;
     var phanTramGiam = Math.Round(((Model.GIAGOC - Model.GIABAN) / Model.GIAGOC) * 100, 2);
     var sodanhgia = danhGiaList != null ? danhGiaList.Count() : 0;
     var somausp = ViewBag.ProductDetail as IEnumerable<ProductDetailModel>;
@@ -146,14 +147,16 @@
                 </div>
                 <div class="detail_info_product_button ">
                     <div class="detail_info_product_button_detail " style="">
-                        <div style="display: flex;">
+                        <div style="display: flex; height: 54.3px;">
                             <a id="formaddtocart" data-orderid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
                             <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='black'" id="them_hang"><i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i>
                                 <p class="addcart" style="margin-bottom: 0;">THÊM VÀO GIỎ HÀNG</p>
                             </button>
                             </a>
-                            <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="mua_hang">MUA NGAY</button>
-                            <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="fav"><i class="fa-solid fa-heart" style="color:red;"></i></button>
+                            <a id="buynow" data-orderid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
+                                <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="mua_hang">MUA NGAY</button>
+                            </a>
+                            @* <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="fav"><i class="fa-solid fa-heart" style="color:red;"></i></button> *@
                         </div>
                         <div style="margin-top: 7px;"><p class="confirm_addtocart"></p></div>
                     </div>
@@ -363,9 +366,104 @@ function increaseQuantity() {
                     @* $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red"); *@
                 }
             });
+
+            $("#buynow").click(function (event){
+                event.preventDefault();
+                var productid = $("#formaddtocart").attr("data-productid");
+                var colorid = $("#formaddtocart").attr("data-colorid");
+                var sizeid = $("#formaddtocart").attr("data-sizeid");
+                var quantity = $("#formaddtocart").attr("data-quantity");
+                var orderid = $("#formaddtocart").attr("data-orderid");
+                if(colorid > 0 && sizeid > 0)
+                {
+                    if(quantity > 0)
+                    {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.RouteUrl("buynow")",
+                            data: {
+                                productid: productid,
+                                colorid: colorid,
+                                sizeid: sizeid,
+                                quantity: quantity,
+                                orderid: orderid
+                            },
+                            success: function (result) {
+                                // Dùng JSON.stringify để chuyển đối tượng JSON thành chuỗi
+        var cartItemsJSON = JSON.stringify(result);
+
+        // Encode chuỗi để truyền qua URL
+        var encodedCartItems = encodeURIComponent(cartItemsJSON);
+
+        // Chuyển hướng đến action Index của controller Order và truyền dữ liệu qua URL
+        window.location.href = "@Url.Action("Index", "Order")" + "?cartItems=" + encodedCartItems;
+                            }
+                        });
+                    }
+                    else{
+                        console.log('\x1b[31m%s\x1b[0m',"Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!");
+                        $(".confirm_addtocart").text("Sản phẩm hết hàng. Vui lòng chọn sản phẩm khác!").css("color", "red");
+                        @* $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red"); *@
+                    }
+                }
+                else{
+                    console.log('\x1b[31m%s\x1b[0m',"Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!");
+                    $(".confirm_addtocart").text("Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!").css("color", "red");
+                    @* $(".confirm_addtocart").text("You should inspect this page and select the console item to know what you need to do!").css("color", "red"); *@
+                }
+            });
         });
     </script>
 }
+
+@{
+    if(feedbackList != null)
+    {
+        <!--REVIEW-->
+<section id="review">
+    <div class="review-heading" style="margin-bottom: 15px;">
+        <h1>FEEDBACK</h1>
+    </div>
+    @{
+        foreach(var item in feedbackList)
+        {
+            var rating = item.SOSAO;
+                <div class="review-box-container">
+        <div class="review-box">
+            <div class="box-top">
+            <div class="profile">
+                <div class="profile-image">
+                    <img src="https://nhacchuonghinhnen.com/wp-content/uploads/2020/03/hinh-nen-gai-xinh-full-hd-cho-dien-thoai-2-scaled.jpg" alt="">
+                </div>
+                <div class="user-name">
+                    <strong>@item.TAIKHOAN.TENKH</strong>
+                    <span>@item.TAIKHOAN.UserName</span>
+                </div>
+            </div>
+            <div class="reviews">
+                @{
+                    for(int i = 0; i<rating;i++)
+                    {
+                        <i class="fa-solid fa-star" style="color: #f3b335;"></i>
+                    }
+                    for(int j = rating; j < 5; j++)
+                    {
+                        <i class="fa-solid fa-star" style="color: #e4e4e4;"></i>
+                    }
+                }
+            </div>
+        </div>
+        <div class="clients-comment">
+            <p>@item.NOIDUNG</p>
+        </div>
+        </div>
+    </div>
+        }
+    }
+</section>
+    }
+}
+
 <!--PRODUCT RELATED-->
 
 <section class="product-related">

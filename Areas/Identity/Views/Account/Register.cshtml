@@ -5,6 +5,7 @@
 @model App.Areas.Identity.Models.AccountViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Đăng ký tài khoản";
+
     Layout = "_MasterLayout";
 }
 
@@ -52,14 +53,14 @@
                     </div>
                 </div>
                 <div style="width: 40%;" class="row">
-                    <div class="form-group">
+                    <div class="form-group col-md-6">
                         <label asp-for="TenKH" class="col-md-12 control-label"></label>
                         <div class="col-md-12">
                             <input asp-for="TenKH" class="form-control" />
                             <span asp-validation-for="TenKH" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-md-6">
                         <label asp-for="SDT" class="col-md-12 control-label"></label>
                         <div class="col-md-12">
                             <input asp-for="SDT" class="form-control" />
@@ -67,22 +68,39 @@
                         </div>
                     </div>
                 </div>
+                @* <div style="width: 40%;" class="row">
+                <div class="form-group">
+                <label asp-for="TenKH" class="col-md-12 control-label"></label>
+                <div class="col-md-12">
+                <input asp-for="TenKH" class="form-control" />
+                <span asp-validation-for="TenKH" class="text-danger"></span>
+                </div>
+                </div>
+                <div class="form-group">
+                <label asp-for="SDT" class="col-md-12 control-label"></label>
+                <div class="col-md-12">
+                <input asp-for="SDT" class="form-control" />
+                <span asp-validation-for="SDT" class="text-danger"></span>
+                </div>
+                </div>
+                </div> *@
                 <div style="width: 40%;" class="row">
                     <div class="form-group">
                         <label asp-for="GioiTinh" class="col-md-12 control-label"></label>
                         <div style="display: flex; justify-content: space-evenly;" class="col-md-12">
                             <div class="form-check">
-                                <input type="checkbox" asp-for="GioiTinh" value="nam" class="form-check-input" />
+                                <input type="radio" asp-for="GioiTinh" value="nam" class="form-check-input" />
                                 <label class="form-check-label" for="GioiTinh">Nam</label>
                             </div>
                             <div class="form-check">
-                                <input type="checkbox" asp-for="GioiTinh" value="nữ" class="form-check-input" />
+                                <input type="radio" asp-for="GioiTinh" value="nữ" class="form-check-input" />
                                 <label class="form-check-label" for="GioiTinh">Nữ</label>
                             </div>
                             <span asp-validation-for="GioiTinh" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div style="margin-top: 24px; text-align: center;" class="col-md-offset-2 col-md-12">
                         <button type="submit" class="btn btn-primary">Đăng ký</button>

@@ -116,6 +116,20 @@ namespace DAFW_IS220.Controllers
                                     .GroupBy(p => p.MASP)
                                     .Select(g => g.First())
                                     .ToList();
+            ViewBag.FeedBacks = (from fb in myShopContext.DANHGIAs
+                                 join user in myShopContext.Users
+                                 on fb.MATK equals user.Id
+                                 where fb.MASP == id
+                                 select new DANHGIA()
+                                 {
+                                     MADANHGIA = fb.MADANHGIA,
+                                     MATK = fb.MATK,
+                                     TAIKHOAN = user,
+                                     MASP = fb.MASP,
+                                     MADH = fb.MADH,
+                                     SOSAO = fb.SOSAO,
+                                     NOIDUNG = fb.NOIDUNG
+                                 }).ToList();
             return View(product);
         }
 
@@ -285,7 +299,7 @@ namespace DAFW_IS220.Controllers
                 TempData["StatusDangerMessage"] = "cartitem null";
             }
             cartService.SaveCartSession(cart);
-            
+
             var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart_list);
             return Content(updatedCartHtml);
 

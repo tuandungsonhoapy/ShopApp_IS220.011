@@ -49,8 +49,7 @@ namespace App.Areas.Identity.Models.AccountViewModels
 
         [DataType(DataType.Text)]
         [Display(Name = "Giới tính")]
-        [Required(ErrorMessage = "Phải nhập {0}")]
-        [StringLength(5, ErrorMessage = "Phải nhập số điện thoại.", MinimumLength = 2)]
+        [Required(ErrorMessage = "Phải chọn {0}")]
         public string GioiTinh { get; set; }
 
     }
