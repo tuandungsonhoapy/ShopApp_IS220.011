@@ -148,12 +148,12 @@
                 <div class="detail_info_product_button ">
                     <div class="detail_info_product_button_detail " style="">
                         <div style="display: flex; height: 54.3px;">
-                            <a id="formaddtocart" data-orderid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
+                            <a id="formaddtocart" data-productdetailid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
                             <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='black'" id="them_hang"><i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i>
                                 <p class="addcart" style="margin-bottom: 0;">THÊM VÀO GIỎ HÀNG</p>
                             </button>
                             </a>
-                            <a id="buynow" data-orderid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
+                            <a id="buynow" data-productdetailid="0" data-productid="@Model.MASP" data-colorid="0" data-sizeid="0" data-quantity="1">
                                 <button style="height: 100%;" onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="mua_hang">MUA NGAY</button>
                             </a>
                             @* <button onmouseover="this.style.backgroundColor='#746c6c'" onmouseout="this.style.backgroundColor='white'" id="fav"><i class="fa-solid fa-heart" style="color:red;"></i></button> *@
@@ -203,7 +203,7 @@
                 var itemsize = parseInt(item.masize);
                 if(itemmau==mamau && itemsize==masize) 
                 {
-                    formaddtocart.setAttribute('data-orderid', item.mactsp);
+                    formaddtocart.setAttribute('data-productdetailid', item.mactsp);
                     return parseInt(item.soluong);
                 }
             }
@@ -334,20 +334,20 @@ function increaseQuantity() {
                 var colorid = $(this).attr("data-colorid");
                 var sizeid = $(this).attr("data-sizeid");
                 var quantity = $(this).attr("data-quantity");
-                var orderid = $(this).attr("data-orderid");
+                var productdetailid = $(this).attr("data-productdetailid");
                 if(colorid > 0 && sizeid > 0)
                 {
                     if(quantity > 0)
                     {
                         $.ajax({
                             type: "POST",
-                            url: "@Url.RouteUrl("addcart")",
+                            url: "@Url.RouteUrl("addproducttocart")",
                             data: {
                                 productid: productid,
                                 colorid: colorid,
                                 sizeid: sizeid,
                                 quantity: quantity,
-                                orderid: orderid
+                                productdetailid: productdetailid
                             },
                             success: function (result) {
                                 window.location.href = "@Url.RouteUrl("cart")";
@@ -373,7 +373,7 @@ function increaseQuantity() {
                 var colorid = $("#formaddtocart").attr("data-colorid");
                 var sizeid = $("#formaddtocart").attr("data-sizeid");
                 var quantity = $("#formaddtocart").attr("data-quantity");
-                var orderid = $("#formaddtocart").attr("data-orderid");
+                var productdetailid = $("#formaddtocart").attr("data-productdetailid");
                 if(colorid > 0 && sizeid > 0)
                 {
                     if(quantity > 0)
@@ -386,17 +386,18 @@ function increaseQuantity() {
                                 colorid: colorid,
                                 sizeid: sizeid,
                                 quantity: quantity,
-                                orderid: orderid
+                                productdetailid: productdetailid
                             },
                             success: function (result) {
                                 // Dùng JSON.stringify để chuyển đối tượng JSON thành chuỗi
-        var cartItemsJSON = JSON.stringify(result);
+        @* var cartItemsJSON = JSON.stringify(result); *@
 
         // Encode chuỗi để truyền qua URL
-        var encodedCartItems = encodeURIComponent(cartItemsJSON);
+        @* var encodedCartItems = encodeURIComponent(cartItemsJSON); *@
 
         // Chuyển hướng đến action Index của controller Order và truyền dữ liệu qua URL
-        window.location.href = "@Url.Action("Index", "Order")" + "?cartItems=" + encodedCartItems;
+        @* window.location.href = "@Url.Action("Index", "Order")" + "?cartItems=" + encodedCartItems; *@
+                                window.location.href = "@Url.Action("PageBuyNow", "Order")";
                             }
                         });
                     }

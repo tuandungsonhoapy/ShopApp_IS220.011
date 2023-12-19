@@ -62,6 +62,49 @@ namespace DAFW_IS220.Controllers
             userManager = user;
         }
 
+        public List<CartItem> GetCartItemList(List<CHITIETGIOHANG> list)
+        {
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+
+            var cartList = (from detailcart in myShopContext.CHITIETGIOHANGs
+                            where detailcart.MATK.Equals(userID)
+                            join productdetail in myShopContext.CHITIETSANPHAMs
+                            on detailcart.MACTSP equals productdetail.MACTSP
+                            join color in myShopContext.MAUSACs
+                            on productdetail.MAMAU equals color.MAMAU
+                            join size in myShopContext.SIZEs
+                            on productdetail.MASIZE equals size.MASIZE
+                            join product in myShopContext.SANPHAMs
+                            on detailcart.MASP equals product.MASP
+                            select new ProductDetailModel()
+                            {
+                                MASP = productdetail.MASP,
+                                MACTSP = detailcart.MACTSP,
+                                TENSP = product.TENSP,
+                                GIABAN = product.GIABAN,
+                                GIAGOC = product.GIAGOC,
+                                MAMAU = color.MAMAU,
+                                TENMAU = color.TENMAU,
+                                HEX = color.HEX,
+                                MASIZE = size.MASIZE,
+                                Size = size.Size,
+                                SoLuong = detailcart.SOLUONGMUA,
+                                MainImg = product.MainImg
+                            }
+                            ).Select(p => new CartItem()
+                            {
+                                userid = userID,
+                                quantity = p.SoLuong,
+                                product = p
+                            }).ToList();
+            return cartList;
+        }
+
         //[Route("chitietsanpham")]
         //[Route("chitietsanpham/{id:int?})]
         //[Route("chitietsanpham/[controller]/[action])]
@@ -138,7 +181,7 @@ namespace DAFW_IS220.Controllers
 
         [HttpPost]
         [Route("/addcart", Name = "addcart")]
-        public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity, [FromForm] int orderid)
+        public IActionResult AddToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity, [FromForm] int productdetailid)
         {
             var user = userManager.GetUserAsync(User).Result;
             var userID = "null";
@@ -164,7 +207,7 @@ namespace DAFW_IS220.Controllers
                           .Select(p => new ProductDetailModel()
                           {
                               MASP = p.MASP,
-                              MACTSP = orderid,
+                              MACTSP = productdetailid,
                               TENSP = p.TENSP,
                               GIABAN = p.GIABAN,
                               GIAGOC = p.GIAGOC,
@@ -174,24 +217,9 @@ namespace DAFW_IS220.Controllers
                               MASIZE = size.MASIZE,
                               Size = size.Size,
                               SoLuong = quantity,
-                              MainImg = p.MainImg,
+                              MainImg = p.MainImg
                           })
                           .FirstOrDefault();
-
-            // var productdetail = (from pro in myShopContext.SANPHAMs
-            //                     where pro.MASP == productid
-            //                     join prodetail in myShopContext.CHITIETSANPHAMs
-            //                     on pro.MASP equals prodetail.MASP
-            //                     where prodetail.MAMAU == colorid && prodetail.MASIZE == sizeid
-            //                     select new ProductDetailModel()
-            //                     {
-            //                         MASP = pro.MASP,
-            //                         TENSP = pro.TENSP,
-            //                         MACTSP = prodetail.MACTSP,
-            //                         MAMAU = prodetail.MAMAU,
-            //                         HEX = prodetail.MAUSAC.HEX,
-
-            //                     })
             if (product == null)
                 return NotFound("Không có sản phẩm");
 
@@ -216,9 +244,9 @@ namespace DAFW_IS220.Controllers
             return RedirectToAction(nameof(Cart));
         }
 
-        // Hiện thị giỏ hàng
-        [Route("/cart", Name = "cart")]
-        public IActionResult Cart()
+        [HttpPost]
+        [Route("/addproducttocart", Name = "addproducttocart")]
+        public async Task<IActionResult> AddProductToCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity, [FromForm] int productdetailid)
         {
             var user = userManager.GetUserAsync(User).Result;
             var userID = "null";
@@ -226,11 +254,97 @@ namespace DAFW_IS220.Controllers
             {
                 userID = user.Id;
             }
-            var cart = cartService.GetCartItems();
-            var cart_list = new List<CartItem>();
-            cart_list = cart.Where(p => p.userid.Equals(userID)).ToList();
-            return View(cart_list);
+            // Xử lý đưa vào cart
+            var cartitem = (from cartdetail in myShopContext.CHITIETGIOHANGs
+                            join productdetail in myShopContext.CHITIETSANPHAMs
+                            on cartdetail.MACTSP equals productdetail.MACTSP
+                            where cartdetail.MASP == productid && productdetail.MAMAU == colorid && productdetail.MASIZE == sizeid && cartdetail.MATK.Equals(userID)
+                            select cartdetail).FirstOrDefault();
+            var productdetailID = myShopContext.CHITIETSANPHAMs.Where(pd => pd.MASP == productid && pd.MAMAU == colorid && pd.MASIZE == sizeid).FirstOrDefault();
+            if (cartitem != null)
+            {
+                cartitem.SOLUONGMUA += quantity;
+                myShopContext.Update(cartitem);
+                await myShopContext.SaveChangesAsync();
+            }
+            else
+            {
+                var product = myShopContext.SANPHAMs.Find(productid);
+                CHITIETGIOHANG cHITIETGIOHANG = new CHITIETGIOHANG();
+                cHITIETGIOHANG.MATK = userID;
+                cHITIETGIOHANG.MASP = productid;
+                if (productdetailID != null) cHITIETGIOHANG.MACTSP = productdetailID.MACTSP;
+                cHITIETGIOHANG.SOLUONGMUA = quantity;
+                if (product != null) cHITIETGIOHANG.TONGGIA = product.GIABAN * quantity;
+                myShopContext.Add(cHITIETGIOHANG);
+                await myShopContext.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Cart));
         }
+
+        // Hiện thị giỏ hàng
+        [Route("/cart", Name = "cart")]
+        public IActionResult Cart()
+        {
+
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+            // var cart = cartService.GetCartItems();
+            // var cart_list = new List<CartItem>();
+            // cart_list = cart.Where(p => p.userid.Equals(userID)).ToList();
+
+            var cartList = (from detailcart in myShopContext.CHITIETGIOHANGs
+                            where detailcart.MATK.Equals(userID)
+                            join productdetail in myShopContext.CHITIETSANPHAMs
+                            on detailcart.MACTSP equals productdetail.MACTSP
+                            join color in myShopContext.MAUSACs
+                            on productdetail.MAMAU equals color.MAMAU
+                            join size in myShopContext.SIZEs
+                            on productdetail.MASIZE equals size.MASIZE
+                            join product in myShopContext.SANPHAMs
+                            on detailcart.MASP equals product.MASP
+                            select new ProductDetailModel()
+                            {
+                                MASP = productdetail.MASP,
+                                MACTSP = detailcart.MACTSP,
+                                TENSP = product.TENSP,
+                                GIABAN = product.GIABAN,
+                                GIAGOC = product.GIAGOC,
+                                MAMAU = color.MAMAU,
+                                TENMAU = color.TENMAU,
+                                HEX = color.HEX,
+                                MASIZE = size.MASIZE,
+                                Size = size.Size,
+                                SoLuong = detailcart.SOLUONGMUA,
+                                MainImg = product.MainImg
+                            }
+                            ).Select(p => new CartItem()
+                            {
+                                userid = userID,
+                                quantity = p.SoLuong,
+                                product = p
+                            }).ToList();
+            return View(cartList);
+        }
+
+        // [Route("/cart", Name = "cart")]
+        // public IActionResult Cart()
+        // {
+        //     var user = userManager.GetUserAsync(User).Result;
+        //     var userID = "null";
+        //     if (user != null)
+        //     {
+        //         userID = user.Id;
+        //     }
+        //     var cart = cartService.GetCartItems();
+        //     var cart_list = new List<CartItem>();
+        //     cart_list = cart.Where(p => p.userid.Equals(userID)).ToList();
+        //     return View(cart_list);
+        // }
 
         /// xóa item trong cart
         [Route("/removecart/{productid:int}", Name = "removecart")]
@@ -254,12 +368,32 @@ namespace DAFW_IS220.Controllers
             return RedirectToAction(nameof(Cart));
         }
 
+        [Route("/removecartitem/{productid:int}", Name = "removecartitem")]
+        public async Task<IActionResult> RemoveCartItem([FromRoute] int productid)
+        {
+            var user = userManager.GetUserAsync(User).Result;
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+            var cartItem = myShopContext.CHITIETGIOHANGs.Where(dc => dc.MASP == productid && dc.MATK.Equals(userID)).FirstOrDefault();
+            if (cartItem != null)
+            {
+                myShopContext.Remove(cartItem);
+                await myShopContext.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Cart));
+        }
+
+
         [Route("/updatecart", Name = "updatecart")]
         [HttpPost]
         public IActionResult UpdateCart([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
         {
             // Cập nhật Cart thay đổi số lượng quantity ...
             var cart = cartService.GetCartItems();
+
             // var cartitem = cart.Find(p => p.product.MASP == productid && p.product.MAMAU == colorid && p.product.MASIZE == sizeid);
             var cartitem = cart.Where(p => p.product.MASP == productid && p.product.MAMAU == colorid && p.product.MASIZE == sizeid).FirstOrDefault();
             if (cartitem != null)
@@ -278,7 +412,7 @@ namespace DAFW_IS220.Controllers
 
         [HttpPost]
         [Route("/changequantity", Name = "changequantity")]
-        public IActionResult Increase([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
+        public async Task<IActionResult> Increase([FromForm] int productid, [FromForm] int colorid, [FromForm] int sizeid, [FromForm] int quantity)
         {
             var user = userManager.GetUserAsync(User).Result;
             var userID = "null";
@@ -286,21 +420,30 @@ namespace DAFW_IS220.Controllers
             {
                 userID = user.Id;
             }
-            var cart = cartService.GetCartItems();
-            var cart_list = cart.Where(c => c.userid.Equals(userID)).ToList();
-            var cartItem = cart_list.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid).FirstOrDefault();
+            // var cart = cartService.GetCartItems();
+            // var cart_list = cart.Where(c => c.userid.Equals(userID)).ToList();
+            // var cartItem = cart_list.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid).FirstOrDefault();
 
+            var cart_list = GetCartItemList(myShopContext.CHITIETGIOHANGs.ToList()).Where(dc => dc.userid.Equals(userID)).ToList();
+            var cartItem = cart_list.Where(c => c.product.MASP == productid && c.product.MAMAU == colorid && c.product.MASIZE == sizeid).FirstOrDefault();
             if (cartItem != null)
             {
-                cartItem.quantity = quantity;
+                var cart_item = myShopContext.CHITIETGIOHANGs.Where(dc => dc.MASP == productid && dc.MACTSP == cartItem.product.MACTSP && dc.MATK.Equals(userID)).FirstOrDefault();
+                if (cart_item != null)
+                {
+                    cart_item.SOLUONGMUA = quantity;
+                    cart_item.TONGGIA = quantity * cartItem.product.GIABAN;
+                    myShopContext.Update(cart_item);
+                    await myShopContext.SaveChangesAsync();
+                }
             }
             else
             {
                 TempData["StatusDangerMessage"] = "cartitem null";
             }
-            cartService.SaveCartSession(cart);
-
-            var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart_list);
+            // cartService.SaveCartSession(cart);
+            var cart_list_new = GetCartItemList(myShopContext.CHITIETGIOHANGs.ToList()).Where(dc => dc.userid.Equals(userID)).ToList();
+            var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart_list_new);
             return Content(updatedCartHtml);
 
             // if (cart.Count == 0)

@@ -1,0 +1,51 @@
+@{
+    ViewBag.Title = "VnpayReturn";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
+<div class="container product_section_container">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Sidebar -->
+            <!-- Main Content -->
+            <div class="row">
+
+                <div class="col-md-12 text-center">
+                    <h1 class="">Kết quả thanh toán</h1>
+                    @if (ViewBag.ThanhToanThanhCong != null)
+                    {
+                        <p style="text-align: center; font-weight: 400px;">
+                            Bạn đã thanh toán thành công với @ViewBag.ThanhToanThanhCong! <br>
+                            Ngân hàng thanh toán: @ViewBag.bankCode <br>
+                            Mã giao dịch: @ViewBag.VNPAYID <br>
+                            Trạng thái thanh toán: @ViewBag.PaymentStatus <br>
+                            Mã đơn hàng: @ViewBag.OrderID
+                        </p>
+                    }
+                    <p>@ViewBag.InnerText</p>
+                    <div style="margin-top: 10px;">
+                        @{
+                            if(ViewBag.Result == 1)
+                            {
+                                <a class="btn btn-success" >Xem thông tin đơn hàng</a>
+                            }
+                            else{
+                                <a class="btn btn-danger" >Xem thông tin đơn hàng</a>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            @*<div class="row">
+                    <div id="show_success"></div>
+                    <div class="col-md-9">
+
+                    </div>
+
+                </div>*@
+        </div>
+    </div>
+</div>
