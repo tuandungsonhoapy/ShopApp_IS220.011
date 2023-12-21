@@ -114,18 +114,8 @@ namespace DAFW_IS220.Controllers
             return cartList;
         }
         // [Route("/index", Name = "index")]
-        public async Task<IActionResult> Index(string cartItems)
+        public async Task<IActionResult> Index()
         {
-            if (cartItems != null)
-            {
-                List<CartItem> cartItemList = JsonConvert.DeserializeObject<List<CartItem>>(cartItems);
-
-                // Xử lý logic tại trang Order với danh sách cartItems nhận được
-                // ...
-
-                // Trả về view Order/Index với danh sách cartItems
-                return View(cartItemList);
-            }
             var user = await userManager.GetUserAsync(User);
             var userID = "null";
             if (user != null)
@@ -138,6 +128,7 @@ namespace DAFW_IS220.Controllers
                 ViewBag.userPhone = user.PhoneNumber;
                 ViewBag.TENKH = user.TENKH;
             }
+            ViewBag.DeliveryInfo = myShopContext.THONGTINGIAOHANGs.Where(s => s.MATK.Equals(userID)).ToList();
             // var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
 
             var cartList = GetCartItemList(myShopContext.CHITIETGIOHANGs.ToList()).Where(p => p.userid.Equals(userID)).ToList();
@@ -229,32 +220,65 @@ namespace DAFW_IS220.Controllers
         }
 
         [Route("/changeaddress", Name = "changeaddress")]
-        public async Task<IActionResult> ChangeAddress([FromForm] string newaddress)
+        public async Task<IActionResult> ChangeAddress([FromForm] string addressValue, [FromForm] string phoneNumber, [FromForm] string receiverName)
         {
             var user = await userManager.GetUserAsync(User);
             var userID = "null";
-            if (user.DIACHI == null)
-            {
-                TempData["StatusMessage"] = "Thêm địa chỉ thành công!";
-            }
-            else TempData["StatusMessage"] = "Thay đổi địa chỉ thành công!";
 
             if (user != null)
             {
                 ViewBag.userID = user.Id;
                 userID = user.Id;
-                ViewBag.userAddress = newaddress;
+                ViewBag.userAddress = addressValue;
                 // var userAddress = user.DIACHI;
                 // if(userAddress != null) ViewBag.userAddress = userAddress;
                 // else ViewBag.userAddress = "NoAddress";
                 ViewBag.userPhone = user.PhoneNumber;
                 ViewBag.TENKH = user.TENKH;
-                user.DIACHI = newaddress;
+                user.DIACHI = addressValue;
                 myShopContext.Update(user);
+                THONGTINGIAOHANG tHONGTINGIAOHANG = new THONGTINGIAOHANG();
+                tHONGTINGIAOHANG.MATK = userID;
+                tHONGTINGIAOHANG.NGAYTAO = DateTime.Now;
+                tHONGTINGIAOHANG.SDT = phoneNumber;
+                tHONGTINGIAOHANG.DIACHI = addressValue;
+                tHONGTINGIAOHANG.TENNGUOINHAN = receiverName;
+                myShopContext.Add(tHONGTINGIAOHANG);
                 await myShopContext.SaveChangesAsync();
             }
 
 
+            // var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
+            // var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart);
+            return Ok();
+        }
+
+        [Route("/updateaddress", Name = "updateaddress")]
+        public async Task<IActionResult> UpdateAddress([FromForm] string addressValue)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user != null)
+            {
+                user.DIACHI = addressValue;
+                myShopContext.Update(user);
+                await myShopContext.SaveChangesAsync();
+            }
+            // var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
+            // var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart);
+            return Ok();
+        }
+
+        [Route("/deleteaddress", Name = "deleteaddress")]
+        public async Task<IActionResult> DeleteAddress([FromForm] int deliveryid)
+        {
+            var deliveryInfo = myShopContext.THONGTINGIAOHANGs.Find(deliveryid);
+
+            if (deliveryInfo != null)
+            {
+                myShopContext.Remove(deliveryInfo);
+                await myShopContext.SaveChangesAsync();
+            }
             // var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
             // var updatedCartHtml = this.RenderPartialViewToString("_Cart", cart);
             return Ok();
@@ -314,7 +338,14 @@ namespace DAFW_IS220.Controllers
             dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";
             dONHANG.GHICHU = orderModel.Note ?? "";
             dONHANG.NGAYSUADOI = DateTime.Now;
+            dONHANG.PHIVANCHUYEN = 35000;
+            dONHANG.MATTGH = orderModel.Deliveryid;
             myShopContext.Add(dONHANG);
+            await myShopContext.SaveChangesAsync();
+            THONGTINVANCHUYEN tHONGTINVANCHUYEN = new THONGTINVANCHUYEN();
+            tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
+            tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
+            myShopContext.Add(tHONGTINVANCHUYEN);
             await myShopContext.SaveChangesAsync();
             if (orderModel.TypePayment == 2)
             {
@@ -457,6 +488,9 @@ namespace DAFW_IS220.Controllers
             dONHANG.NGAYSUADOI = DateTime.Now;
             myShopContext.Add(dONHANG);
             await myShopContext.SaveChangesAsync();
+            // THONGTINVANCHUYEN tHONGTINVANCHUYEN = new THONGTINVANCHUYEN();
+            // tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
+            // tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
             if (orderModel.TypePayment == 2)
             {
                 THANHTOAN tHANHTOAN = new THANHTOAN();

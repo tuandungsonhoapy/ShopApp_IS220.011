@@ -70,6 +70,44 @@ namespace DAFW_IS220.Controllers
             return View(orderList);
         }
 
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userID = "null";
+            if (user != null)
+            {
+                userID = user.Id;
+            }
+            var orderdetailList = (from orderdetail in myShopContext.CTDHs
+                                   where orderdetail.MADH == id
+                                   join productdetail in myShopContext.CHITIETSANPHAMs
+                                   on orderdetail.MACTSP equals productdetail.MACTSP
+                                   join product in myShopContext.SANPHAMs
+                                   on productdetail.MASP equals product.MASP
+                                   join color in myShopContext.MAUSACs
+                                   on productdetail.MAMAU equals color.MAMAU
+                                   join size in myShopContext.SIZEs
+                                   on productdetail.MASIZE equals size.MASIZE
+                                   select new OrderDetailModel()
+                                   {
+                                       MADH = orderdetail.MADH,
+                                       cHITIETSANPHAM = productdetail,
+                                       Price = orderdetail.TONGGIA,
+                                       SoLuong = orderdetail.SOLUONG,
+                                       sANPHAM = product,
+                                       mAUSAC = color,
+                                       sIZE = size
+                                   }).ToList();
+            ViewBag.Order = myShopContext.DONHANGs.Find(id);
+            // ViewBag.DeliveryInfo = myShopContext.THONGTINGIAOHANGs.Where(s => s.MATK.Equals(userID)).FirstOrDefault();
+            ViewBag.DeliveryInfo = (from order in myShopContext.DONHANGs
+                                    where order.MADH == id
+                                    join ttgh in myShopContext.THONGTINGIAOHANGs
+                                    on order.MATTGH equals ttgh.MATTGH
+                                    select ttgh).FirstOrDefault();
+            return View(orderdetailList);
+        }
+
         public async Task<IActionResult> DangGiao()
         {
             // var orderdetail = myShopContext.CTDHs.Include(order => order.DONHANG);
@@ -320,12 +358,13 @@ namespace DAFW_IS220.Controllers
                                    join ctsp in myShopContext.CHITIETSANPHAMs
                                    on ctdh.MACTSP equals ctsp.MACTSP
                                    where ctdh.MADH == id
-                                   select new CTDH(){
-                                    MADH = ctdh.MADH,
-                                    MACTSP = ctdh.MACTSP,
-                                    TONGGIA = ctdh.TONGGIA,
-                                    SOLUONG = ctdh.SOLUONG,
-                                    CHITIETSANPHAM = ctsp
+                                   select new CTDH()
+                                   {
+                                       MADH = ctdh.MADH,
+                                       MACTSP = ctdh.MACTSP,
+                                       TONGGIA = ctdh.TONGGIA,
+                                       SOLUONG = ctdh.SOLUONG,
+                                       CHITIETSANPHAM = ctsp
                                    }).ToList();
             foreach (var item in orderdetailList)
             {
@@ -352,12 +391,13 @@ namespace DAFW_IS220.Controllers
                                    join ctsp in myShopContext.CHITIETSANPHAMs
                                    on ctdh.MACTSP equals ctsp.MACTSP
                                    where ctdh.MADH == id
-                                   select new CTDH(){
-                                    MADH = ctdh.MADH,
-                                    MACTSP = ctdh.MACTSP,
-                                    TONGGIA = ctdh.TONGGIA,
-                                    SOLUONG = ctdh.SOLUONG,
-                                    CHITIETSANPHAM = ctsp
+                                   select new CTDH()
+                                   {
+                                       MADH = ctdh.MADH,
+                                       MACTSP = ctdh.MACTSP,
+                                       TONGGIA = ctdh.TONGGIA,
+                                       SOLUONG = ctdh.SOLUONG,
+                                       CHITIETSANPHAM = ctsp
                                    }).ToList();
             foreach (var item in orderdetailList)
             {

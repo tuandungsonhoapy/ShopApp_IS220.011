@@ -22,5 +22,7 @@ namespace DAFW_IS220.Models
         public decimal Price {set;get;}
 
         public string? Note {set;get;}
+
+        public int Deliveryid {set;get;}
     }
 }

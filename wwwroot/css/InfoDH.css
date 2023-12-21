@@ -83,7 +83,9 @@
 }
 
 .box-thanh-tien {
-    padding-left: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 
 .thanh-tien-total {
@@ -101,7 +103,13 @@
 }
 
 .link-info-van-chuyen {
-    color: black;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    background-color: #000;
+    border-style: none;
+    border-radius: 5px;
+    padding: 5px 10px;
 }
 
 .link-info-van-chuyen:hover {

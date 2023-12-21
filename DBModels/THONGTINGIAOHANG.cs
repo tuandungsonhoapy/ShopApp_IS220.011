@@ -16,6 +16,10 @@ namespace App.DBModels
 
         [StringLength(255)]
         [Column(TypeName = "varchar")]
+        public string TENNGUOINHAN { set; get; }
+
+        [StringLength(255)]
+        [Column(TypeName = "varchar")]
         public string DIACHI { set; get; }
 
         [StringLength(11)]

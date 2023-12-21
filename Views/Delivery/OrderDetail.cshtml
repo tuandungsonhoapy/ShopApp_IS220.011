@@ -1,0 +1,122 @@
+@using DAFW_IS220.Models;
+@using App.DBModels
+@model List<OrderDetailModel>
+@section css {
+    <link rel="stylesheet" href="/css/InfoDH.css">
+}
+@{
+    var order = ViewBag.Order as DONHANG;
+    decimal Total_price = 0;
+    var deliveryInfo = ViewBag.DeliveryInfo as THONGTINGIAOHANG;
+}
+
+<div class="content container mt-3">
+    <div class="header-content">
+        <div class="header-content-box-icon"><a class="header-content-icon" href="#" id="goBackBtn"><i
+                    class="fa-solid fa-circle-arrow-left fa-xl"></i></a></div>
+        <div class="box-title">
+            <h2 class="title">Thông tin đơn hàng</h2>
+        </div>
+    </div>
+    <div class="main-content m-5">
+
+        <section class="main-content-product">
+            <div class="main-content-product-box">
+                <table class="table" style="margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá niêm yết</th>
+                            <th>Giá bán</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                Total_price += item.sANPHAM.GIABAN * item.SoLuong;
+                                <tr>
+                                    <td>
+                                        <div class="main-content-product-info">
+                                            <div><img class="img-row"
+                                                    src="http://localhost:5235/contents/Img/Product/@item.sANPHAM.MainImg"
+                                                    alt=""></div>
+                                            <div class="box-info-product">
+                                                <p class="info-product">
+                                                    <a class="title-info-product" href="#">@item.sANPHAM.TENSP</a> <br>
+                                                    Màu sắc: @item.mAUSAC.TENMAU <br>
+                                                    size: @item.sIZE.Size <br>
+                                                    x @item.SoLuong
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="price price-remove">@(item.sANPHAM.GIAGOC)đ</span></td>
+                                    <td>
+                                        <span class="price">@(item.sANPHAM.GIABAN)đ</span>
+                                    </td>
+                                    <td>
+                                        <div class="main-content-product-total">
+                                            <span class="ThanhTien">@(item.SoLuong * item.sANPHAM.GIABAN)</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="box-thanh-tien">
+            <div style="width: 300px;" class="phi-van-chuyen box-thanh-tien-item">
+                <p>Phí vận chuyển:</p>
+                <p>35.000đ</p>
+            </div>
+            <div style="width: 300px;" class="thanh-tien box-thanh-tien-item">
+                <p>Thành tiền:</p>
+                <p class="thanh-tien-total">@(order.TONGTIEN)đ</p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Thông tin đơn hàng</h4>
+            <div class="info-address">
+                <p>
+                    Mã đơn hàng: @order.MADH<br>
+                    Ngày đặt hàng: @order.NGAYMUA <br>
+                    Trạng thái đơn hàng: @order.TRANGTHAIDONHANG <br>
+                    Trạng thái thanh toán: @order.TRANGTHAITHANHTOAN <br>
+                    Hình thức thanh toán: @order.HINHTHUCTHANHTOAN <br>
+                    Tổng tiền sản phẩm: @(Total_price)đ <br>
+                    Phí vận chuyển: 35000.00đ <br>
+                    Tổng tiền hóa đơn: @order.TONGTIEN
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-6 ">
+            <h4>Địa chỉ nhận hàng</h4>
+            <div class="info-address">
+                <p>
+                    Tên người nhận: @deliveryInfo.TENNGUOINHAN <br>
+                    SĐT: @deliveryInfo.SDT <br>
+                    Địa chỉ: @deliveryInfo.DIACHI <br>                
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="div-link-info-van-chuyen"><a class="link-info-van-chuyen" asp-action="Index" asp-controller="Delivery">Đến trang thông tin giao hàng</a></div>
+</div>
+
+@section Scripts
+{
+    <script>
+        document.getElementById('goBackBtn').addEventListener('click', function () {
+            window.history.back();
+        });
+    </script>
+}

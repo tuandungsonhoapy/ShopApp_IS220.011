@@ -49,6 +49,9 @@ namespace App.DBModels
 
             modelBuilder.Entity<THANHTOAN>()
             .HasIndex(p => p.SOTIEN).HasDatabaseName("index-THANHTOAN-sotien");
+
+            modelBuilder.Entity<THONGTINVANCHUYEN>()
+            .HasKey(c => new { c.MADH, c.MATTGH });
             
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -88,6 +91,8 @@ namespace App.DBModels
         public DbSet<VOUCHER_DONHANG> VOUCHER_DONHANGs {set;get;}
 
         public DbSet<SIZE> SIZEs {set;get;}
+
+        public DbSet<THONGTINVANCHUYEN> THONGTINVANCHUYENs {set;get;}
 
     }
 }

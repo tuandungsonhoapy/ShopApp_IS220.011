@@ -21,6 +21,9 @@ namespace App.DBModels
         [Column(TypeName = "decimal(10,2)")]
         public decimal TONGTIEN { set; get; }
 
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal PHIVANCHUYEN { set; get; }
+
         [DataType(DataType.Date)]
         public DateTime? NGAYGIAO { set; get; }
 

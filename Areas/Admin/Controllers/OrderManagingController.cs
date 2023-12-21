@@ -15,6 +15,7 @@ using App.Data;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.Text.Json.Serialization;
+using NuGet.Common;
 
 
 namespace App.Areas.Admin.Controllers
@@ -206,9 +207,24 @@ namespace App.Areas.Admin.Controllers
         {
 
             var order = await myShopContext.DONHANGs.FindAsync(id);
-            order.TRANGTHAIDONHANG = donhang.TRANGTHAIDONHANG;
-            order.NGAYSUADOI = DateTime.Now;
-            if (order.TRANGTHAIDONHANG.Equals("Đang giao")) order.NGAYGIAO = DateTime.Now;
+            if (order != null)
+            {
+                var user = myShopContext.Users.Find(order.MATK);
+                order.TRANGTHAIDONHANG = donhang.TRANGTHAIDONHANG;
+                order.NGAYSUADOI = DateTime.Now;
+                if (order.TRANGTHAIDONHANG.Equals("Đang giao"))
+                {
+                    order.NGAYGIAO = DateTime.Now;
+                    // THONGTINGIAOHANG tHONGTINGIAOHANG = new THONGTINGIAOHANG();
+                    // tHONGTINGIAOHANG.MATK = order.MATK;
+                    // tHONGTINGIAOHANG.NGAYTAO = DateTime.Now;
+                    // if(user != null && user.PhoneNumber!= null) tHONGTINGIAOHANG.SDT = user.PhoneNumber;
+                    // if(user != null && user.DIACHI != null) tHONGTINGIAOHANG.DIACHI = user.DIACHI;
+                    // myShopContext.Add(tHONGTINGIAOHANG);
+                    // await myShopContext.SaveChangesAsync();
+                }
+            }
+            
             // var orderdetails = await (from ord in myShopContext.DONHANGs
             //                           join ordetail in myShopContext.CTDHs
             //                           on ord.MADH equals ordetail.MADH

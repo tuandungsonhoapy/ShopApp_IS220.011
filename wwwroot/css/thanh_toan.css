@@ -185,11 +185,18 @@ button {
     margin-top: 20px;
 }
 
+#Payment-result
+{
+    margin-top: 44px;
+    text-align: center;
+}
+
 .address_add_button {
     padding: 12px 25px;
     border: 1px solid #000;
     background-color: #fff;
     margin-top: 20px;
+    color: black;
 }
 
 .address_update {
@@ -254,6 +261,12 @@ tr {
     border-style: none;
     border-radius: 5px;
     padding: 15px 30px;
+}
+
+.div-link-info-van-chuyen{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
 }
 
 .button_confirm:hover {

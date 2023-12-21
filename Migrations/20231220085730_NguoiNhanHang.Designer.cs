@@ -3,6 +3,7 @@ using System;
 using App.DBModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAFW_IS220.Migrations
 {
     [DbContext(typeof(MyShopContext))]
-    partial class MyShopContextModelSnapshot : ModelSnapshot
+    [Migration("20231220085730_NguoiNhanHang")]
+    partial class NguoiNhanHang
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,9 +168,6 @@ namespace DAFW_IS220.Migrations
 
                     b.Property<DateTime>("NGAYSUADOI")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<decimal>("PHIVANCHUYEN")
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("TONGTIEN")
                         .HasColumnType("decimal(10,2)");

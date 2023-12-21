@@ -74,7 +74,7 @@
                         </div>
                         <div class="col-auto text-end">
                             <a  asp-action="Delete" asp-route-id="@order.MADH" ><button style="margin-right: 20px;" class="btn btn-danger">Hủy đơn hàng</button></a>
-                            <a class="text-decoration-none bland" href="#">Chi tiết</a>
+                            <a class="text-decoration-none bland" asp-action="OrderDetail" asp-route-id="@order.MADH">Chi tiết</a>
                         </div>
                     </div>
                 </div>
