@@ -215,6 +215,7 @@ namespace DAFW_IS220.Controllers
                 ViewBag.userPhone = user.PhoneNumber;
                 ViewBag.TENKH = user.TENKH;
             }
+            ViewBag.DeliveryInfo = myShopContext.THONGTINGIAOHANGs.Where(s => s.MATK.Equals(userID)).ToList();
             var cart = cartService.GetCartItems().Where(p => p.userid.Equals(userID)).ToList();
             return View(cart);
         }

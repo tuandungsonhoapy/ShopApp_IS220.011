@@ -1,4 +1,5 @@
 @using DAFW_IS220.Models
+@using App.DBModels
 @model List<CartItem>
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
@@ -13,6 +14,8 @@
     var address = ViewBag.userAddress;
     decimal shipping_costs = 35000;
     decimal total = 0;
+    var AddressList = ViewBag.DeliveryInfo as List<THONGTINGIAOHANG>;
+    var Address = AddressList.FirstOrDefault();
 }
 
 
@@ -28,83 +31,85 @@
                 </div>
             </div>
             <div class="address_info row justify-content-between">
-                <div class="col-auto fw-bold">
-                    <span>@TENKH</span>
-                    <span>(+84)@phonenumber</span>
-                </div>
+
                 @{
-                    if (address == "NoAddress")
+                    if (Address == null)
                     {
                         <div class="col-auto">
-                            <span style="color: red;">Chưa có địa chỉ nhận hàng</span>
+                            <span id="show_address" style="color: red;">Chưa có địa chỉ nhận hàng</span>
                         </div>
+                        @* <div class="col-auto">
+                <a class="ChangeAddress">Thêm địa chỉ mới</a>
+                </div> *@
                         <div class="col-auto">
-                            <a class="link-dark" data-bs-toggle="collapse" href="" id="add_address">Thêm địa chỉ mới</a>
+                            <a class="link-dark" data-bs-toggle="collapse" href="" id="add_address"><i
+                                    class="fa-solid fa-caret-down"></i></a>
                         </div>
                     }
                     else
                     {
-                        <div class="col-auto">
-                            <span>@address</span>
+                        <div class="col-auto fw-bold">
+                            <span id="show_name">@Address.TENNGUOINHAN</span>
+                            <span id="show_phoneNumber">(+84)@Address.SDT</span>
                         </div>
                         <div class="col-auto">
-                            <a class="link-dark" data-bs-toggle="collapse" href="" id="change_address">Thay đổi</a>
+                            <span id="show_address">@Address.DIACHI</span>
+                        </div>
+                        @* <div class="col-auto">
+                <a class="ChangeAddress">Thay đổi</a>
+                </div> *@
+                        <div class="col-auto">
+                            <a class="link-dark" data-bs-toggle="collapse" href="#address_change"><i
+                                    class="fa-solid fa-caret-down"></i></a>
                         </div>
                     }
                 }
 
             </div>
         </div>
-        @* <div class="address_change collapse" id="address_change">
-        <div class="address_box_container">
-        <div class="address_box">
-        <div class="address_info row">
-        <div class="col-1">
-        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-        checked>
+        <div class="address_change collapse" id="address_change">
+            <div class="address_box_container">
+                @{
+                    if (AddressList != null)
+                    {
+                        foreach (var item in AddressList)
+                        {
+                            <div class="address_box">
+                                <div class="address_info row">
+                                    <div class="col-1">
+                                        <input data-deliveryid="@item.MATTGH" type="radio" name="address_radio"
+                                            data-bs-toggle="collapse" href="">
+                                    </div>
+                                    <div class="col-5 fw-bold">
+                                        <span id="TNN_@item.MATTGH">@item.TENNGUOINHAN</span>
+                                        <span>(+84)<span id="SDT_@item.MATTGH">@item.SDT</span></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span id="DIACHI_@item.MATTGH">@item.DIACHI</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                @* <div class="address_box">
+                <div class="address_info row">
+                <div class="col-1">
+                <input type="radio" name="address_radio" data-bs-toggle="collapse" href="">
+                </div>
+                <div class="col-5 fw-bold">
+                <span id="TNN_1">Nguyễn Văn B</span>
+                <span>(+84)<span id="SDT_1">123456789</span></span>
+                </div>
+                <div class="col-6">
+                <span id="DIACHI_1">1 đường A, phường B, Quận 1, Tp.HCM</span>
+                </div>
+                </div>
+                </div> *@
+                <button type="button" class="address_add_button" id="add_address">+ Thêm địa chỉ mới</button>
+                <button type="button" class="address_delete_button" id="delete_address">- Xóa địa chỉ</button>
+            </div>
         </div>
-        <div class="col-5 fw-bold">
-        <span>Nguyễn Văn A</span>
-        <span>(+84)123456789</span>
-        </div>
-        <div class="col-6">
-        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-        </div>
-        </div>
-        </div>
-        <div class="address_box">
-        <div class="address_info row">
-        <div class="col-1">
-        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-        checked>
-        </div>
-        <div class="col-5 fw-bold">
-        <span>Nguyễn Văn A</span>
-        <span>(+84)123456789</span>
-        </div>
-        <div class="col-6">
-        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-        </div>
-        </div>
-        </div>
-        <div class="address_box">
-        <div class="address_info row">
-        <div class="col-1">
-        <input type="radio" name="address_radio" data-bs-toggle="collapse" href="#address_change"
-        checked>
-        </div>
-        <div class="col-5 fw-bold">
-        <span>Nguyễn Văn A</span>
-        <span>(+84)123456789</span>
-        </div>
-        <div class="col-6">
-        <span>1 đường A, phường B, Quận 1, Tp.HCM</span>
-        </div>
-        </div>
-        </div>
-        <button type="button" class="address_add_button">+ Thêm địa chỉ mới</button>
-        </div>
-        </div> *@
         <div style="display: none;" class="address_update" id="address_update">
             @* <div class="row mb-2">
             <div class="col-12">
@@ -112,6 +117,18 @@
             <input type="text" class="form-control" value="Nguyễn Văn A">
             </div>
             </div> *@
+            <div class="row mb-2">
+                <div class="col-12">
+                    <label class="form-label">Tên người nhận</label>
+                    <input id="value_receivername" type="text" class="form-control" value="">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12">
+                    <label class="form-label">Số điện thoại</label>
+                    <input id="value_PhoneNumber" type="text" class="form-control" value="">
+                </div>
+            </div>
             <div class="row mb-2">
                 <div class="col-12">
                     <label class="form-label">Địa chỉ</label>
@@ -262,10 +279,14 @@
         </div>
 
         <div class="payment_confirm justify-content-end">
-            <button class="button_confirm float-end" id="btn_checkout">Thanh toán</button>
+            <button data-deliveryid="@(Address?.MATTGH ?? 0)" class="button_confirm float-end" id="btn_checkout">Thanh
+                toán</button>
         </div>
+        
     </div>
-    <div style="height: 150px;" class="col-auto"></div>
+    
+    @* <div style="height: 150px;" class="col-auto"></div> *@
+    <div id="Payment-result"></div>
     @section Scripts
     {
         <script>
@@ -281,11 +302,15 @@
                 $("#confirm_address").click(function (event) {
                     event.preventDefault();
                     var addressValue = $("#value_address").val();
+                    var phoneNumber = $("#value_PhoneNumber").val();
+                    var receiverName = $("#value_receivername").val();
                     $.ajax({
                         type: "POST",
                         url: "@Url.RouteUrl("changeaddress")",
                         data: {
-                            newaddress: addressValue
+                            addressValue: addressValue,
+                            phoneNumber: phoneNumber,
+                            receiverName: receiverName
                         },
                         success: function (result) {
             @* $(".Contain_all_payment").html(result); *@
@@ -330,29 +355,75 @@
                     var TypePaymentVN = $("input[name='TypePaymentVN']:checked").val();
                     var Price = $("#Total_price").attr("data-total");
                     var Note = $("#input_note").val();
+                    var deliveryid = $(this).attr("data-deliveryid");
                     var model = {
                         TypePayment: TypePayment,
                         TypePaymentVN: TypePaymentVN,
                         Price: Price,
-                        Note: Note
+                        Note: Note,
+                        Deliveryid: deliveryid
                     }
-                    $.ajax({
-                        url: "@Url.RouteUrl("checkoutforbuynow")",
-                        type: "POST",
-                        data: model,
-                        success: function (result) {
-                            if (result.success) {
-                                if (result.code == 1) {
-                                    window.location.href = "/Delivery/Index";
-                                }
-                                else {
-                                    window.location.href = result.url;
+                    if (deliveryid > 0) {
+                        $.ajax({
+                            url: "@Url.RouteUrl("checkout")",
+                            type: "POST",
+                            data: model,
+                            success: function (result) {
+                                if (result.success) {
+                                    if (result.code == 1) {
+                                        window.location.href = "/Delivery/Index";
+                                    }
+                                    else {
+                                        window.location.href = result.url;
+                                    }
                                 }
                             }
+                        });
+                    }else{
+                        $("#Payment-result").text("Vui lòng chọn địa chỉ nhận hàng trước khi thanh toán!").css("color", "red");
+                    }
+                    
+                });
+            });    
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lắng nghe sự kiện khi radio button thay đổi
+                var radioButtons = document.getElementsByName("address_radio");
+                var btn_checkout = document.querySelector("#btn_checkout");
+                radioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener("change", function () {
+                        // Kiểm tra xem radio button có được chọn hay không
+                        if (radioButton.checked) {
+                            var deliveryid = $(this).attr("data-deliveryid");
+                            btn_checkout.setAttribute('data-deliveryid', deliveryid);
+                            $("#delete_address").click(function (event) {
+                                event.preventDefault();
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.RouteUrl("deleteaddress")",
+                                    data: {
+                                        deliveryid: deliveryid
+                                    },
+                                    success: function (result) {
+            @* $(".Contain_all_payment").html(result); *@
+                                            window.location.href = "@Url.RouteUrl("index")";
+                                    }
+                                });
+                            });
+                            // Lấy thông tin từ radio button đã chọn
+                            var name = document.getElementById("TNN_" + deliveryid).innerText;
+                            var phoneNumber = document.getElementById("SDT_" + deliveryid).innerText;
+                            var address = document.getElementById("DIACHI_" + deliveryid).innerText;
+
+                            // Hiển thị thông tin tương ứng
+                            document.getElementById("show_name").innerText = name;
+                            document.getElementById("show_phoneNumber").innerText = "(+84)" + phoneNumber;
+                            document.getElementById("show_address").innerText = address;
                         }
                     });
                 });
-            });    
+            });
         </script>
     }
 </div>

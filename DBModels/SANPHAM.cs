@@ -20,10 +20,10 @@ namespace App.DBModels
         [DisplayName("Giá gốc")]
         public decimal GIAGOC {set;get;}
 
-        [DisplayName("Phân loại")]
+        [DisplayName("Danh mục")]
         public int MAPL {set;get;}
         [ForeignKey("MAPL")]
-        [DisplayName("Phân loại")]
+        [DisplayName("Danh mục")]
         public PL_SP? PL_SP {set;get;}
 
         [StringLength(30)]

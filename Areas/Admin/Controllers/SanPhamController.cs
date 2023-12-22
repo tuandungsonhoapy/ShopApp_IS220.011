@@ -170,26 +170,26 @@ namespace App.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/admin/sanpham/create/")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TENSP,GIAGOC,MAPL,MOTA,GIABAN,PLTHOITRANG,MainImg")] SANPHAM sANPHAM)
+        public async Task<IActionResult> Create([Bind("TENSP,GIAGOC,MAPL,MOTA,GIABAN,PLTHOITRANG")] SANPHAM sANPHAM, IFormFile MainImg)
         {
             //ViewBag.PL_SPs = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
             ViewData["MAPL"] = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
+            UploadFile uploadFile = new UploadFile();
+            uploadFile.FileUpload = MainImg;
+            var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Path.GetExtension(uploadFile.FileUpload.FileName);
+            sANPHAM.MainImg = file1 ?? "";
+            var f = Path.Combine("Uploads/Img/Product", file1);
 
-            if (ModelState.IsValid)
+            using (var filestream = new FileStream(f, FileMode.Create))
             {
-                _context.Add(sANPHAM);
-                await _context.SaveChangesAsync();
-                TempData["StatusMessage"] = "Thêm sản phẩm mới thành công";
-                return RedirectToAction("Index", "SanPham");
+                await uploadFile.FileUpload.CopyToAsync(filestream);
             }
-            foreach (var item in ModelState.Values)
-            {
-                foreach (var error in item.Errors)
-                {
-                    TempData["StatusDangerMessage"] = "Thêm sản phẩm mới thất bại. Lỗi: " + error.ErrorMessage.ToString();
-                }
-            }
-            return View(sANPHAM);
+
+            _context.Add(sANPHAM);
+            await _context.SaveChangesAsync();
+            TempData["StatusMessage"] = "Thêm sản phẩm mới thành công";
+            return RedirectToAction("Index", "SanPham");
+
         }
 
         // GET: SanPham/Create
@@ -424,12 +424,13 @@ namespace App.Areas.Admin.Controllers
             return (_context.SANPHAMs?.Any(e => e.MASP == id)).GetValueOrDefault();
         }
 
-        public class UploadFile{
+        public class UploadFile
+        {
             [Required]
             [DataType(DataType.Upload)]
             [FileExtensions(Extensions = "png,jpg,jpeg,gif")]
             [Display(Name = "Chọn file ảnh sản phẩm")]
-            public IFormFile FileUpload {set;get;}
+            public IFormFile FileUpload { set; get; }
         }
 
         [HttpGet]
@@ -438,7 +439,7 @@ namespace App.Areas.Admin.Controllers
             var product = _context.SANPHAMs.Where(sp => sp.MASP == id)
                                            .Include(sp => sp.Image)
                                            .FirstOrDefault();
-            if(product == null)
+            if (product == null)
             {
                 return NotFound("Không có sản phẩm!");
             }
@@ -450,13 +451,13 @@ namespace App.Areas.Admin.Controllers
         public async Task<IActionResult> UploadPhotoAsync(int id, [Bind("FileUpload")] UploadFile file)
         {
             var product = _context.SANPHAMs.Find(id);
-            if(product == null)
+            if (product == null)
             {
                 return NotFound("Không có sản phẩm!");
             }
             ViewBag.Product = product;
 
-            if(file != null)
+            if (file != null)
             {
                 var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Path.GetExtension(file.FileUpload.FileName);
 
@@ -467,7 +468,8 @@ namespace App.Areas.Admin.Controllers
                     await file.FileUpload.CopyToAsync(filestream);
                 }
 
-                _context.Add(new HINHANH(){
+                _context.Add(new HINHANH()
+                {
                     MASP = product.MASP,
                     TENHINHANH = file1,
                     LINK = file1
@@ -477,6 +479,95 @@ namespace App.Areas.Admin.Controllers
 
             }
             return View(new UploadFile());
+        }
+
+        [HttpPost]
+        public IActionResult ListPhotos(int id)
+        {
+            var product = _context.SANPHAMs.Where(e => e.MASP == id)
+                .Include(p => p.Image)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return Json(
+                    new
+                    {
+                        success = 0,
+                        message = "Product not found",
+                    }
+                );
+            }
+
+            var listphotos = product.Image.Select(photo => new
+            {
+                id = photo.MAHINHANH,
+                path = "http://localhost:5235/contents/Img/Product/" + photo.LINK
+            });
+
+            return Json(
+                new
+                {
+                    success = 1,
+                    photos = listphotos
+                }
+            );
+
+
+        }
+
+        [HttpPost]
+        public IActionResult DeletePhoto(int id)
+        {
+            var photo = _context.HINHANHs.Where(p => p.MAHINHANH == id).FirstOrDefault();
+            if (photo != null)
+            {
+                _context.Remove(photo);
+                _context.SaveChanges();
+
+                var filename = "Uploads/Img/Product/" + photo.LINK;
+                System.IO.File.Delete(filename);
+            }
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhotoApi(int id, [Bind("FileUpload")] UploadFile f)
+        {
+            var product = _context.SANPHAMs.Where(e => e.MASP == id)
+                .Include(p => p.Image)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return NotFound("Không có sản phẩm");
+            }
+
+
+            if (f != null)
+            {
+                var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                            + Path.GetExtension(f.FileUpload.FileName);
+
+                var file = Path.Combine("Uploads", "Products", file1);
+
+                using (var filestream = new FileStream(file, FileMode.Create))
+                {
+                    await f.FileUpload.CopyToAsync(filestream);
+                }
+
+                _context.Add(new HINHANH()
+                {
+                    MASP = product.MASP,
+                    LINK = file1,
+                    TENHINHANH = file1
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+
+            return Ok();
         }
     }
 }
