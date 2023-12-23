@@ -46,17 +46,17 @@
 
 @if (can_connect)
 {
-    <h2>Các Table</h2>
+    @* <h2>Các Table</h2> *@
     await dbContext.Database.OpenConnectionAsync();
     var table = dbContext.Database.GetDbConnection().GetSchema("Tables");
-    <ul>
+    @* <ul>
       @foreach (System.Data.DataRow row in table.Rows)
       {
           <li>@row["TABLE_NAME"]</li>
       }
-    </ul>
+    </ul> *@
 
-    <a class = "btn btn-danger" asp-action="DeleteDb">Xóa Db:  @dbname</a>
+    @* <a class = "btn btn-danger" asp-action="DeleteDb">Xóa Db:  @dbname</a> *@
     <a class = "btn btn-danger" asp-action="SeedData">Seed Data</a>
 
 
@@ -67,5 +67,5 @@
 
 @section Sidebar
 {
-    @Html.Raw(_AdminSidebarService.renderHtml())
+    @* @Html.Raw(_AdminSidebarService.renderHtml()) *@
 }

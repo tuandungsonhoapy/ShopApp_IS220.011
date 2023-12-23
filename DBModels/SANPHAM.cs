@@ -43,6 +43,7 @@ namespace App.DBModels
         [StringLength(255)]
         [Required]
         [Column(TypeName = "varchar")]
+        [DisplayName("Ảnh chính cho sản phẩm")]
         public string MainImg {set;get;}
 
         public List<HINHANH>? Image {set;get;}

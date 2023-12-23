@@ -1,0 +1,47 @@
+.box_backtolist{
+    margin-top: 15px;
+}
+
+.box_content_input_update{
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.form-control{
+    width: 300px;
+}
+
+h4{
+    text-align: center;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box_contain_input_file{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#box-photo-upload{
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tạo 3 cột có chiều rộng bằng nhau */
+    gap: 16px; /* Khoảng cách giữa các phần tử */
+}
+
+.grid-item {
+    padding: 16px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.photodetail{
+    text-align: center;
+}

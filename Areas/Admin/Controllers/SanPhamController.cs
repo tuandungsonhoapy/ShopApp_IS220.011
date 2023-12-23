@@ -549,7 +549,8 @@ namespace App.Areas.Admin.Controllers
                 var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
                             + Path.GetExtension(f.FileUpload.FileName);
 
-                var file = Path.Combine("Uploads", "Products", file1);
+                var file = Path.Combine("Uploads/Img/Product", file1);
+
 
                 using (var filestream = new FileStream(file, FileMode.Create))
                 {

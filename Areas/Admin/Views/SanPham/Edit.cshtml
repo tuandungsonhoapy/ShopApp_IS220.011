@@ -4,62 +4,206 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+@section css {
+    <link rel="stylesheet" href="/css/EditProduct.css">
+}
 
-<h4>SANPHAM</h4>
+<h4>Cập nhật thông tin sản phẩm</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12 box_content_input_update">
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MASP" />
-            <div class="form-group">
-                <label asp-for="TENSP" class="control-label"></label>
-                <input asp-for="TENSP" class="form-control" />
-                <span asp-validation-for="TENSP" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="TENSP" class="control-label"></label>
+                    <input asp-for="TENSP" class="form-control" />
+                    <span asp-validation-for="TENSP" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="GIAGOC" class="control-label"></label>
+                    <input asp-for="GIAGOC" class="form-control" />
+                    <span asp-validation-for="GIAGOC" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="GIAGOC" class="control-label"></label>
-                <input asp-for="GIAGOC" class="form-control" />
-                <span asp-validation-for="GIAGOC" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="MAPL" class="control-label"></label>
+                    <select asp-for="MAPL" class="form-control" asp-items="ViewBag.MAPL"></select>
+                    <span asp-validation-for="MAPL" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="MOTA" class="control-label"></label>
+                    <input asp-for="MOTA" class="form-control" />
+                    <span asp-validation-for="MOTA" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MAPL" class="control-label"></label>
-                <select asp-for="MAPL" class="form-control" asp-items="ViewBag.MAPL"></select>
-                <span asp-validation-for="MAPL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MOTA" class="control-label"></label>
-                <input asp-for="MOTA" class="form-control" />
-                <span asp-validation-for="MOTA" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GIABAN" class="control-label"></label>
-                <input asp-for="GIABAN" class="form-control" />
-                <span asp-validation-for="GIABAN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PLTHOITRANG" class="control-label"></label>
-                <select asp-for="PLTHOITRANG" class="form-control" asp-items="@(new SelectList(new List<SelectListItem>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="GIABAN" class="control-label"></label>
+                    <input asp-for="GIABAN" class="form-control" />
+                    <span asp-validation-for="GIABAN" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="PLTHOITRANG" class="control-label"></label>
+                    <select asp-for="PLTHOITRANG" class="form-control" asp-items="@(new SelectList(new List<SelectListItem>
                 {
                     new SelectListItem { Text = "Nam", Value = "Nam" },
                     new SelectListItem { Text = "Nữ", Value = "Nữ" },
                     new SelectListItem { Text = "Trẻ em", Value = "Trẻ em" }
                 }, "Value", "Text"))"></select>
-                <span asp-validation-for=" PLTHOITRANG" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MainImg" class="control-label"></label>
-                <input type="file" asp-for="MainImg" class="form-control" />
-                <span asp-validation-for="MainImg" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                    <span asp-validation-for=" PLTHOITRANG" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MainImg" class="control-label"></label>
+                    <input type="file" asp-for="MainImg" class="form-control" />
+                    <span asp-validation-for="MainImg" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Lưu cập nhật" class="btn btn-primary" />
+                </div>
             </div>
         </form>
     </div>
 </div>
+<hr>
+<h4>Cập nhật hình ảnh cho sản phẩm</h4>
+<div class="box_contain_input_file">
+    <input class="collapse" type="file" id="selectfileupload" onchange="AutoUploadPhoto()" />
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <span class="btn btn-primary" onclick="ClickButtoUpload()"><img style="width: 30px; height: auto;" src="/Uploads/Icon/logouploadfile.png" alt="">Upload</span>
 </div>
+<div id="box-photo-upload" class="d-flex flex-wrap photo-upload" data-id="@Model.MASP">
+</div>
+
+<hr>
+
+<div class="box_backtolist">
+    <a asp-action="Index"><i class="fa-solid fa-backward"></i> Danh sách sản phẩm</a>
+</div>
+
+@section Scripts {
+    <script>
+        function AutoUploadPhoto() {
+            var formData = new FormData();
+
+            var id = $("#box-photo-upload").data("id");
+            formData.append("id", id);
+
+            var sofile = document.getElementById("selectfileupload").files.length;
+            if (sofile == 0) return;
+            var fileData = document.getElementById("selectfileupload").files[0];
+            formData.append("FileUpload", fileData)
+
+
+            var urlUpload = "@Url.Action("UploadPhotoApi")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlUpload,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // ... xu ly du lieu lay duoc
+                    LoadPhotos();
+                }
+            });
+
+        }
+
+        function ClickButtoUpload() {
+            $("#selectfileupload").click();
+        }
+
+        function setClickDeletePhoto() {
+            $("#box-photo-upload .photodetail span").click(function () {
+
+
+                if (confirm("Có chắc chắn xóa ảnh?") != true) return;
+
+                var spanButton = $(this);
+                var id = spanButton.data("id");
+
+                var formData = new FormData();
+                formData.append("id", id);
+
+                var urlDeletePhoto = "@Url.Action("DeletePhoto")";
+
+                $.ajax({
+                    data: formData,
+                    cache: false,
+                    url: urlDeletePhoto,
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        // ... xu ly du lieu lay duoc
+                        LoadPhotos();
+
+                    }
+                });
+
+
+            });
+        }
+
+        function LoadPhotos() {
+            var box = $("#box-photo-upload");
+            var ProductID = box.data("id");
+            box.empty();
+
+            var formData = new FormData();
+            formData.append("id", ProductID);
+
+            var urlListPhoto = "@Url.Action("ListPhotos")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlListPhoto,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // ... xu ly du lieu lay duoc
+                    data.photos.forEach(function (item) {
+                        // console.log(item.id);
+                        // console.log(item.path);
+                        var e = $(
+                            '<div class="photodetail w-25 p-1 ">'
+                            + '<img class="w-100 grid-item" src="' + item.path + '" />'
+                            + '<span style="margin-top:12px;" class="btn btn-danger" data-id="' + item.id + '">Delete</span></div>');
+
+                        box.append(e);
+
+                    });
+                    setClickDeletePhoto();
+                }
+            });
+
+            // console.log(ProductID);
+
+        }
+
+        $(document).ready(function () {
+            LoadPhotos();
+        });
+    </script>
+
+    <script>
+        function validateForm() {
+            var fileInput = document.getElementById('FileUpload');
+
+            // Kiểm tra xem có tệp được chọn hay không
+            if (fileInput.files.length === 0) {
+                alert('Vui lòng chọn một tệp trước khi upload.');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+}
