@@ -29,7 +29,7 @@ namespace App.DBModels
         [StringLength(30)]
         [Column(TypeName = "varchar")]
         [Required(ErrorMessage = "Phải nhập {0}")]
-        [DisplayName("Phân loại thời trang")]
+        [DisplayName("Phân loại")]
         public string PLTHOITRANG {set;get;}
 
         [Column(TypeName = "text")]

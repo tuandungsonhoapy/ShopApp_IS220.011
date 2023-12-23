@@ -8,6 +8,10 @@
 
 }
 
+@section css{
+    <link rel="stylesheet" href="/css/ManageProduct.css">
+}
+
 <h1>Quản lý sản phẩm</h1>
 @* <form asp-action="Index" method="get" id="searchForm">
 <label for="SearchString">Tìm kiếm sản phẩm:</label>
@@ -56,12 +60,12 @@
                 </td>
                 <td>
                     <div>
-                        <a asp-action="Edit" asp-route-id="@item.MASP"><i class="fa-solid fa-pen-to-square"
+                        <a asp-action="Edit" asp-route-id="@item.MASP"><i class="fa-solid fa-pen-to-square fa-solid_icon"
                                 style="color: #12f33f;"></i></a>
                         @* <a asp-action="Details" asp-route-id="@item.MASP">Xem</a> | *@
-                        <a asp-action="Delete" asp-route-id="@item.MASP"><i class="fa-solid fa-eraser"
+                        <a asp-action="Delete" asp-route-id="@item.MASP"><i class="fa-solid fa-eraser fa-solid_icon"
                                 style="color: red;"></i></a> 
-                        <a asp-action="CreateSample" asp-route-id="@item.MASP">Thêm mẫu sản phẩm</a>
+                        <a asp-action="CreateSample" asp-route-id="@item.MASP"><i class="fa-solid fa-shirt fa-solid_icon" style="color: blue;"></i></a>
                         @* <a asp-action="UploadPhoto" asp-route-id="@item.MASP">Thêm hình ảnh</a> *@
                     </div>
                 </td>

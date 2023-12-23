@@ -105,6 +105,7 @@ namespace DAFW_IS220.Controllers
             return cartList;
         }
 
+        [AllowAnonymous]
         //[Route("chitietsanpham")]
         //[Route("chitietsanpham/{id:int?})]
         //[Route("chitietsanpham/[controller]/[action])]

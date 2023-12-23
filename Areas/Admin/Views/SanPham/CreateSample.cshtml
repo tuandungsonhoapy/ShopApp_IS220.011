@@ -4,42 +4,112 @@
     ViewData["Title"] = "Create";
     var masp = ViewBag.DefaultMASPValue.ToString();
     var tensp = ViewBag.Product.TENSP.ToString();
+    var productdetailList = ViewBag.ProductDetailList as List<App.DBModels.CHITIETSANPHAM>;
 }
 
-<h1>Create</h1>
+@section css
+{
+    <link rel="stylesheet" href="/css/CreateProductSample.css">
+}
 
-<h4>Thêm mới mẫu cho sản phẩm có ID: @masp</h4>
+<h4>Thêm mới mẫu sản phẩm</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="CreateSample" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MASP" class="control-label"></label>
-                <select asp-for="MASP" class="form-control">
-                    <option value="@ViewBag.DefaultMASPValue" selected="selected">@tensp</option>
-                </select>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="MASP" class="control-label"></label>
+                    <select asp-for="MASP" class="form-control">
+                        <option value="@ViewBag.DefaultMASPValue" selected="selected">@tensp</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="MAMAU" class="control-label"></label>
+                    <select asp-for="MAMAU" class="form-control" asp-items="ViewBag.MAMAU"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MAMAU" class="control-label"></label>
-                <select asp-for="MAMAU" class="form-control" asp-items="ViewBag.MAMAU"></select>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="MASIZE" class="control-label"></label>
+                    <select asp-for="MASIZE" class="form-control" asp-items="ViewBag.MASIZE"></select>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="SOLUONG" class="control-label"></label>
+                    <input asp-for="SOLUONG" class="form-control" />
+                    <span asp-validation-for="SOLUONG" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MASIZE" class="control-label"></label>
-                <select asp-for="MASIZE" class="form-control" asp-items="ViewBag.MASIZE"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SOLUONG" class="control-label"></label>
-                <input asp-for="SOLUONG" class="form-control" />
-                <span asp-validation-for="SOLUONG" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div style="margin-top: 15px;" class="form-group">
+                <input type="submit" value="Lưu thông tin" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+<hr>
+
+<h4>Danh sách các mẫu sản phẩm</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SANPHAM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SANPHAM.TENSP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MAUSAC.TENMAU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SIZE)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.SOLUONG)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (productdetailList != null)
+            {
+                @foreach (var item in productdetailList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SANPHAM.MASP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SANPHAM.TENSP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MAUSAC.TENMAU)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SIZE.Size)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SOLUONG)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.MACTSP"><i class="fa-solid fa-pen-to-square fa-solid_icon"
+                                style="color: #12f33f;"></i></a> 
+                            <a asp-action="Delete" asp-route-id="@item.MACTSP"><i class="fa-solid fa-eraser fa-solid_icon"
+                                style="color: red;"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"><i class="fa-solid fa-backward"></i> Danh sách sản phẩm</a>
 </div>

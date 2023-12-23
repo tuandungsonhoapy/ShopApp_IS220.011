@@ -481,17 +481,21 @@ namespace DAFW_IS220.Controllers
             else if (orderModel.TypePayment == 2)
             {
                 dONHANG.HINHTHUCTHANHTOAN = "Chuyển khoản";
-                dONHANG.TRANGTHAITHANHTOAN = "Đã thanh toán";
+                dONHANG.TRANGTHAITHANHTOAN = "Chưa thanh toán";
             }
             dONHANG.TONGTIEN = orderModel.Price;
             dONHANG.TRANGTHAIDONHANG = "Chờ lấy hàng";
             dONHANG.GHICHU = orderModel.Note ?? "";
             dONHANG.NGAYSUADOI = DateTime.Now;
+            dONHANG.PHIVANCHUYEN = 35000;
+            dONHANG.MATTGH = orderModel.Deliveryid;
             myShopContext.Add(dONHANG);
             await myShopContext.SaveChangesAsync();
-            // THONGTINVANCHUYEN tHONGTINVANCHUYEN = new THONGTINVANCHUYEN();
-            // tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
-            // tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
+            THONGTINVANCHUYEN tHONGTINVANCHUYEN = new THONGTINVANCHUYEN();
+            tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
+            tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
+            myShopContext.Add(tHONGTINVANCHUYEN);
+            await myShopContext.SaveChangesAsync();
             if (orderModel.TypePayment == 2)
             {
                 THANHTOAN tHANHTOAN = new THANHTOAN();

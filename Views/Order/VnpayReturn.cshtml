@@ -28,7 +28,7 @@
                         @{
                             if(ViewBag.Result == 1)
                             {
-                                <a class="btn btn-success" >Xem thông tin đơn hàng</a>
+                                <a asp-action="OrderDetail" asp-controller="Delivery" asp-route-id="@ViewBag.OrderID" class="btn btn-success" >Xem thông tin đơn hàng</a>
                             }
                             else{
                                 <a class="btn btn-danger" >Xem thông tin đơn hàng</a>

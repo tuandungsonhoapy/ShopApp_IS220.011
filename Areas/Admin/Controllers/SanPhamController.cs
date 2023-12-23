@@ -283,6 +283,22 @@ namespace App.Areas.Admin.Controllers
 
             int defaultMASPValue = id;
             ViewBag.DefaultMASPValue = defaultMASPValue;
+            ViewBag.ProductDetailList = (from pro in _context.SANPHAMs
+                                         where pro.MASP == id
+                                         join productdetail in _context.CHITIETSANPHAMs
+                                         on pro.MASP equals productdetail.MASP
+                                         join color in _context.MAUSACs
+                                         on productdetail.MAMAU equals color.MAMAU
+                                         join size in _context.SIZEs
+                                         on productdetail.MASIZE equals size.MASIZE
+                                         select new CHITIETSANPHAM()
+                                         {
+                                            MACTSP = productdetail.MACTSP,
+                                            MAUSAC = color,
+                                            SIZE = size,
+                                            SANPHAM = pro,
+                                            SOLUONG = productdetail.SOLUONG
+                                         }).ToList();
             return View();
         }
 
@@ -312,7 +328,7 @@ namespace App.Areas.Admin.Controllers
                 // {
                 //     return Redirect(returnUrl);
                 // }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("CreateSample", new {id = cHITIETSANPHAM.MASP});
             }
             foreach (var item in ModelState.Values)
             {

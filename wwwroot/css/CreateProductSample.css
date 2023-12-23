@@ -1,0 +1,22 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-control{
+    width: 300px;
+}
+
+h4{
+    text-align: center;
+}
+
+form{
+    padding: 0 60px;
+}
+
+.fa-solid_icon{
+    font-size: 24px;
+}
