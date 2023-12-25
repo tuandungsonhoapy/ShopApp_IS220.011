@@ -290,7 +290,7 @@
         </div>
 
         <div class="payment_confirm justify-content-end">
-            <button data-deliveryid="@(Address?.MATTGH ?? 0)" class="button_confirm float-end" id="btn_checkout">Thanh
+            <button data-deliveryid="@(Address?.MATTGH ?? 0)" data-voucherid="0" class="button_confirm float-end" id="btn_checkout">Thanh
                 toán</button>
         </div>
 
@@ -360,8 +360,10 @@
                                 var totalroot = $("#Total_price").attr("data-totalroot");
                                 var discountprice = result.discountPrice;
                                 var newTotal = totalroot - discountprice;
+                                var voucherid = result.voucherID;
 
                                 $("#Total_price").attr("data-total", newTotal);
+                                $("#btn_checkout").attr("data-voucherid", voucherid);
                                 $("#Discount_Price").text(discountprice.toFixed(2) + "đ");
                                 $("#Total_price").text(newTotal.toFixed(2) + "đ"); // Định dạng hiển thị số có 2 chữ số thập phân
                                 $("#result_voucher").text("").css("color", "red");
@@ -370,6 +372,7 @@
                                 if(result.giadontoithieu > 0) $("#result_voucher").text("Yêu cầu đơn hàng có giá trị tối thiểu " + result.giadontoithieu + "đ!").css("color", "red");
                                 else if (result.thoigianbd == 1) $("#result_voucher").text("Chưa đến ngày áp dụng voucher!").css("color", "red");
                                 else if (result.thoigiankt == 1) $("#result_voucher").text("Voucher đã hết hạn sử dụng!").css("color", "red");
+                                else if (result.soluong == 0) $("#result_voucher").text("Voucher đã hết số lượt sử dụng!").css("color", "red");
                                 else $("#result_voucher").text("Mã voucher không chính xác!").css("color", "red");
                             }
                         }
@@ -383,12 +386,14 @@
                     var Price = $("#Total_price").attr("data-total");
                     var Note = $("#input_note").val();
                     var deliveryid = $(this).attr("data-deliveryid");
+                    var voucherid = $(this).attr("data-voucherid");
                     var model = {
                         TypePayment: TypePayment,
                         TypePaymentVN: TypePaymentVN,
                         Price: Price,
                         Note: Note,
-                        Deliveryid: deliveryid
+                        Deliveryid: deliveryid,
+                        voucherID: voucherid
                     }
                     if (deliveryid > 0) {
                         $.ajax({
