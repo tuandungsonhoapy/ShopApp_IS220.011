@@ -466,6 +466,10 @@ appsettings.json
 # Ignore appsettings.identity.json
 appsettings.identity.json
 
+# Ignore appsettings.identity.json
+/appsettings.identity.json
+
+
 # Folder config file
 [Dd]esktop.ini
 
