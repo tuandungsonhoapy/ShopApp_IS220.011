@@ -399,3 +399,13 @@ a, button{
     color: black;
     text-decoration: none;
 }
+.thongtingiaohang {
+    margin-left: 130px;
+}
+#thongtin_1 {
+    text-align: center;
+}
+#thongtin_2 {
+    text-align: center;
+    margin-left: 700px;
+}

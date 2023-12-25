@@ -84,9 +84,9 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <h4>Thông tin đơn hàng</h4>
+            <h4 id="thongtin_1">Thông tin đơn hàng</h4>
             <div class="info-address">
-                <p>
+                <p class="thongtingiaohang">
                     Mã đơn hàng: @order.MADH<br>
                     Ngày đặt hàng: @order.NGAYMUA <br>
                     Trạng thái đơn hàng: @order.TRANGTHAIDONHANG <br>
@@ -99,9 +99,9 @@
             </div>
         </div>
         <div class="col-sm-6 ">
-            <h4>Địa chỉ nhận hàng</h4>
+            <h4 id="thongtin_1">Địa chỉ nhận hàng</h4>
             <div class="info-address">
-                <p>
+                <p class="thongtingiaohang">
                     Tên người nhận: @deliveryInfo.TENNGUOINHAN <br>
                     SĐT: @deliveryInfo.SDT <br>
                     Địa chỉ: @deliveryInfo.DIACHI <br>                
@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    <div class="div-link-info-van-chuyen"><a class="link-info-van-chuyen" asp-action="Index" asp-controller="Delivery">Đến trang thông tin giao hàng</a></div>
+    <div class="div-link-info-van-chuyen" id="thongtin_2"><a class="link-info-van-chuyen" asp-action="Index" asp-controller="Delivery">Đến trang thông tin giao hàng</a></div>
 </div>
 
 @section Scripts

@@ -79,25 +79,25 @@ namespace App.Areas.Database.Controllers
         public async Task<IActionResult> SeedDataAsync()
         {
             // Create Roles
-            var rolenames = typeof(RoleName).GetFields().ToList();
-            foreach (var r in rolenames)
-            {
-                var rolename = (string)r.GetRawConstantValue();
-                var rfound = await _roleManager.FindByNameAsync(rolename);
-                if (rfound == null)
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(rolename));
-                }
-            }
+            // var rolenames = typeof(RoleName).GetFields().ToList();
+            // foreach (var r in rolenames)
+            // {
+            //     var rolename = (string)r.GetRawConstantValue();
+            //     var rfound = await _roleManager.FindByNameAsync(rolename);
+            //     if (rfound == null)
+            //     {
+            //         await _roleManager.CreateAsync(new IdentityRole(rolename));
+            //     }
+            // }
 
             // admin, pass=admin123, 21521974@gm.uit.edu.vn
-            var useradmin = await _userManager.FindByEmailAsync("21521974@gm.uit.edu.vn");
+            var useradmin = await _userManager.FindByEmailAsync("xoan25012003@gmail.com");
             if (useradmin == null)
             {
                 useradmin = new AppUser()
                 {
                     UserName = "admin",
-                    Email = "21521974@gm.uit.edu.vn",
+                    Email = "xoan25012003@gmail.com",
                     EmailConfirmed = true,
                 };
 
