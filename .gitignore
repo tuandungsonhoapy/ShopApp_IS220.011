@@ -460,9 +460,6 @@ ehthumbs_vista.db
 # Dump file
 *.stackdump
 
-# Ignore appsettings.json
-appsettings.json
-
 # Ignore appsettings.identity.json
 appsettings.identity.json
 
