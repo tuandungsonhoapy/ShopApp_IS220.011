@@ -33,5 +33,15 @@ namespace App.DBModels
         [Column(TypeName = "int")]
         [Display(Name = "Giá trị giảm(%)")]
         public int GIATRIGIAM {set;get;}
+
+        [Column(TypeName = "int")]
+        [Display(Name = "Loại voucher")]
+        public int LOAIVOUCHER {set;get;}
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal GIADONTOITHIEU { set; get; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal GIAMTOIDA { set; get; }
     }
 }

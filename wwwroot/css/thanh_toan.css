@@ -240,9 +240,19 @@ tr {
     padding: 7px 0;
 }
 
+#result_voucher{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .vertical_align_center {
     display: flex;
     align-items: center;
+}
+
+.box_info_discount_of_voucher{
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .horizontal_align_right {
