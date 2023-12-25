@@ -135,18 +135,40 @@ namespace DAFW_IS220.Controllers
             return View(cartList);
         }
 
-        public async Task<IActionResult> DiscountByVoucher([FromForm] string code)
+        public IActionResult DiscountByVoucher([FromForm] string code, [FromForm] decimal totalOrder, [FromForm] decimal shippingcost)
         {
-            var result = await myShopContext.VOUCHERs.Where(v => v.TENVOUCHER.Equals(code)).FirstOrDefaultAsync();
+            var result = myShopContext.VOUCHERs.Where(v => v.TENVOUCHER.Equals(code)).FirstOrDefault();
             if (result != null)
             {
+                if (totalOrder < result.GIADONTOITHIEU)
+                {
+                    return Ok(new { success = false, discountnumber = 0, giadontoithieu = result.GIADONTOITHIEU});
+                }
+                if(result.THOIGIANBD > DateTime.Now)
+                {
+                    return Ok(new { success = false, discountnumber = 0, thoigianbd = 1  });
+                }
+                if(result.THOIGIANKT < DateTime.Now)
+                {
+                    return Ok(new { success = false, discountnumber = 0, thoigiankt = 1  });
+                }
                 int DiscountPercent = result.GIATRIGIAM;
-                result.SOLUONG--;
-                myShopContext.Update(result);
-                await myShopContext.SaveChangesAsync();
-                return Ok(new { success = true, discountnumber = DiscountPercent });
+                decimal discountprice = 0;
+                if(result.LOAIVOUCHER == 1)
+                {
+                    discountprice = totalOrder * DiscountPercent / 100;
+
+                }
+                else if (result.LOAIVOUCHER == 2){
+                    discountprice = shippingcost * DiscountPercent / 100; 
+                }
+                if(discountprice > result.GIAMTOIDA) discountprice = result.GIAMTOIDA;
+                // result.SOLUONG--;
+                // myShopContext.Update(result);
+                // await myShopContext.SaveChangesAsync();
+                return Ok(new { success = true, discountPrice = discountprice });
             }
-            return Ok(new { success = true, discountnumber = 0 });
+            return Ok(new { success = false, discountPrice = 0 });
         }
 
         [HttpPost]

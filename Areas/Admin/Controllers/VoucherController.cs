@@ -75,7 +75,7 @@ namespace App.Areas.Admin.Controllers
 
         [HttpPost("/voucher/create")] 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TENVOUCHER, THOIGIANBD, THOIGIANKT, SOLUONG, MOTA, GIATRIGIAM")]VOUCHER vOUCHER)
+        public async Task<IActionResult> Create([Bind("TENVOUCHER, THOIGIANBD, THOIGIANKT, SOLUONG, MOTA, GIATRIGIAM, GIADONTOITHIEU, GIAMTOIDA, LOAIVOUCHER")]VOUCHER vOUCHER)
         {
             myShopContext.Add(vOUCHER);
             await myShopContext.SaveChangesAsync();

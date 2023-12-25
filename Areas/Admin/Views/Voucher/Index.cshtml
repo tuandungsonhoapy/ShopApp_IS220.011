@@ -98,8 +98,8 @@
                                 <td data-label="update">
                                     <div class="icon-update">
                                         <i class="fa-solid fa-eye" style="color: #4656aa;"></i>
-                                        <a style="cursor: pointer;" id="deleteButton" data-voucherid="@item.MAVOUCHER"><i class="fa-solid fa-eraser"
-                                                style="color: red;"></i></a>
+                                        <a style="cursor: pointer;" class="deleteButton" data-voucherid="@item.MAVOUCHER"><i
+                                                class="fa-solid fa-eraser" style="color: red;"></i></a>
                                         <a asp-action="Edit" asp-route-id="@item.MAVOUCHER"><i class="fa-solid fa-pen-to-square"
                                                 style="color: #12f33f;"></i></a>
                                     </div>
@@ -122,7 +122,7 @@
         <div><span class="close">&times;</span></div>
         <div style="margin-top: 25px; display: flex; flex-direction: column;">
             <p style="text-align: center; color: red;">Bạn có chắc chắn muốn xóa voucher này không?</p>
-            <button class="btn btn-danger" id="confirmDelete">Xác nhận</button>
+            <button data-voucherid="0" class="btn btn-danger" id="confirmDelete">Xác nhận</button>
         </div>
     </div>
 </div>
@@ -130,9 +130,17 @@
 @section Scripts {
     <script>
         // Hiển thị modal khi click vào nút xóa
-        document.getElementById('deleteButton').addEventListener('click', function () {
-            var modal = document.getElementById('confirmDeleteModal');
-            modal.style.display = 'block';
+        // Lấy tất cả các thẻ có class là "deleteButton"
+        var deleteButtons = document.querySelectorAll('.deleteButton');
+        // Lặp qua từng thẻ và thêm sự kiện click
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var voucherid = $(this).attr("data-voucherid");
+                var deletebutton = document.getElementById('confirmDelete');
+                deletebutton.setAttribute('data-voucherid', voucherid);
+                var modal = document.getElementById('confirmDeleteModal');
+                modal.style.display = 'block';
+            });
         });
 
         // Đóng modal khi click vào nút đóng hoặc nút xác nhận
@@ -141,7 +149,7 @@
                 this.style.display = 'none';
             } else if (event.target.id === 'confirmDelete') {
                 // Lấy ID voucher và gọi đến controller để xóa
-                var voucherid = document.getElementById('deleteButton').getAttribute('data-voucherid');
+                var voucherid = document.getElementById('confirmDelete').getAttribute('data-voucherid');
                 deleteVoucher(voucherid);
                 this.style.display = 'none';
             }

@@ -219,8 +219,9 @@
                 <div class="col-4 text-start">
                     <input style="width: 100%;" type="text" name="" id="codevoucher">
                 </div>
-                <div class="col-2 text-end"><a id="voucherconfirm" class="btn btn-primary">Xác nhận</a></div>
+                <div class="col-2 text-end"><a data-total="@total" data-shippingcost="@shipping_costs" id="voucherconfirm" class="btn btn-primary">Xác nhận</a></div>
             </div>
+            <div id="result_voucher" class="col-2 text-end"></div>
             <div class="row justify-content-end">
                 <div class="vertical_align_center col-3">
                     <span>Phí vận chuyển:</span>
@@ -233,6 +234,16 @@
                 </div>
                 <div class="vertical_align_center horizontal_align_right col-2 text-end">
                     <span>@shipping_costs đ</span>
+                </div>
+            </div>
+            <div class="row justify-content-end box_info_discount_of_voucher">
+                <div class="vertical_align_center col-3">
+                    <span>Giá voucher giảm:</span>
+                </div>
+                <div class="col-4">
+                </div>
+                <div class="vertical_align_center horizontal_align_right col-2 text-end">
+                    <span id="Discount_Price">0 đ</span>
                 </div>
             </div>
             <div class="row justify-content-end">
@@ -268,7 +279,7 @@
                     <span class="fs-4">Tổng số tiền:</span>
                 </div>
                 <div class="col-2 text-end">
-                    <span id="Total_price" data-total="@(total + shipping_costs)"
+                    <span id="Total_price" data-total="@(total + shipping_costs)" data-totalroot="@(total + shipping_costs)"
                         class="discount_price fs-4 fw-bold">@((total + shipping_costs).ToString())đ</span>
                 </div>
             </div>
@@ -282,9 +293,9 @@
             <button data-deliveryid="@(Address?.MATTGH ?? 0)" class="button_confirm float-end" id="btn_checkout">Thanh
                 toán</button>
         </div>
-        
+
     </div>
-    
+
     @* <div style="height: 150px;" class="col-auto"></div> *@
     <div id="Payment-result"></div>
     @section Scripts
@@ -330,20 +341,36 @@
                 $("#voucherconfirm").click(function (event) {
                     event.preventDefault();
                     var code = $("#codevoucher").val();
+                    var totalOrder = $(this).attr("data-total");
+                    var shippingcost = $(this).attr("data-shippingcost");
+                    @* var total = $("#Total_price").attr("data-total");
+                    $("#Total_price").text(total.toFixed(2) + "đ"); *@
                     $.ajax({
                         type: "POST",
-                        url: "DiscountByVoucher/Order",
+                        url: "/Order/DiscountByVoucher",
                         data: {
-                            code: code
+                            code: code,
+                            totalOrder: totalOrder,
+                            shippingcost: shippingcost
                         },
                         success: function (result) {
                             if (result.success) {
-                                var discountpercent = result.discountnumber
+                                @* var discountpercent = result.discountnumber *@
                                 var total = $("#Total_price").attr("data-total");
-                                var newTotal = total - total * discountpercent / 100;
+                                var totalroot = $("#Total_price").attr("data-totalroot");
+                                var discountprice = result.discountPrice;
+                                var newTotal = totalroot - discountprice;
 
                                 $("#Total_price").attr("data-total", newTotal);
+                                $("#Discount_Price").text(discountprice.toFixed(2) + "đ");
                                 $("#Total_price").text(newTotal.toFixed(2) + "đ"); // Định dạng hiển thị số có 2 chữ số thập phân
+                                $("#result_voucher").text("").css("color", "red");
+                            }
+                            else{
+                                if(result.giadontoithieu > 0) $("#result_voucher").text("Yêu cầu đơn hàng có giá trị tối thiểu " + result.giadontoithieu + "đ!").css("color", "red");
+                                else if (result.thoigianbd == 1) $("#result_voucher").text("Chưa đến ngày áp dụng voucher!").css("color", "red");
+                                else if (result.thoigiankt == 1) $("#result_voucher").text("Voucher đã hết hạn sử dụng!").css("color", "red");
+                                else $("#result_voucher").text("Mã voucher không chính xác!").css("color", "red");
                             }
                         }
                     });
@@ -379,10 +406,10 @@
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         $("#Payment-result").text("Vui lòng chọn địa chỉ nhận hàng trước khi thanh toán!").css("color", "red");
                     }
-                    
+
                 });
             });    
         </script>
