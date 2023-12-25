@@ -10,6 +10,12 @@ namespace DAFW_IS220.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "MADH",
+                table: "DANHGIAs",
+                type: "int",
+                nullable: false);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_DANHGIAs_DONHANGs_MADH",
                 table: "DANHGIAs",
