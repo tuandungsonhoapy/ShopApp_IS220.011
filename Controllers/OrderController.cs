@@ -140,33 +140,39 @@ namespace DAFW_IS220.Controllers
             var result = myShopContext.VOUCHERs.Where(v => v.TENVOUCHER.Equals(code)).FirstOrDefault();
             if (result != null)
             {
+                int voucherid = result.MAVOUCHER;
                 if (totalOrder < result.GIADONTOITHIEU)
                 {
-                    return Ok(new { success = false, discountnumber = 0, giadontoithieu = result.GIADONTOITHIEU});
+                    return Ok(new { success = false, discountnumber = 0, giadontoithieu = result.GIADONTOITHIEU });
                 }
-                if(result.THOIGIANBD > DateTime.Now)
+                if (result.THOIGIANBD > DateTime.Now)
                 {
-                    return Ok(new { success = false, discountnumber = 0, thoigianbd = 1  });
+                    return Ok(new { success = false, discountnumber = 0, thoigianbd = 1 });
                 }
-                if(result.THOIGIANKT < DateTime.Now)
+                if (result.THOIGIANKT < DateTime.Now)
                 {
-                    return Ok(new { success = false, discountnumber = 0, thoigiankt = 1  });
+                    return Ok(new { success = false, discountnumber = 0, thoigiankt = 1 });
+                }
+                if(result.SOLUONG == 0)
+                {
+                    return Ok(new { success = false, discountnumber = 0, soluong = 0 });
                 }
                 int DiscountPercent = result.GIATRIGIAM;
                 decimal discountprice = 0;
-                if(result.LOAIVOUCHER == 1)
+                if (result.LOAIVOUCHER == 1)
                 {
                     discountprice = totalOrder * DiscountPercent / 100;
 
                 }
-                else if (result.LOAIVOUCHER == 2){
-                    discountprice = shippingcost * DiscountPercent / 100; 
+                else if (result.LOAIVOUCHER == 2)
+                {
+                    discountprice = shippingcost * DiscountPercent / 100;
                 }
-                if(discountprice > result.GIAMTOIDA) discountprice = result.GIAMTOIDA;
+                if (discountprice > result.GIAMTOIDA) discountprice = result.GIAMTOIDA;
                 // result.SOLUONG--;
                 // myShopContext.Update(result);
                 // await myShopContext.SaveChangesAsync();
-                return Ok(new { success = true, discountPrice = discountprice });
+                return Ok(new { success = true, discountPrice = discountprice, voucherID = voucherid });
             }
             return Ok(new { success = false, discountPrice = 0 });
         }
@@ -369,6 +375,16 @@ namespace DAFW_IS220.Controllers
             tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
             tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
             myShopContext.Add(tHONGTINVANCHUYEN);
+            var voucher = myShopContext.VOUCHERs.Find(orderModel.voucherID);
+            if (voucher != null)
+            {
+                voucher.SOLUONG--;
+                myShopContext.Update(voucher);
+                VOUCHER_DONHANG vOUCHER_DONHANG = new VOUCHER_DONHANG();
+                vOUCHER_DONHANG.MADH = dONHANG.MADH;
+                vOUCHER_DONHANG.MAVOUCHER = voucher.MAVOUCHER;
+                myShopContext.Add(vOUCHER_DONHANG);
+            }
             await myShopContext.SaveChangesAsync();
             if (orderModel.TypePayment == 2)
             {
@@ -517,6 +533,17 @@ namespace DAFW_IS220.Controllers
             tHONGTINVANCHUYEN.MATTGH = orderModel.Deliveryid;
             tHONGTINVANCHUYEN.MADH = dONHANG.MADH;
             myShopContext.Add(tHONGTINVANCHUYEN);
+            myShopContext.Add(tHONGTINVANCHUYEN);
+            var voucher = myShopContext.VOUCHERs.Find(orderModel.voucherID);
+            if (voucher != null)
+            {
+                voucher.SOLUONG--;
+                myShopContext.Update(voucher);
+                VOUCHER_DONHANG vOUCHER_DONHANG = new VOUCHER_DONHANG();
+                vOUCHER_DONHANG.MADH = dONHANG.MADH;
+                vOUCHER_DONHANG.MAVOUCHER = voucher.MAVOUCHER;
+                myShopContext.Add(vOUCHER_DONHANG);
+            }
             await myShopContext.SaveChangesAsync();
             if (orderModel.TypePayment == 2)
             {

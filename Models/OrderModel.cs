@@ -24,5 +24,7 @@ namespace DAFW_IS220.Models
         public string? Note {set;get;}
 
         public int Deliveryid {set;get;}
+
+        public int voucherID {set;get;}
     }
 }

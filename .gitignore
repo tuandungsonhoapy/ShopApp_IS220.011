@@ -460,6 +460,16 @@ ehthumbs_vista.db
 # Dump file
 *.stackdump
 
+# Ignore appsettings.json
+appsettings.json
+
+# Ignore appsettings.identity.json
+appsettings.identity.json
+
+# Ignore appsettings.identity.json
+/appsettings.identity.json
+
+
 # Folder config file
 [Dd]esktop.ini
 
@@ -475,3 +485,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Ignore all appsettings.json files
+**/appsettings.json
