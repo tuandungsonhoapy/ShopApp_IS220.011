@@ -30,8 +30,12 @@
                 @Html.DisplayFor(modelItem => item.Size)
             </td>
             <td>
-                <a asp-action="Update" asp-route-id="@item.MASIZE">Update</a> |
-                <a asp-action="Delete" asp-route-id="@item.MASIZE">Delete</a>
+                <a asp-action="Update" asp-route-id="@item.MASIZE">
+                     <i class="fa-solid fa-pen-to-square fa-solid_icon" style="color: #12f33f; font-size: 24px;"></i>
+                </a> 
+                <a asp-action="Delete" asp-route-id="@item.MASIZE">
+                      <i class="fa-solid fa-eraser fa-solid_icon" style="color: red;font-size: 24px;"></i>
+                </a>
             </td>
         </tr>
 }
