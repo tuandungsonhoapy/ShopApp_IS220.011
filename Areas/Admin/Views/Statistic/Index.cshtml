@@ -1,4 +1,3 @@
-
 @{
     ViewBag.Title = "Index";
 }
@@ -22,7 +21,17 @@
 
 <!-- Main content -->
 <section class="content">
+    <div class="form-group">
+        <label class="control-label"> Từ ngày: </label>
+        <input class="form-control" type="datetime-local" />
+        <span class="text-danger"></span>
+    </div>
 
+    <div class="form-group">
+        <label class="control-label">Đến ngày: </label>
+        <input class="form-control" type="datetime-local" />
+        <span class="text-danger"></span>
+    </div>
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
@@ -39,25 +48,27 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="chart">
-                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        <canvas id="barChart"
+                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Ngày</th>
-                                <th>Doanh thu</th>
-                                <th>Lợi nhuận</th>
-                            </tr>
-                        </thead>
-                        <tbody id="load_data"></tbody>
-                    </table>
-                </div>
+
             </div>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ngày</th>
+                        <th>Doanh thu</th>
+                        <th>Lợi nhuận</th>
+                    </tr>
+                </thead>
+                <tbody id="load_data"></tbody>
+            </table>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -69,9 +80,9 @@
 
 </section>
 <!-- /.content -->
-@section Scripts{
-    <script src="~/Content/clients/plugins/chart.js/Chart.min.js"></script>
-    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+@section Scripts {
+    <script src="/vendor/chart.js/Chart.min.js"></script>
+    <script src="/vendor/moment/moment.min.js"></script>
     <script>
         $(function () {
             /* ChartJS
@@ -83,8 +94,8 @@
             var arrLoiNhuan = [];
             var arrDate = [];
             $.ajax({
-                url: '/Statistical/GetStatistical',
-                type: 'GET',
+                url: '/Statistic/GetStatistical',
+                type: 'POST',
                 data: { fromDate: '', toDate: '' },
                 success: function (rs) {
 
@@ -154,10 +165,10 @@
             $.each(data, function (i, item) {
                 var strDate = moment(item.Date).format('DD/MM/yyyy');
                 strHtml += "<tr>";
-                strHtml += "<td>"+(i+1)+"</td>";
-                strHtml += "<td>" + strDate+"</td>";
-                strHtml += "<td>"+item.DoanhThu+"</td>";
-                strHtml += "<td>"+item.LoiNhuan+"</td>";
+                strHtml += "<td>" + (i + 1) + "</td>";
+                strHtml += "<td>" + strDate + "</td>";
+                strHtml += "<td>" + item.DoanhThu + "</td>";
+                strHtml += "<td>" + item.LoiNhuan + "</td>";
                 strHtml += "</tr>";
             });
             $('#load_data').html(strHtml);
