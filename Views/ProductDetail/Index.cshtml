@@ -9,9 +9,7 @@
     var somausp = ViewBag.ProductDetail as IEnumerable<ProductDetailModel>;
     var tbsosao = danhGiaList != null && danhGiaList.Any() ? danhGiaList.Average(dg => dg.SOSAO) : 0;
     var trungBinhSaoLamTron = (int)Math.Round(tbsosao);
-    var ImgList = ViewBag.Img as IEnumerable<HINHANH>;
-    @* var img_main = ImgList != null && ImgList.Any() ? ImgList.FirstOrDefault()?.LINK :
-    "Hinh-Nen-Trang-10.jpg"; *@
+    var ImgList = ViewBag.Img as IEnumerable<HINHANH>; 
     var so_img = ImgList != null ? ImgList.Count() : 0;
     HashSet<int> seenSizes = new HashSet<int>();
     HashSet<int> seencolors = new HashSet<int>();
@@ -32,42 +30,94 @@
 <div class="container col-sm-12 ">
     <div class="container-fluid">
         <div class="container_info_product">
-
-            <div style="text-align: right;" class="product_image col-sm-6">
-                <div style="" class="product_image__list_mini_image">
-                    @{
-                        if (ImgList != null)
-                        {
-                            <div class="product_image__list_mini_image__item">
-                                    <img 
-                                        src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
-                                        class="product_image__list_mini_image__item__Mainimg"
-                                        data-mainindex="1"
-                                    >
-                                </div>
-                            int index = 0;
-                            foreach (var item in ImgList)
-                            {
-                                <div class="product_image__list_mini_image__item">
-                                    <img 
-                                        src="http://localhost:5235/contents/Img/Product/@item.LINK" alt=""
-                                        class="product_image__list_mini_image__item__img"
-                                        data-index="@index"
-                                    >
-                                </div>
-                                index++;
+            <div class="container_info_product__1  col-sm-6">
+                
+                <div>
+                    <div style="text-align: right;" class="product_image">
+                        <div style="" class="product_image__list_mini_image">
+                            @{
+                                if (ImgList != null)
+                                { 
+                                    int index = 0;
+                                    foreach (var item in ImgList)
+                                    {
+                                        <div class="product_image__list_mini_image__item">
+                                            <img 
+                                                src="http://localhost:5235/contents/Img/Product/@item.LINK" alt=""
+                                                class="product_image__list_mini_image__item__img"
+                                                data-index="@index"
+                                            >
+                                        </div>
+                                        index++;
+                                    }
+                                }
                             }
+                        </div>
+                        <div class="product_image__main_image">
+                            <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                                class="product_image__main_image__img"> 
+                            <div class="controls_main_image">
+                                <button class="prev_button">❰</button>
+                                <button class="next_button">❱</button>
+                            </div>
+                        </div>
+                        <div class="product_image__main_image__overlay">
+                            <span class="close_button">&times;</span>
+                            <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                                class="product_image__main_image__img"> 
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    @{
+                        if(feedbackList != null)
+                        { 
+                            <section id="review">
+                                <div class="review-heading" style="margin-bottom: 15px;">
+                                    <h1>FEEDBACK</h1>
+                                </div>
+                                <div class="danhgia_1">
+                                    @{
+                                        foreach(var item in feedbackList)
+                                        {
+                                            var rating = item.SOSAO;
+                                            <div class="review-box-container">
+                                            <div class="review-box">
+                                                <div class="box-top">
+                                                <div class="profile">
+                                                    <div class="profile-image">
+                                                        <img src="https://nhacchuonghinhnen.com/wp-content/uploads/2020/03/hinh-nen-gai-xinh-full-hd-cho-dien-thoai-2-scaled.jpg" alt="">
+                                                    </div>
+                                                    <div class="user-name">
+                                                        <strong>@item.TAIKHOAN.TENKH</strong>
+                                                        <span>@item.TAIKHOAN.UserName</span>
+                                                    </div>
+                                                </div>
+                                                <div class="reviews">
+                                                    @{
+                                                        for(int i = 0; i<rating;i++)
+                                                        {
+                                                            <i class="fa-solid fa-star" style="color: #f3b335;"></i>
+                                                        }
+                                                        for(int j = rating; j < 5; j++)
+                                                        {
+                                                            <i class="fa-solid fa-star" style="color: #e4e4e4;"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="clients-comment">
+                                                <p>@item.NOIDUNG</p>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </section>
                         }
                     }
-                </div>
-                <div class="product_image__main_image">
-                    <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
-                        class="product_image__main_image__img"> 
-                </div>
-                <div class="product_image__main_image__overlay">
-                    <span class="close_button">&times;</span>
-                    <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
-                        class="product_image__main_image__img"> 
                 </div>
             </div>
             <div class="detail_info_product col-sm-6">
@@ -207,15 +257,12 @@
 <script>
     $(document).ready(function () {
 
-        @* var defaultIndex = 0; // Chỉ số của ảnh mặc định (ví dụ: ảnh đầu tiên)
-        var images = @Html.Raw(Json.Serialize(ImgList));
-        function showImage(index) {
-            var mainImgSrc = images[index];
-            $('.product_image__main_image__img').attr('src', mainImgSrc);
-        }
+        var currentIndex = 0;
+        @* var images = ViewBag.Img as IEnumerable<HINHANH>;
+        var lenghtImages = 0;
+        if(ImgList != null) lenghtImages = ImgList.Count();  *@
+        var lengthImages = $('.product_image__list_mini_image__item__img').length; // Số lượng hình ảnh mini
 
-        // Hiển thị ảnh mặc định khi trang được tải lần đầu
-        showImage(defaultIndex); *@
         $('.product_image__list_mini_image__item__Mainimg').click(function () {
 
             var mainImgSrc = $('.product_image__list_mini_image__item__Mainimg').attr('src');
@@ -228,10 +275,12 @@
         $('.product_image__list_mini_image__item__img').click(function () {
             var newIndex = $(this).data('index'); // Lấy chỉ số của hình ảnh mini được click
 
-            var mainImgSrc = $('.product_image__list_mini_image__item__img[data-index="' + newIndex + '"]').attr('src');
+            let mainImgSrc = $('.product_image__list_mini_image__item__img[data-index="' + newIndex + '"]').attr('src');
             // Lấy đường dẫn của hình ảnh mini được click
 
             $('.product_image__main_image__img').attr('src', mainImgSrc);
+            
+            currentIndex = newIndex;
             // Thay đổi đường dẫn của hình ảnh chính thành đường dẫn của hình ảnh mini được click
         });
         $('.product_image__main_image__img').click(function () {
@@ -242,7 +291,24 @@
             $('.product_image__main_image__overlay').fadeOut();
         });
 
-        
+        $('.next_button').click(function () {
+            currentIndex = (currentIndex + 1) % lengthImages; // Tăng chỉ số hiện tại và quay vòng khi đến cuối danh sách
+            
+            let mainImgSrc = $('.product_image__list_mini_image__item__img[data-index="' + currentIndex + '"]').attr('src');
+            // Lấy đường dẫn của hình ảnh mini được click
+
+            $('.product_image__main_image__img').attr('src', mainImgSrc);
+        });
+
+        // Sự kiện khi nhấn nút "Lùi"
+        $('.prev_button').click(function () {
+        currentIndex = (currentIndex - 1 + lengthImages) % lengthImages; // Giảm chỉ số hiện tại và quay vòng khi ở đầu danh sách
+            
+            let mainImgSrc = $('.product_image__list_mini_image__item__img[data-index="' + currentIndex + '"]').attr('src');
+            // Lấy đường dẫn của hình ảnh mini được click
+
+            $('.product_image__main_image__img').attr('src', mainImgSrc);
+        });
 
     });
 </script>
@@ -479,55 +545,7 @@ function increaseQuantity() {
     </script>
 }
 
-@{
-    if(feedbackList != null)
-    {
-        <!--REVIEW-->
-<section id="review">
-    <div class="review-heading" style="margin-bottom: 15px;">
-        <h1>FEEDBACK</h1>
-    </div>
-   <div class="danhgia_1">
-     @{
-        foreach(var item in feedbackList)
-        {
-            var rating = item.SOSAO;
-                <div class="review-box-container">
-        <div class="review-box">
-            <div class="box-top">
-            <div class="profile">
-                <div class="profile-image">
-                    <img src="https://nhacchuonghinhnen.com/wp-content/uploads/2020/03/hinh-nen-gai-xinh-full-hd-cho-dien-thoai-2-scaled.jpg" alt="">
-                </div>
-                <div class="user-name">
-                    <strong>@item.TAIKHOAN.TENKH</strong>
-                    <span>@item.TAIKHOAN.UserName</span>
-                </div>
-            </div>
-            <div class="reviews">
-                @{
-                    for(int i = 0; i<rating;i++)
-                    {
-                        <i class="fa-solid fa-star" style="color: #f3b335;"></i>
-                    }
-                    for(int j = rating; j < 5; j++)
-                    {
-                        <i class="fa-solid fa-star" style="color: #e4e4e4;"></i>
-                    }
-                }
-            </div>
-        </div>
-        <div class="clients-comment">
-            <p>@item.NOIDUNG</p>
-        </div>
-        </div>
-    </div>
-        }
-    }
-   </div>
-</section>
-    }
-}
+
 
 <!--PRODUCT RELATED-->
 
