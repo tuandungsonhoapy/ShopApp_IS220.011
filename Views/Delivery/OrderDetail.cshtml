@@ -8,6 +8,7 @@
     var order = ViewBag.Order as DONHANG;
     decimal Total_price = 0;
     var deliveryInfo = ViewBag.DeliveryInfo as THONGTINGIAOHANG;
+    var voucher = ViewBag.Voucher as VOUCHER;
 }
 
 <div class="content container mt-3">
@@ -99,17 +100,37 @@
             </div>
         </div>
         <div class="col-sm-6 ">
-            <h4 id="thongtin_1">Địa chỉ nhận hàng</h4>
-            <div class="info-address">
-                <p class="thongtingiaohang">
-                    Tên người nhận: @deliveryInfo.TENNGUOINHAN <br>
-                    SĐT: @deliveryInfo.SDT <br>
-                    Địa chỉ: @deliveryInfo.DIACHI <br>                
-                </p>
+            <div>
+                <h4 id="thongtin_1">Địa chỉ nhận hàng</h4>
+                <div class="info-address">
+                    <p class="thongtingiaohang">
+                        Tên người nhận: @deliveryInfo.TENNGUOINHAN <br>
+                        SĐT: @deliveryInfo.SDT <br>
+                        Địa chỉ: @deliveryInfo.DIACHI <br>
+                    </p>
+                </div>
             </div>
+            @{
+                if (voucher != null)
+                {
+                    <div>
+                        <h4 id="thongtin_1">Voucher đã sử dụng</h4>
+                        <div class="info-address">
+                            <p class="thongtingiaohang">
+                                Mã voucher: @voucher.TENVOUCHER <br>
+                                Giá trị giảm: @(voucher.GIATRIGIAM)% <br>
+                                Loại voucher: @(voucher.LOAIVOUCHER==1?"Giảm giá đơn hàng" : "Giảm giá phí vận chuyển") <br>
+                                Giá trị giảm tối đa: @(voucher.GIAMTOIDA)đ
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
         </div>
+
     </div>
-    <div class="div-link-info-van-chuyen" id="thongtin_2"><a class="link-info-van-chuyen" asp-action="Index" asp-controller="Delivery">Đến trang thông tin giao hàng</a></div>
+    <div class="div-link-info-van-chuyen" id="thongtin_2"><a class="link-info-van-chuyen" asp-action="Index"
+            asp-controller="Delivery">Đến trang thông tin giao hàng</a></div>
 </div>
 
 @section Scripts

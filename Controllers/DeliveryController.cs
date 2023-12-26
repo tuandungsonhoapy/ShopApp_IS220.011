@@ -105,6 +105,11 @@ namespace DAFW_IS220.Controllers
                                     join ttgh in myShopContext.THONGTINGIAOHANGs
                                     on order.MATTGH equals ttgh.MATTGH
                                     select ttgh).FirstOrDefault();
+            ViewBag.Voucher = (from voucher_dh in myShopContext.VOUCHER_DONHANGs
+                               where voucher_dh.MADH == id
+                               join voucher in myShopContext.VOUCHERs
+                               on voucher_dh.MAVOUCHER equals voucher.MAVOUCHER
+                               select voucher).FirstOrDefault();
             return View(orderdetailList);
         }
 

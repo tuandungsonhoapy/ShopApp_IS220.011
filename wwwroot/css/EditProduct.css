@@ -22,6 +22,16 @@ h4{
     justify-content: center;
 }
 
+img {
+    max-width: 300px;
+}
+
+.box_main_img{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
 .box_contain_input_file{
     display: flex;
     flex-direction: column;

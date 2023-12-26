@@ -101,6 +101,8 @@ namespace App.Areas.Admin.Controllers
             ViewData["MAMAU"] = new SelectList(_context.MAUSACs, "MAMAU", "TENMAU", cHITIETSANPHAM.MAMAU);
             ViewData["MASP"] = new SelectList(_context.SANPHAMs, "MASP", "TENSP", cHITIETSANPHAM.MASP);
             ViewData["MASIZE"] = new SelectList(_context.SIZEs, "MASIZE", "Size", cHITIETSANPHAM.MASIZE);
+
+            ViewBag.ProductID = cHITIETSANPHAM.MASP;
             return View(cHITIETSANPHAM);
         }
 

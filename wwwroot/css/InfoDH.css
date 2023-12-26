@@ -96,9 +96,13 @@
     font-weight: 600;
 }
 
+h4{
+    margin-bottom: 5px;
+}
+
 .info-address {
     margin-left: 36px;
-    margin-top: 24px;
+    margin-top: 8px;
     line-height: 36px;
 }
 
@@ -408,4 +412,8 @@ a, button{
 #thongtin_2 {
     text-align: center;
     margin-left: 700px;
+}
+
+.div-link-info-van-chuyen{
+    margin-top: 12px;
 }

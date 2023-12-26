@@ -215,6 +215,9 @@ namespace App.Areas.Admin.Controllers
                 if (order.TRANGTHAIDONHANG.Equals("Đang giao"))
                 {
                     order.NGAYGIAO = DateTime.Now;
+                    var shipping = myShopContext.THONGTINVANCHUYENs.Where(s => s.MADH == id).FirstOrDefault();
+                    if (shipping != null) shipping.NGAYGIAO = DateTime.Now;
+                    myShopContext.Update(shipping);
                     // THONGTINGIAOHANG tHONGTINGIAOHANG = new THONGTINGIAOHANG();
                     // tHONGTINGIAOHANG.MATK = order.MATK;
                     // tHONGTINGIAOHANG.NGAYTAO = DateTime.Now;
@@ -223,8 +226,14 @@ namespace App.Areas.Admin.Controllers
                     // myShopContext.Add(tHONGTINGIAOHANG);
                     // await myShopContext.SaveChangesAsync();
                 }
+                else
+                {
+                    var shipping = myShopContext.THONGTINVANCHUYENs.Where(s => s.MADH == id).FirstOrDefault();
+                    if (shipping != null) shipping.NGAYKETTHUC = DateTime.Now;
+                    myShopContext.Update(shipping);
+                }
             }
-            
+
             // var orderdetails = await (from ord in myShopContext.DONHANGs
             //                           join ordetail in myShopContext.CTDHs
             //                           on ord.MADH equals ordetail.MADH

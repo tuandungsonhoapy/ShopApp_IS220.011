@@ -483,5 +483,3 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Ignore all appsettings.json files
-**/appsettings.json

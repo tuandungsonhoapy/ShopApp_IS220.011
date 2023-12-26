@@ -15,6 +15,13 @@
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MASP" />
+            <div class="box_main_img"><img class="w-100 grid-item"
+                    src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""></div>
+            <div class="form-group">
+                <label asp-for="MainImg" class="control-label"></label>
+                <input type="file" asp-for="MainImg" class="form-control" />
+                <span asp-validation-for="MainImg" class="text-danger"></span>
+            </div>
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="TENSP" class="control-label"></label>
@@ -55,12 +62,6 @@
                 }, "Value", "Text"))"></select>
                     <span asp-validation-for=" PLTHOITRANG" class="text-danger"></span>
                 </div>
-                <div><img class="w-100 grid-item" src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""></div>
-                <div class="form-group">
-                    <label asp-for="MainImg" class="control-label"></label>
-                    <input type="file" asp-for="MainImg" class="form-control" />
-                    <span asp-validation-for="MainImg" class="text-danger"></span>
-                </div>
                 <div class="form-group">
                     <input type="submit" value="Lưu cập nhật" class="btn btn-primary" />
                 </div>
@@ -73,7 +74,8 @@
 <div class="box_contain_input_file">
     <input class="collapse" type="file" id="selectfileupload" onchange="AutoUploadPhoto()" />
 
-    <span class="btn btn-primary" onclick="ClickButtoUpload()"><img style="width: 30px; height: auto;" src="/Uploads/Icon/logouploadfile.png" alt="">Thêm hình ảnh</span>
+    <span class="btn btn-primary" onclick="ClickButtoUpload()"><img style="width: 30px; height: auto;"
+            src="/Uploads/Icon/logouploadfile.png" alt="">Thêm hình ảnh</span>
 </div>
 <div id="box-photo-upload" class="d-flex flex-wrap photo-upload" data-id="@Model.MASP">
 </div>
@@ -176,7 +178,7 @@
                         var e = $(
                             '<div class="photodetail w-25 p-1 ">'
                             + '<img class="w-100 grid-item" src="' + item.path + '" />'
-                            + '<span style="margin-top:12px;" class="btn btn-danger" data-id="' + item.id + '">Delete</span></div>');
+                            + '<span style="margin-top:12px;" class="btn btn-danger" data-id="' + item.id + '"><i class="fa-solid fa-circle-xmark fa-xl"></i></span></div>');
 
                         box.append(e);
 

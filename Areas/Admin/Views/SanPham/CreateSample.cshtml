@@ -98,9 +98,9 @@
                             @Html.DisplayFor(modelItem => item.SOLUONG)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.MACTSP"><i class="fa-solid fa-pen-to-square fa-solid_icon"
+                            <a asp-action="Edit" asp-controller="ChiTietSanPham" asp-route-id="@item.MACTSP"><i class="fa-solid fa-pen-to-square fa-solid_icon"
                                 style="color: #12f33f;"></i></a> 
-                            <a asp-action="Delete" asp-route-id="@item.MACTSP"><i class="fa-solid fa-eraser fa-solid_icon"
+                            <a asp-action="Delete" asp-controller="ChiTietSanPham" asp-route-id="@item.MACTSP"><i class="fa-solid fa-eraser fa-solid_icon"
                                 style="color: red;"></i></a>
                         </td>
                     </tr>
