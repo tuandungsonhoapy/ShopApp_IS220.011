@@ -8,6 +8,7 @@ using App.Models;
 using Bogus;
 using DAFW_IS220.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +79,7 @@ namespace App.Areas.Database.Controllers
 
         public async Task<IActionResult> SeedDataAsync()
         {
-            // Create Roles
+            // Created Roles
             // var rolenames = typeof(RoleName).GetFields().ToList();
             // foreach (var r in rolenames)
             // {
@@ -91,13 +92,13 @@ namespace App.Areas.Database.Controllers
             // }
 
             // admin, pass=admin123, 21521974@gm.uit.edu.vn
-            var useradmin = await _userManager.FindByEmailAsync("xoan25012003@gmail.com");
-            if (useradmin == null)
-            {
-                useradmin = new AppUser()
+            // var useradmin = await _userManager.FindByEmailAsync("dosidat15031712@gmail.com");
+            // if (useradmin == null)
+            // {
+                var useradmin = new AppUser()
                 {
                     UserName = "admin",
-                    Email = "xoan25012003@gmail.com",
+                    Email = "dosidat15031712@gmail.com",
                     EmailConfirmed = true,
                 };
 
@@ -107,19 +108,19 @@ namespace App.Areas.Database.Controllers
 
                 return RedirectToAction("SeedData");
 
-            }
-            else
-            {
-                var user = await _userManager.GetUserAsync(this.User);
-                if (user == null) return this.Forbid();
-                var roles = await _userManager.GetRolesAsync(user);
+            // }
+            // else
+            // {
+            //     var user = await _userManager.GetUserAsync(this.User);
+            //     if (user == null) return this.Forbid();
+            //     var roles = await _userManager.GetRolesAsync(user);
 
-                if (!roles.Any(r => r == RoleName.Administrator))
-                {
-                    return this.Forbid();
-                }
+            //     if (!roles.Any(r => r == RoleName.Administrator))
+            //     {
+            //         return this.Forbid();
+            //     }
 
-            }
+            // }
 
 
 
