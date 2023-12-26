@@ -38,6 +38,13 @@
                     @{
                         if (ImgList != null)
                         {
+                            <div class="product_image__list_mini_image__item">
+                                    <img 
+                                        src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                                        class="product_image__list_mini_image__item__Mainimg"
+                                        data-mainindex="1"
+                                    >
+                                </div>
                             int index = 0;
                             foreach (var item in ImgList)
                             {
@@ -200,16 +207,23 @@
 <script>
     $(document).ready(function () {
 
-        var defaultIndex = 0; // Chỉ số của ảnh mặc định (ví dụ: ảnh đầu tiên)
-        var images = ViewBag.Img as IEnumerable<HINHANH>;
-
+        @* var defaultIndex = 0; // Chỉ số của ảnh mặc định (ví dụ: ảnh đầu tiên)
+        var images = @Html.Raw(Json.Serialize(ImgList));
         function showImage(index) {
             var mainImgSrc = images[index];
             $('.product_image__main_image__img').attr('src', mainImgSrc);
         }
 
         // Hiển thị ảnh mặc định khi trang được tải lần đầu
-        showImage(defaultIndex);
+        showImage(defaultIndex); *@
+        $('.product_image__list_mini_image__item__Mainimg').click(function () {
+
+            var mainImgSrc = $('.product_image__list_mini_image__item__Mainimg').attr('src');
+            // Lấy đường dẫn của hình ảnh mini được click
+
+            $('.product_image__main_image__img').attr('src', mainImgSrc);
+            // Thay đổi đường dẫn của hình ảnh chính thành đường dẫn của hình ảnh mini được click
+        });
 
         $('.product_image__list_mini_image__item__img').click(function () {
             var newIndex = $(this).data('index'); // Lấy chỉ số của hình ảnh mini được click
