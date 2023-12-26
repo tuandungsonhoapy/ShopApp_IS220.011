@@ -23,13 +23,13 @@
 <section class="content">
     <div class="form-group">
         <label class="control-label"> Từ ngày: </label>
-        <input class="form-control" type="datetime-local" />
+        <input id="fromDate" class="form-control" type="datetime-local" />
         <span class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label class="control-label">Đến ngày: </label>
-        <input class="form-control" type="datetime-local" />
+        <input id="toDate" class="form-control" type="datetime-local" />
         <span class="text-danger"></span>
     </div>
     <!-- Default box -->
@@ -62,9 +62,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Ngày</th>
+                        <th>Tháng</th>
                         <th>Doanh thu</th>
-                        <th>Lợi nhuận</th>
                     </tr>
                 </thead>
                 <tbody id="load_data"></tbody>
@@ -84,41 +83,37 @@
     <script src="/vendor/chart.js/Chart.min.js"></script>
     <script src="/vendor/moment/moment.min.js"></script>
     <script>
+        var fromDateValue = document.getElementById('fromDate').value;
+        var toDateValue = document.getElementById('toDate').value;
         $(function () {
             /* ChartJS
              * -------
              * Here we will create a few charts using ChartJS
              */
 
-            var arrDoanhThu = [];
-            var arrLoiNhuan = [];
+            var arrTotalPrice = [];
             var arrDate = [];
+            var dataToSend = {
+                fromDate: fromDateValue,
+                toDate: toDateValue
+            };
             $.ajax({
                 url: '/Statistic/GetStatistical',
                 type: 'POST',
-                data: { fromDate: '', toDate: '' },
+                data: dataToSend,
                 success: function (rs) {
-
-                    $.each(rs.Data, function (i, item) {
-                        var strDate = moment(item.Date).format('DD/MM/yyyy');
+                    console.log(rs.data);
+                    $.each(rs.data, function (i, item) {
+                        console.log(item.price);
+                        @* var strDate = moment(item.Date).format('MMMM YYYY'); *@
+                        var strDate = moment(`${item.date.year}-${item.date.month}-01`).format('MMMM YYYY');
                         arrDate.push(strDate);
-                        arrDoanhThu.push(item.DoanhThu);
-                        arrLoiNhuan.push(item.LoiNhuan);
+                        arrTotalPrice.push(item.price);
                     });
+
                     var areaChartData = {
                         labels: arrDate,
                         datasets: [
-                            {
-                                label: 'Lợi nhuận',
-                                backgroundColor: 'rgba(60,141,188,0.9)',
-                                borderColor: 'rgba(60,141,188,0.8)',
-                                pointRadius: false,
-                                pointColor: '#3b8bba',
-                                pointStrokeColor: 'rgba(60,141,188,1)',
-                                pointHighlightFill: '#fff',
-                                pointHighlightStroke: 'rgba(60,141,188,1)',
-                                data: arrLoiNhuan
-                            },
                             {
                                 label: 'Danh thu',
                                 backgroundColor: 'rgba(210, 214, 222, 1)',
@@ -128,32 +123,30 @@
                                 pointStrokeColor: '#c1c7d1',
                                 pointHighlightFill: '#fff',
                                 pointHighlightStroke: 'rgba(220,220,220,1)',
-                                data: arrDoanhThu
+                                data: arrTotalPrice
                             },
                         ]
-                    }
+                    };
+
                     //-------------
                     //- BAR CHART -
                     //-------------
-                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-                    var barChartData = $.extend(true, {}, areaChartData)
-                    var temp0 = areaChartData.datasets[0]
-                    var temp1 = areaChartData.datasets[1]
-                    barChartData.datasets[0] = temp1
-                    barChartData.datasets[1] = temp0
+                    var barChartCanvas = $('#barChart').get(0).getContext('2d');
+                    var barChartData = $.extend(true, {}, areaChartData);
 
                     var barChartOptions = {
                         responsive: true,
                         maintainAspectRatio: false,
                         datasetFill: false
-                    }
+                    };
 
                     new Chart(barChartCanvas, {
                         type: 'bar',
                         data: barChartData,
                         options: barChartOptions
                     });
-                    load_data(rs.Data);
+
+                    load_data(rs.data);
                 }
             });
 
@@ -163,12 +156,12 @@
         function load_data(data) {
             var strHtml = "";
             $.each(data, function (i, item) {
-                var strDate = moment(item.Date).format('DD/MM/yyyy');
+                @* var strDate = moment(item.Date).format('MMMM YYYY'); *@
+                var strDate = moment(`${item.date.year}-${item.date.month}-01`).format('MMMM YYYY');
                 strHtml += "<tr>";
                 strHtml += "<td>" + (i + 1) + "</td>";
                 strHtml += "<td>" + strDate + "</td>";
-                strHtml += "<td>" + item.DoanhThu + "</td>";
-                strHtml += "<td>" + item.LoiNhuan + "</td>";
+                strHtml += "<td>" + item.price + "</td>";
                 strHtml += "</tr>";
             });
             $('#load_data').html(strHtml);

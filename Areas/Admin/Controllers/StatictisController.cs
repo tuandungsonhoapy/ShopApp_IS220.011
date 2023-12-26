@@ -36,7 +36,7 @@ namespace App.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetStatistical(string fromDate, string toDate)
+        public ActionResult GetStatistical([FromForm] DateTime fromDate, [FromForm] DateTime toDate)
         {
             var query = from order in myShopContext.DONHANGs
                         join orderdetail in myShopContext.CTDHs
@@ -48,37 +48,39 @@ namespace App.Areas.Admin.Controllers
                         select new
                         {
                             CreatedDate = order.NGAYMUA,
-                            Quantity = orderdetail.SOLUONG,
-                            Price = orderdetail.TONGGIA,
-                            OriginalPrice = product.GIABAN
+                            TotalPrice = order.TONGTIEN
                         };
-            if (!string.IsNullOrEmpty(fromDate))
+            if (fromDate != DateTime.MinValue)
             {
-                DateTime startDate = DateTime.ParseExact(fromDate, "dd/MM/yyyy", null);
-                query = query.Where(x => x.CreatedDate >= startDate);
+                query = query.Where(x => x.CreatedDate >= fromDate);
             }
-            if (!string.IsNullOrEmpty(toDate))
+            if (toDate != DateTime.MinValue)
             {
-                DateTime endDate = DateTime.ParseExact(toDate, "dd/MM/yyyy", null);
-                query = query.Where(x => x.CreatedDate < endDate);
+                query = query.Where(x => x.CreatedDate < toDate);
             }
 
+            // var result = query
+            //    .GroupBy(x => EntityFunctions.TruncateTime(x.CreatedDate))
+            //     .Select(x => new
+            //     {
+            //         Date = x.Key,
+            //         TotalBuy = x.Sum(y => y.Quantity * y.OriginalPrice),
+            //         TotalSell = x.Sum(y => y.Quantity * y.Price),
+            //     })
+            //     .Select(x => new
+            //     {
+            //         Date = x.Date,
+            //         DoanhThu = x.TotalSell,
+            //         LoiNhuan = x.TotalSell
+            //     });
             var result = query
-               .GroupBy(x => EntityFunctions.TruncateTime(x.CreatedDate))
-                .Select(x => new
-                {
-                    Date = x.Key,
-                    TotalBuy = x.Sum(y => y.Quantity * y.OriginalPrice),
-                    TotalSell = x.Sum(y => y.Quantity * y.Price),
-                })
-                .Select(x => new
-                {
-                    Date = x.Date,
-                    DoanhThu = x.TotalSell,
-                    LoiNhuan = x.TotalSell
-                });
-
-            return Json(new { Data = result });
+        .GroupBy(x => new { Year = x.CreatedDate.Year, Month = x.CreatedDate.Month })
+        .Select(group => new
+        {
+            date = group.Key,
+            price = group.Sum(x => x.TotalPrice)
+        });
+            return Json(new { success = true, data = result });
         }
     }
 }
