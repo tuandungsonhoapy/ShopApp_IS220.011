@@ -38,19 +38,29 @@
                     @{
                         if (ImgList != null)
                         {
+                            int index = 0;
                             foreach (var item in ImgList)
                             {
                                 <div class="product_image__list_mini_image__item">
-                                    <img src="http://localhost:5235/contents/Img/Product/@item.LINK" alt=""
-                                        class="product_image__list_mini_image__item__img">
+                                    <img 
+                                        src="http://localhost:5235/contents/Img/Product/@item.LINK" alt=""
+                                        class="product_image__list_mini_image__item__img"
+                                        data-index="@index"
+                                    >
                                 </div>
+                                index++;
                             }
                         }
                     }
                 </div>
-                <div style="flex: 1; max-width: 400px;" class="product_image__main_image">
+                <div class="product_image__main_image">
                     <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
-                        class="product_image__main_image__img">
+                        class="product_image__main_image__img"> 
+                </div>
+                <div class="product_image__main_image__overlay">
+                    <span class="close_button">&times;</span>
+                    <img src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                        class="product_image__main_image__img"> 
                 </div>
             </div>
             <div class="detail_info_product col-sm-6">
@@ -185,6 +195,44 @@
     </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var defaultIndex = 0; // Chỉ số của ảnh mặc định (ví dụ: ảnh đầu tiên)
+        var images = ViewBag.Img as IEnumerable<HINHANH>;
+
+        function showImage(index) {
+            var mainImgSrc = images[index];
+            $('.product_image__main_image__img').attr('src', mainImgSrc);
+        }
+
+        // Hiển thị ảnh mặc định khi trang được tải lần đầu
+        showImage(defaultIndex);
+
+        $('.product_image__list_mini_image__item__img').click(function () {
+            var newIndex = $(this).data('index'); // Lấy chỉ số của hình ảnh mini được click
+
+            var mainImgSrc = $('.product_image__list_mini_image__item__img[data-index="' + newIndex + '"]').attr('src');
+            // Lấy đường dẫn của hình ảnh mini được click
+
+            $('.product_image__main_image__img').attr('src', mainImgSrc);
+            // Thay đổi đường dẫn của hình ảnh chính thành đường dẫn của hình ảnh mini được click
+        });
+        $('.product_image__main_image__img').click(function () {
+            $('.product_image__main_image__overlay').fadeIn();
+        });
+
+        $('.close_button').click(function () {
+            $('.product_image__main_image__overlay').fadeOut();
+        });
+
+        
+
+    });
+</script>
+
 @section ProductDetailScripts
 {
     <script>
