@@ -4,6 +4,10 @@
 
     Layout = "_MasterLayout";
 }
+@section css
+{
+    <link rel="stylesheet" href="/css/thongtin.css">
+}
 
 <h1>@ViewData["Title"].</h1>
 <p class="text-success">@ViewData["StatusMessage"]</p>
@@ -12,7 +16,7 @@
     <h4>Cập nhật thông tin tài khoản</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-4">Thông tin cơ bản:</dt>
+        <dt class="col-sm-4" id="thongtin_1">Thông tin cơ bản:</dt>
         <dd class="col-sm-6">
             <dl class="row">
                 <dt class="col-sm-6">
@@ -66,7 +70,7 @@
 
         </dd>
 
-        <dt class="col-sm-4">Mật khẩu:</dt>
+        <dt class="col-sm-4" id="thongtin_1">Mật khẩu:</dt>
         <dd class="col-sm-6">
             @if (Model.HasPassword)
             {
@@ -77,15 +81,16 @@
                 <a asp-controller="Manage" asp-action="SetPassword">Tạo mật khẩu</a>
             }
         </dd>
-        <dt class="col-sm-4">Liên kết tài khoản ngoài:</dt>
+        <dt class="col-sm-4"  id="thongtin_1">Liên kết tài khoản ngoài:</dt>
         <dd class="col-sm-6">
             Có @Model.Logins.Count liên kết. <a asp-controller="Manage" asp-action="ManageLogins">Quản lý liên kết
                 ngoài</a>
         </dd>
 
-        <dt class="col-sm-4">Số điện thoại:</dt>
+        <dt class="col-sm-4"  id="thongtin_1">Số điện thoại:</dt>
         <dd class="col-sm-6">
-            <p>
+            <div class="thongtin_2">
+                <p>
                 Số điện thoại dùng để xác thực hai yêu tố
             </p>
             @(Model.PhoneNumber ?? "không có")
@@ -104,9 +109,10 @@
                 <text>&nbsp;&nbsp;<a class="btn btn-primary" asp-controller="Manage" asp-action="AddPhoneNumber">Thêm số
                         điện thoại</a></text>
             }
+            </div>
         </dd>
 
-        <dt class="col-sm-4">Xác thực hai yếu tố:</dt>
+        <dt class="col-sm-4"  id="thongtin_1">Xác thực hai yếu tố:</dt>
         <dd class="col-sm-6">
             <!--<p>
                 There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>

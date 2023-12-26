@@ -31,9 +31,15 @@
                 @Html.DisplayFor(modelItem => item.HEX)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.MAMAU">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MAMAU">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MAMAU">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.MAMAU">
+                    <i class="fa-solid fa-pen-to-square fa-solid_icon" style="color: #12f33f;font-size: 24px;"></i>
+                </a> 
+                <a asp-action="Details" asp-route-id="@item.MAMAU">
+                    <i class="fa-solid fa-eraser fa-solid_icon" style="color: red;font-size: 24px;"></i>
+                </a> 
+                <a asp-action="Delete" asp-route-id="@item.MAMAU">
+                    <i class="fa-solid fa-shirt fa-solid_icon" style="color: blue;font-size: 24px;"></i>
+                </a>
             </td>
         </tr>
 }
