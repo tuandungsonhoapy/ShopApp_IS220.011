@@ -274,7 +274,7 @@ namespace DAFW_IS220.Migrations
 
                     b.Property<string>("MOTA")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("MainImg")
                         .IsRequired()

@@ -15,13 +15,14 @@
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MASP" />
+            <input type="hidden" asp-for="MainImg" />
             <div class="box_main_img"><img class="w-100 grid-item"
                     src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""></div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="MainImg" class="control-label"></label>
                 <input type="file" asp-for="MainImg" class="form-control" />
                 <span asp-validation-for="MainImg" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="TENSP" class="control-label"></label>
@@ -42,7 +43,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label asp-for="MOTA" class="control-label"></label>
-                    <input asp-for="MOTA" class="form-control" />
+                    <textarea rows="5" asp-for="MOTA" class="form-control"></textarea>
                     <span asp-validation-for="MOTA" class="text-danger"></span>
                 </div>
             </div>
@@ -209,4 +210,9 @@
             return true;
         }
     </script>
+
+    @{
+        var summernote = new DAFW_IS220.Models.Summernote("#MOTA");
+    }
+    <partial name="_Summernote" model="summernote" />
 }

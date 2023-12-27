@@ -61,23 +61,10 @@
     <a asp-action="Index"><i class="fa-solid fa-backward"></i> Danh sách sản phẩm</a>
 </div>
 
-<script>
-    function validateForm() {
-        var form = document.getElementById('myForm'); // Lấy đối tượng form
-        var tenSP = form.querySelector('#TENSP').value;
-        var giaGoc = form.querySelector('#GIAGOC').value;
-        var maPL = form.querySelector('#MAPL').value;
-        var moTa = form.querySelector('#MOTA').value;
-        var giaBan = form.querySelector('#GIABAN').value;
-        var plThoiTrang = form.querySelector('#PLTHOITRANG').value;
 
-        if (!tenSP || !giaGoc || !maPL || !moTa || !giaBan || !plThoiTrang) {
-            alert("Vui lòng nhập đủ thông tin!");
-            return false; // Ngăn chặn gửi form
-        }
-
-        // Nếu muốn kiểm tra thêm các điều kiện khác, bạn có thể thêm vào đây
-
-        return true; // Cho phép gửi form nếu điều kiện đều đúng
+@section Scripts {
+    @{
+        var summernote = new DAFW_IS220.Models.Summernote("#MOTA");
     }
-</script>
+    <partial name="_Summernote" model="summernote" />
+}

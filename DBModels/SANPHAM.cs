@@ -32,7 +32,7 @@ namespace App.DBModels
         [DisplayName("Phân loại")]
         public string PLTHOITRANG {set;get;}
 
-        [Column(TypeName = "text")]
+        [Column(TypeName = "longtext")]
         [DisplayName("Mô tả")]
         public string MOTA {set;get;}
 
