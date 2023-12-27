@@ -2,18 +2,16 @@
     ViewBag.Title = "Index";
 }
 
+@section css {
+    <link rel="stylesheet" href="/css/Statistic.css">
+}
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Thống kê</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Thống kê</li>
-                </ol>
+            <div class="col-sm-12">
+                <h2>Thống kê</h2>
             </div>
         </div>
     </div><!-- /.container-fluid -->
@@ -21,30 +19,41 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="form-group">
-        <label class="control-label"> Từ ngày: </label>
-        <input id="fromDate" class="form-control" type="datetime-local" />
-        <span class="text-danger"></span>
-    </div>
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <label class="control-label"> Từ ngày: </label>
+            <input id="fromDate" class="form-control" type="datetime-local" />
+            <span class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label class="control-label">Đến ngày: </label>
-        <input id="toDate" class="form-control" type="datetime-local" />
-        <span class="text-danger"></span>
+        <div class="form-group col-sm-4">
+            <label class="control-label">Đến ngày: </label>
+            <input id="toDate" class="form-control" type="datetime-local" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group select_option col-sm-4">
+            <label class="control-label">Thống kê theo: </label>
+            <select id="mySelect">
+                <option value="1">Ngày</option>
+                <option value="2">Tháng</option>
+                <option value="3">Năm</option>
+            </select>
+        </div>
     </div>
+    <div class="btn_statistic"><button class="btn btn-primary" id="submitButton">Thống kê</button></div>
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Thống kê danh thu</h3>
 
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+            @* <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+            <i class="fas fa-times"></i>
+            </button>
+            </div> *@
         </div>
         <div class="card-body">
             <div class="row">
@@ -62,7 +71,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Ngày</th>
                         <th>Tháng</th>
+                        <th>Năm</th>
                         <th>Doanh thu</th>
                     </tr>
                 </thead>
@@ -70,9 +81,6 @@
             </table>
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-            Footer
-        </div>
         <!-- /.card-footer-->
     </div>
     <!-- /.card -->
@@ -83,30 +91,42 @@
     <script src="/vendor/chart.js/Chart.min.js"></script>
     <script src="/vendor/moment/moment.min.js"></script>
     <script>
-        var fromDateValue = document.getElementById('fromDate').value;
-        var toDateValue = document.getElementById('toDate').value;
-        $(function () {
-            /* ChartJS
-             * -------
-             * Here we will create a few charts using ChartJS
-             */
-
+        function performTask() {
+            var fromDateValue = document.getElementById('fromDate').value;
+            var toDateValue = document.getElementById('toDate').value;
+            var option = document.getElementById("mySelect").value;
             var arrTotalPrice = [];
             var arrDate = [];
             var dataToSend = {
                 fromDate: fromDateValue,
-                toDate: toDateValue
+                toDate: toDateValue,
+                option: option
             };
+            console.log(dataToSend);
             $.ajax({
                 url: '/Statistic/GetStatistical',
                 type: 'POST',
-                data: dataToSend,
+                data: {
+                    fromDate: fromDateValue,
+                    toDate: toDateValue,
+                    option: option
+                },
                 success: function (rs) {
                     console.log(rs.data);
+                    var option = rs.option;
                     $.each(rs.data, function (i, item) {
                         console.log(item.price);
-                        @* var strDate = moment(item.Date).format('MMMM YYYY'); *@
-                        var strDate = moment(`${item.date.year}-${item.date.month}-01`).format('MMMM YYYY');
+                        if (option == 1) {
+                            var strDate = moment(item.date.date).format('DD MMMM YYYY');
+                            console.log(strDate);
+                        } else if(option == 2)
+                        {
+                            var strDate = moment(item.date.date).format('MMMM YYYY');
+                        }
+                        else {
+                            var strDate = moment(item.date.date).format('YYYY');
+                        }
+
                         arrDate.push(strDate);
                         arrTotalPrice.push(item.price);
                     });
@@ -146,25 +166,56 @@
                         options: barChartOptions
                     });
 
-                    load_data(rs.data);
+                    load_data(rs.data, option);
                 }
             });
+        }
 
 
-        })
-
-        function load_data(data) {
+        function load_data(data, option) {
+            var srtDate;
             var strHtml = "";
             $.each(data, function (i, item) {
-                @* var strDate = moment(item.Date).format('MMMM YYYY'); *@
-                var strDate = moment(`${item.date.year}-${item.date.month}-01`).format('MMMM YYYY');
-                strHtml += "<tr>";
-                strHtml += "<td>" + (i + 1) + "</td>";
-                strHtml += "<td>" + strDate + "</td>";
-                strHtml += "<td>" + item.price + "</td>";
-                strHtml += "</tr>";
+        @* var strDate = moment(item.Date).format('MMMM YYYY'); *@
+                            if (option == 1) {
+                    strDate = moment(item.date.date).format('DD MMMM YYYY');
+                    console.log(strDate);
+                    strHtml += "<tr>";
+                    strHtml += "<td>" + (i + 1) + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('DD') + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('MMMM') + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('YYYY') + "</td>";
+                    strHtml += "<td>" + item.price + "</td>";
+                    strHtml += "</tr>";
+                } else if (option == 2) {
+                    strDate = moment(item.date.date).format('DD MMMM YYYY');
+                    console.log(strDate);
+                    strHtml += "<tr>";
+                    strHtml += "<td>" + (i + 1) + "</td>";
+                    strHtml += "<td>" + "-" + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('MMMM') + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('YYYY') + "</td>";
+                    strHtml += "<td>" + item.price + "</td>";
+                    strHtml += "</tr>";
+                } else {
+                    strDate = moment(item.date.date).format('DD MMMM YYYY');
+                    console.log(strDate);
+                    strHtml += "<tr>";
+                    strHtml += "<td>" + (i + 1) + "</td>";
+                    strHtml += "<td>" + "-" + "</td>";
+                    strHtml += "<td>" + "-" + "</td>";
+                    strHtml += "<td>" + moment(strDate).format('YYYY') + "</td>";
+                    strHtml += "<td>" + item.price + "</td>";
+                    strHtml += "</tr>";
+                }
+
             });
             $('#load_data').html(strHtml);
         }
+
+        @* window.onload = performTask; *@
+
+        var submitButton = document.getElementById("submitButton");
+        submitButton.onclick = performTask;
     </script>
 }

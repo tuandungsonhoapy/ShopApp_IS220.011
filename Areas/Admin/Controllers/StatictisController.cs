@@ -16,6 +16,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.Text.Json.Serialization;
 using System.Data.Entity.Core.Objects;
+using Bogus.DataSets;
 
 namespace App.Areas.Admin.Controllers
 {
@@ -36,7 +37,7 @@ namespace App.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetStatistical([FromForm] DateTime fromDate, [FromForm] DateTime toDate)
+        public ActionResult GetStatistical([FromForm] DateTime fromdate, [FromForm] DateTime todate, [FromForm] int option)
         {
             var query = from order in myShopContext.DONHANGs
                         join orderdetail in myShopContext.CTDHs
@@ -47,16 +48,16 @@ namespace App.Areas.Admin.Controllers
                         on productdetail.MASP equals product.MASP
                         select new
                         {
-                            CreatedDate = order.NGAYMUA,
+                            CreatedDate = order.NGAYMUA.Date,
                             TotalPrice = order.TONGTIEN
                         };
-            if (fromDate != DateTime.MinValue)
+            if (fromdate != DateTime.MinValue)
             {
-                query = query.Where(x => x.CreatedDate >= fromDate);
+                query = query.Where(x => x.CreatedDate >= fromdate.Date);
             }
-            if (toDate != DateTime.MinValue)
+            if (todate != DateTime.MinValue)
             {
-                query = query.Where(x => x.CreatedDate < toDate);
+                query = query.Where(x => x.CreatedDate <= todate.Date);
             }
 
             // var result = query
@@ -73,14 +74,36 @@ namespace App.Areas.Admin.Controllers
             //         DoanhThu = x.TotalSell,
             //         LoiNhuan = x.TotalSell
             //     });
-            var result = query
+            if (option == 2)
+            {
+                var result = query
         .GroupBy(x => new { Year = x.CreatedDate.Year, Month = x.CreatedDate.Month })
         .Select(group => new
         {
             date = group.Key,
             price = group.Sum(x => x.TotalPrice)
         });
-            return Json(new { success = true, data = result });
+        return Json(new { success = true, data = result, option = option });
+            }else if(option==1)
+            {
+                var result = query
+        .GroupBy(x => new { Year = x.CreatedDate.Year, Month = x.CreatedDate.Month, Date = x.CreatedDate.Date })
+        .Select(group => new
+        {
+            date = group.Key,
+            price = group.Sum(x => x.TotalPrice)
+        });
+        return Json(new { success = true, data = result, option = option });
+            }else{
+                var result = query
+        .GroupBy(x => new { Year = x.CreatedDate.Year })
+        .Select(group => new
+        {
+            date = group.Key,
+            price = group.Sum(x => x.TotalPrice)
+        });
+        return Json(new { success = true, data = result, option = option });
+            }
         }
     }
 }

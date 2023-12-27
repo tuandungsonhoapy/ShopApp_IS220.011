@@ -1,0 +1,25 @@
+.btn_statistic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* .control{
+    width: 300px;
+} */
+
+.form-group{
+    width: 300px;
+}
+
+.select_option{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#mySelect{
+    width: 150px;
+}
