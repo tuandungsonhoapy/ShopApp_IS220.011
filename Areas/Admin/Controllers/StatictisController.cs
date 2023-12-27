@@ -39,14 +39,21 @@ namespace App.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult GetStatistical([FromForm] DateTime fromdate, [FromForm] DateTime todate, [FromForm] int option)
         {
+            // var query = from order in myShopContext.DONHANGs
+            //             join orderdetail in myShopContext.CTDHs
+            //             on order.MADH equals orderdetail.MADH
+            //             join productdetail in myShopContext.CHITIETSANPHAMs
+            //             on orderdetail.MACTSP equals productdetail.MACTSP
+            //             join product in myShopContext.SANPHAMs
+            //             on productdetail.MASP equals product.MASP
+            //             select new
+            //             {
+            //                 CreatedDate = order.NGAYMUA.Date,
+            //                 TotalPrice = order.TONGTIEN
+            //             };
             var query = from order in myShopContext.DONHANGs
-                        join orderdetail in myShopContext.CTDHs
-                        on order.MADH equals orderdetail.MADH
-                        join productdetail in myShopContext.CHITIETSANPHAMs
-                        on orderdetail.MACTSP equals productdetail.MACTSP
-                        join product in myShopContext.SANPHAMs
-                        on productdetail.MASP equals product.MASP
-                        select new
+                        where order.TRANGTHAITHANHTOAN.Equals("Đã thanh toán")
+                        select new 
                         {
                             CreatedDate = order.NGAYMUA.Date,
                             TotalPrice = order.TONGTIEN

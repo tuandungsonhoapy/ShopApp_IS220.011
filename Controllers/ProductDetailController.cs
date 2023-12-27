@@ -430,8 +430,19 @@ namespace DAFW_IS220.Controllers
             if (cartItem != null)
             {
                 var cart_item = myShopContext.CHITIETGIOHANGs.Where(dc => dc.MASP == productid && dc.MACTSP == cartItem.product.MACTSP && dc.MATK.Equals(userID)).FirstOrDefault();
+                CHITIETSANPHAM cHITIETSANPHAM = new CHITIETSANPHAM();
                 if (cart_item != null)
                 {
+                    cHITIETSANPHAM = myShopContext.CHITIETSANPHAMs.Find(cart_item.MACTSP);
+                }
+                if (cart_item != null)
+                {
+                    if (quantity > cHITIETSANPHAM.SOLUONG)
+                    {
+                        var cart_list_new_ = GetCartItemList(myShopContext.CHITIETGIOHANGs.ToList()).Where(dc => dc.userid.Equals(userID)).ToList();
+                        var updatedCartHtml_ = this.RenderPartialViewToString("_Cart", cart_list_new_);
+                        return Content(updatedCartHtml_);
+                    }
                     cart_item.SOLUONGMUA = quantity;
                     cart_item.TONGGIA = quantity * cartItem.product.GIABAN;
                     myShopContext.Update(cart_item);

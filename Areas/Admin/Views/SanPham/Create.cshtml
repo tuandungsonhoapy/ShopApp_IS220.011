@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" id="myForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TENSP" class="control-label"></label>
@@ -51,12 +51,33 @@
                 <span asp-validation-for="MainImg" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" onclick="validateForm()" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"><i class="fa-solid fa-backward"></i> Danh sách sản phẩm</a>
 </div>
+
+<script>
+    function validateForm() {
+        var form = document.getElementById('myForm'); // Lấy đối tượng form
+        var tenSP = form.querySelector('#TENSP').value;
+        var giaGoc = form.querySelector('#GIAGOC').value;
+        var maPL = form.querySelector('#MAPL').value;
+        var moTa = form.querySelector('#MOTA').value;
+        var giaBan = form.querySelector('#GIABAN').value;
+        var plThoiTrang = form.querySelector('#PLTHOITRANG').value;
+
+        if (!tenSP || !giaGoc || !maPL || !moTa || !giaBan || !plThoiTrang) {
+            alert("Vui lòng nhập đủ thông tin!");
+            return false; // Ngăn chặn gửi form
+        }
+
+        // Nếu muốn kiểm tra thêm các điều kiện khác, bạn có thể thêm vào đây
+
+        return true; // Cho phép gửi form nếu điều kiện đều đúng
+    }
+</script>

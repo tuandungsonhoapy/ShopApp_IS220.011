@@ -38,7 +38,14 @@
                             @{
                                 if (ImgList != null)
                                 { 
-                                    int index = 0;
+                                    <div class="product_image__list_mini_image__item">
+                                            <img 
+                                                src="http://localhost:5235/contents/Img/Product/@Model.MainImg" alt=""
+                                                class="product_image__list_mini_image__item__img"
+                                                data-index="@(0)"
+                                            >
+                                        </div>
+                                    int index = 1;
                                     foreach (var item in ImgList)
                                     {
                                         <div class="product_image__list_mini_image__item">

@@ -173,6 +173,9 @@ namespace App.Areas.Admin.Controllers
         public async Task<IActionResult> Create([Bind("TENSP,GIAGOC,MAPL,MOTA,GIABAN,PLTHOITRANG")] SANPHAM sANPHAM, IFormFile MainImg)
         {
             //ViewBag.PL_SPs = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
+            if(sANPHAM.TENSP == null){
+                TempData["StatusDangerMessage"] = "Vui lòng nhập tên sản phẩm!";
+            }
             ViewData["MAPL"] = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
             UploadFile uploadFile = new UploadFile();
             uploadFile.FileUpload = MainImg;
