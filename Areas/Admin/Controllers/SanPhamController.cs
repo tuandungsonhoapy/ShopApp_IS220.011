@@ -173,7 +173,8 @@ namespace App.Areas.Admin.Controllers
         public async Task<IActionResult> Create([Bind("TENSP,GIAGOC,MAPL,MOTA,GIABAN,PLTHOITRANG")] SANPHAM sANPHAM, IFormFile MainImg)
         {
             //ViewBag.PL_SPs = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
-            if(sANPHAM.TENSP == null){
+            if (sANPHAM.TENSP == null)
+            {
                 TempData["StatusDangerMessage"] = "Vui lòng nhập tên sản phẩm!";
             }
             ViewData["MAPL"] = new SelectList(_context.PL_SPs, "MAPL", "TENPL", sANPHAM.MAPL);
@@ -296,11 +297,11 @@ namespace App.Areas.Admin.Controllers
                                          on productdetail.MASIZE equals size.MASIZE
                                          select new CHITIETSANPHAM()
                                          {
-                                            MACTSP = productdetail.MACTSP,
-                                            MAUSAC = color,
-                                            SIZE = size,
-                                            SANPHAM = pro,
-                                            SOLUONG = productdetail.SOLUONG
+                                             MACTSP = productdetail.MACTSP,
+                                             MAUSAC = color,
+                                             SIZE = size,
+                                             SANPHAM = pro,
+                                             SOLUONG = productdetail.SOLUONG
                                          }).ToList();
             return View();
         }
@@ -312,12 +313,24 @@ namespace App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSample([Bind("MAMAU,MASP,SOLUONG,MASIZE")] CHITIETSANPHAM cHITIETSANPHAM, string returnUrl = null)
         {
+            var productdetailList = _context.CHITIETSANPHAMs.Where(pd => pd.MASP == cHITIETSANPHAM.MASP).ToList();
+            var productdetail = productdetailList.Where(pd => pd.MAMAU == cHITIETSANPHAM.MAMAU && pd.MASIZE == cHITIETSANPHAM.MASIZE).FirstOrDefault();
+
             if (ModelState.IsValid)
             {
 
-                _context.Add(cHITIETSANPHAM);
-                await _context.SaveChangesAsync();
-                TempData["StatusMessage"] = "Thêm mới mẫu sản phẩm thành công";
+                if (productdetail == null)
+                {
+                    _context.Add(cHITIETSANPHAM);
+                    await _context.SaveChangesAsync();
+                    TempData["StatusMessage"] = "Thêm mới mẫu sản phẩm thành công";
+                }
+                else{
+                    productdetail.SOLUONG += cHITIETSANPHAM.SOLUONG;
+                    _context.Update(productdetail);
+                    await _context.SaveChangesAsync();
+                    TempData["StatusMessage"] = "Mẫu sản phẩm đã tồn tại. Đã cập nhật số lượng cho mẫu sản phẩm này!";
+                }
                 // Kiểm tra xem có tham số returnUrl trong yêu cầu không
                 // if (string.IsNullOrEmpty(returnUrl))
                 // {
@@ -331,7 +344,7 @@ namespace App.Areas.Admin.Controllers
                 // {
                 //     return Redirect(returnUrl);
                 // }
-                return RedirectToAction("CreateSample", new {id = cHITIETSANPHAM.MASP});
+                return RedirectToAction("CreateSample", new { id = cHITIETSANPHAM.MASP });
             }
             foreach (var item in ModelState.Values)
             {
