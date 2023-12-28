@@ -24,7 +24,7 @@
             <a class="btn btn-primary" asp-action="Index">Danh sách thành viên</a>
         </form>
         <hr>
-        <p>Các claim của user có được từ role:</p>
+        @* <p>Các claim của user có được từ role:</p>
         @if (Model.claimsInRole.Count >  0)
         {
             <ul>
@@ -34,11 +34,11 @@
                 }
             </ul>
         }
-        <hr>
-        <p>Các claim riêng:
+        <hr> *@
+        @* <p>Các claim riêng:
             <a asp-action="AddClaim" asp-route-userid="@Model.user.Id">+ Thêm claim riêng</a>     
-        </p>
-        @if (Model.claimsInUserClaim.Count >  0)
+        </p> *@
+        @* @if (Model.claimsInUserClaim.Count >  0)
         {
             <ul>
                 @foreach (var claim in Model.claimsInUserClaim)
@@ -48,7 +48,7 @@
                     </li>
                 }
             </ul>
-        }
+        } *@
 
 
 
