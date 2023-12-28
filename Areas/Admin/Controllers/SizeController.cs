@@ -27,9 +27,9 @@ namespace App.Areas.Admin.Controllers
         // GET: MauSac
         public async Task<IActionResult> Index()
         {
-              return _context.SIZEs != null ? 
-                          View(await _context.SIZEs.ToListAsync()) :
-                          Problem("Entity set 'MyShopContext.SIZEs'  is null.");
+            return _context.SIZEs != null ?
+                        View(await _context.SIZEs.ToListAsync()) :
+                        Problem("Entity set 'MyShopContext.SIZEs'  is null.");
         }
 
         // GET: MauSac/Create
@@ -95,7 +95,7 @@ namespace App.Areas.Admin.Controllers
             {
                 _context.SIZEs.Remove(mSIZE);
             }
-            
+
             await _context.SaveChangesAsync();
             TempData["StatusMessage"] = "Xóa size thành công!";
             return RedirectToAction(nameof(Index));
@@ -103,7 +103,51 @@ namespace App.Areas.Admin.Controllers
 
         private bool MAUSACExists(int id)
         {
-          return (_context.SIZEs?.Any(e => e.MASIZE == id)).GetValueOrDefault();
+            return (_context.SIZEs?.Any(e => e.MASIZE == id)).GetValueOrDefault();
+        }
+
+        // GET: PL_SP/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.SIZEs == null)
+            {
+                return NotFound();
+            }
+
+            var size = await _context.SIZEs.FindAsync(id);
+            if (size == null)
+            {
+                return NotFound();
+            }
+            return View(size);
+        }
+
+        // POST: PL_SP/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("MASIZE,Size")] SIZE sIZE)
+        {
+            if (id != sIZE.MASIZE)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(sIZE);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(sIZE);
         }
     }
 }

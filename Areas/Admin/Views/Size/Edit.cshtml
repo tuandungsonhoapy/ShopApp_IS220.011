@@ -1,23 +1,24 @@
 @model App.DBModels.SIZE
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
+<h2 style="text-align: center;">Cập nhật size</h2>
 
-<h2 style="text-align: center;">Tạo mới SIZE</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MASIZE" />
             <div class="form-group">
                 <label asp-for="Size" class="control-label"></label>
                 <input asp-for="Size" class="form-control" />
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
