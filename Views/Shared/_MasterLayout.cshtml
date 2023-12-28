@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="/css/thoitrangnam.css">
     <link rel="stylesheet" href="/css/infoProduct.css">
     <link rel="stylesheet" href="/css/GioHang.css">
-    
+
     <link rel="stylesheet" href="/css/thong_tin_don_hang.css">
     @RenderSection("css", required: false)
 
@@ -78,12 +78,21 @@
                             src="https://dosi-in.com/images/assets/icons/logo.svg" alt="logo dosi-in"></a>
                 </div>
                 <div class="header_body__search col-sm-7">
+                    @* <form action="">
                     <div class="header_body__search__div_css">
-                        <input type="text" placeholder="Tìm kiếm sản phẩm" class="header_body__search__input">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm" class="header_body__search__input">
+                    <button class="header_body__search__button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    </div>
+                    </form> *@
+                    <form asp-action="Index" asp-controller="Home" method="get" id="searchForm">
+                        <input style="height: 62%; width: 300px;" type="search" placeholder="Tìm kiếm sản phẩm" class="header_body__search__input"
+                            name="SearchString" id="searchInput">
                         <button class="header_body__search__button">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
-                    </div>
+                    </form>
                 </div>
                 <div class="header_body__option_and_info col-sm-3">
                     <div class="header_body__option_and_info__div_css">
@@ -130,7 +139,8 @@
                                                 tài khoản</span>
                                         </a>
                                         <a asp-action="Index" asp-controller="Delivery">
-                                            <span class="header_body__option_and_info__user__select_login_or_logout__in">Thông tin giao hàng</span>
+                                            <span class="header_body__option_and_info__user__select_login_or_logout__in">Thông
+                                                tin giao hàng</span>
                                         </a>
                                     </div>
                                 }
@@ -228,7 +238,7 @@
                     Copyright © 2023
                     <a href="">Web_Name</a>
                     .
-                    <a href="">Powered by Nhom_2</a>
+                    <a href="">Powered by Nhóm 13</a>
                 </p>
             </div>
         </div>

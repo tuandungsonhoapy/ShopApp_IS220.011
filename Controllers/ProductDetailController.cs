@@ -147,19 +147,23 @@ namespace DAFW_IS220.Controllers
             ViewBag.Img = myShopContext.HINHANHs.Where(h => h.MASP == id);
             ViewBag.otherProduct = (from pro in myShopContext.SANPHAMs
                                     where pro.MAPL.Equals(product.MAPL) && pro.PLTHOITRANG.Equals(product.PLTHOITRANG) && pro.MASP != id
-                                    join urlanh in myShopContext.HINHANHs
-                                    on pro.MASP equals urlanh.MASP
-                                    select new SANPHAMModel()
-                                    {
-                                        MASP = pro.MASP,
-                                        TENSP = pro.TENSP,
-                                        GIABAN = pro.GIABAN,
-                                        GIAGOC = pro.GIAGOC,
-                                        HINHANH = urlanh.LINK
-                                    })
-                                    .GroupBy(p => p.MASP)
-                                    .Select(g => g.First())
+                                    select pro)
                                     .ToList();
+            // ViewBag.otherProduct = (from pro in myShopContext.SANPHAMs
+            //                         where pro.MAPL.Equals(product.MAPL) && pro.PLTHOITRANG.Equals(product.PLTHOITRANG) && pro.MASP != id
+            //                         join urlanh in myShopContext.HINHANHs
+            //                         on pro.MASP equals urlanh.MASP
+            //                         select new SANPHAMModel()
+            //                         {
+            //                             MASP = pro.MASP,
+            //                             TENSP = pro.TENSP,
+            //                             GIABAN = pro.GIABAN,
+            //                             GIAGOC = pro.GIAGOC,
+            //                             HINHANH = urlanh.LINK
+            //                         })
+            //                         .GroupBy(p => p.MASP)
+            //                         .Select(g => g.First())
+            //                         .ToList();
             ViewBag.FeedBacks = (from fb in myShopContext.DANHGIAs
                                  join user in myShopContext.Users
                                  on fb.MATK equals user.Id

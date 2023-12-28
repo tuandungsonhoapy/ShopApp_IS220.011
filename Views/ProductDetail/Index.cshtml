@@ -21,7 +21,7 @@
                                 soluong = sample.SoLuong,
                                 mactsp = sample.MACTSP
                              }).ToList() : null;     
-    var otherproduct = ViewBag.otherProduct as IEnumerable<SANPHAMModel>;                      
+    var otherproduct = ViewBag.otherProduct as IEnumerable<SANPHAM>;                      
 }
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -82,7 +82,7 @@
                         { 
                             <section id="review">
                                 <div class="review-heading" style="margin-bottom: 15px;">
-                                    <h1>FEEDBACK</h1>
+                                    <h1 style="margin-bottom: 0px;">FEEDBACK</h1>
                                 </div>
                                 <div class="danhgia_1">
                                     @{
@@ -567,7 +567,7 @@ function increaseQuantity() {
                 foreach(var pro in otherproduct.Take(5))
                 {
                     <div class="product-related-item">
-                        <a asp-action="Index" asp-route-id="@pro.MASP"><img src="http://localhost:5235/contents/Img/Product/@pro.HINHANH" alt=""></a>
+                        <a asp-action="Index" asp-route-id="@pro.MASP"><img src="http://localhost:5235/contents/Img/Product/@pro.MainImg" alt=""></a>
                         <p style="font-weight: 500; font-size: 18px; padding-top: 14px;" id="item-name">@pro.TENSP</p>
                         <p style="font-weight: 500; font-size: 16px;">@pro.GIABAN<sup>đ</sup></p>
                     </div>

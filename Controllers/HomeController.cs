@@ -22,11 +22,21 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index([FromQuery(Name = "p")] int currentPage, int pagesize)
+    public IActionResult Index([FromQuery(Name = "p")] int currentPage, int pagesize, string SearchString)
     {
         IEnumerable<SANPHAM> productinpage;
         int totalOrder;
-        totalOrder = myshopcontext.SANPHAMs.Count();
+        // totalOrder = myshopcontext.SANPHAMs.Count();
+        totalOrder = 0;
+        if(SearchString != null){
+            var productList = (from product in myshopcontext.SANPHAMs
+                             join category in myshopcontext.PL_SPs
+                             on product.MAPL equals category.MAPL
+                             where product.TENSP.Contains(SearchString) || category.TENPL.Contains(SearchString) || product.PLTHOITRANG.Contains(SearchString)
+                             select product).ToList();
+            totalOrder = productList.Count();
+        }
+        else totalOrder = myshopcontext.SANPHAMs.Count();
         if (pagesize <= 0) { pagesize = 20; }
         int countPages = (int)Math.Ceiling((double)totalOrder / pagesize);
 
@@ -52,9 +62,26 @@ public class HomeController : Controller
         ViewData["pagesize_product"] = pagesize;
 
         ViewBag.pagingmodel = pagingmodel;
-        productinpage = myshopcontext.SANPHAMs.Skip((currentPage - 1) * pagesize)
-                                                      .Take(pagesize)
-                                                      .ToList();
+        if (SearchString != null)
+        {
+            // productinpage = myshopcontext.SANPHAMs.Include(sp => sp.PL_SP)
+            //                                   .Where(sp => sp.TENSP.Contains(SearchString) || sp.PL_SP.TENPL.Contains(SearchString) || sp.PLTHOITRANG.Contains(SearchString))
+            //                                   .Skip((currentPage - 1) * pagesize)
+            //                                   .Take(pagesize)
+            //                                   .ToList();
+            productinpage = (from product in myshopcontext.SANPHAMs
+                             join category in myshopcontext.PL_SPs
+                             on product.MAPL equals category.MAPL
+                             where product.TENSP.Contains(SearchString) || category.TENPL.Contains(SearchString) || product.PLTHOITRANG.Contains(SearchString)
+                             select product).Skip((currentPage - 1) * pagesize)
+                                              .Take(pagesize)
+                                              .ToList();
+        }
+        else{
+            productinpage = myshopcontext.SANPHAMs.Skip((currentPage - 1) * pagesize)
+                                              .Take(pagesize)
+                                              .ToList();
+        }
         return View(productinpage);
     }
 
