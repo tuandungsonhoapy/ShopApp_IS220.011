@@ -1,0 +1,43 @@
+@using CK_Model;
+@using DB_CK;
+@model List<HK_CB>
+@{
+    var ChuyenBay = ViewBag.CHUYENBAY as CHUYENBAY;
+}
+
+<input type="text" name="" id="" value="@ChuyenBay.CHUYEN">
+<input type="text" name="" id="" value="@ChuyenBay.NGAY">
+<input type="text" name="" id="" value="@ChuyenBay.DDI">
+<input type="text" name="" id="" value="@ChuyenBay.GBAY">
+<input type="text" value="@ChuyenBay.DDEN">
+<input type="text" value="@ChuyenBay.GDEN">
+<div>Chỗ VIP         @ViewBag.VIP/@ChuyenBay.VIP</div>
+<div>Chỗ Thường         @ViewBag.THUONG/@ChuyenBay.THUONG</div>
+<a asp-action="AddHK" class="btn btn-primary">Thêm hành khách</a>
+<table>
+    <thead>
+        <tr>
+            <th>Họ tên hành khách</th>
+            <th>Điện thoại</th>
+            <th>Loại ghế</th>
+            <th>Số ghế</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if(Model != null){
+                foreach(var item in Model){
+                    <tr>
+                        <td>@item.HOTEN</td>
+                        <td>@item.SDT</td>
+                        <td>@item.LOAIGHE</td>
+                        <td>@item.SOGHE</td>
+                        <td><a asp-action="DeleteHK" asp-route-id="@item.MAHK">Xóa</a>
+                        <a asp-action="UpdateHK" asp-route-id="@item.MAHK">Sửa</a></td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
