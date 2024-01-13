@@ -67,6 +67,11 @@ public class OnTapCKContext : DbContext
         return HKs;
     }
 
+    public void InsertHK_CB(CT_CB cT_CB){
+        this.Add(cT_CB);
+        this.SaveChanges();
+    }
+
     DbSet<HANHKHACH> HANHKHACH { set; get; }
 
     DbSet<MAYBAY> MAYBAY { set; get; }

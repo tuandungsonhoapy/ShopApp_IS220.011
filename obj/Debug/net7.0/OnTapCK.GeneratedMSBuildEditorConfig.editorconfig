@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = E:\DAFW_IS220\OnTapCK
 build_property._RazorSourceGeneratorDebug = 
 
+[E:/DAFW_IS220/OnTapCK/Views/ChuyenBay/AddHK.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuQmF5XEFkZEhLLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/DAFW_IS220/OnTapCK/Views/ChuyenBay/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuQmF5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

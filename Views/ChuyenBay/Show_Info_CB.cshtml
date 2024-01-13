@@ -13,7 +13,7 @@
 <input type="text" value="@ChuyenBay.GDEN">
 <div>Chỗ VIP         @ViewBag.VIP/@ChuyenBay.VIP</div>
 <div>Chỗ Thường         @ViewBag.THUONG/@ChuyenBay.THUONG</div>
-<a asp-action="AddHK" class="btn btn-primary">Thêm hành khách</a>
+<a asp-action="AddHK" asp-route-MACH="@ChuyenBay.MACH" class="btn btn-primary">Thêm hành khách</a>
 <table>
     <thead>
         <tr>

@@ -1,0 +1,23 @@
+@using CK_Model;
+@using DB_CK;
+@model CHUYENBAY
+
+<form action="InsertHK_CB">
+    <input type="hidden" name="MACH" value="@Model.MACH">
+    <input type="text" name="" id="" value="@Model.CHUYEN" readonly>
+    <input type="text" name="" id="" value="@Model.NGAY" readonly>
+    <input type="text" name="" id="" value="@Model.DDI" readonly>
+    <input type="text" name="" id="" value="@Model.GBAY" readonly>
+    <input type="text" value="@Model.DDEN" readonly>
+    <input type="text" value="@Model.GDEN" readonly>
+    <div>Chỗ VIP @ViewBag.VIP/@Model.VIP</div>
+    <div>Chỗ Thường @ViewBag.THUONG/@Model.THUONG</div>
+    <input type="text" name="MAHK" id="">
+    <input type="text" name="HOTEN" id="">
+    <input type="text" name="SOGHE" id="">
+    <select name="LOAIGHE" id="">
+        <option value="0">Thuong</option>
+        <option value="1">VIP</option>
+    </select>
+    <input type="submit" value="Thêm hành khách">
+</form>
