@@ -13,7 +13,7 @@
 <input type="text" value="@ChuyenBay.GDEN">
 <div>Chỗ VIP         @ViewBag.VIP/@ChuyenBay.VIP</div>
 <div>Chỗ Thường         @ViewBag.THUONG/@ChuyenBay.THUONG</div>
-<a asp-action="AddHK" asp-route-MACH="@ChuyenBay.MACH" class="btn btn-primary">Thêm hành khách</a>
+<a asp-action="AddHK" asp-controller="CT_CB" asp-route-MACH="@ChuyenBay.MACH" class="btn btn-primary">Thêm hành khách</a>
 <table>
     <thead>
         <tr>
@@ -33,8 +33,8 @@
                         <td>@item.SDT</td>
                         <td>@item.LOAIGHE</td>
                         <td>@item.SOGHE</td>
-                        <td><a asp-action="DeleteHK" asp-route-id="@item.MAHK">Xóa</a>
-                        <a asp-action="UpdateHK" asp-route-id="@item.MAHK">Sửa</a></td>
+                        <td><a asp-action="ShowDeleteHK" asp-controller="CT_CB" asp-route-MAHK="@item.MAHK" asp-route-MACH="@ChuyenBay.MACH">Xóa</a>
+                        <a asp-action="ShowUpdateHK" asp-controller="CT_CB" asp-route-MAHK="@item.MAHK" asp-route-MACH="@ChuyenBay.MACH">Sửa</a></td>
                     </tr>
                 }
             }

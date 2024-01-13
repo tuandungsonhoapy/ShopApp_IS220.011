@@ -2,7 +2,7 @@
 @using DB_CK;
 @model CHUYENBAY
 
-<form action="InsertHK_CB">
+<form asp-action="InsertHK_CB" asp-controller="CT_CB">
     <input type="hidden" name="MACH" value="@Model.MACH">
     <input type="text" name="" id="" value="@Model.CHUYEN" readonly>
     <input type="text" name="" id="" value="@Model.NGAY" readonly>
@@ -16,8 +16,8 @@
     <input type="text" name="HOTEN" id="">
     <input type="text" name="SOGHE" id="">
     <select name="LOAIGHE" id="">
-        <option value="0">Thuong</option>
-        <option value="1">VIP</option>
+        <option value="false">Thuong</option>
+        <option value="true">VIP</option>
     </select>
     <input type="submit" value="Thêm hành khách">
 </form>

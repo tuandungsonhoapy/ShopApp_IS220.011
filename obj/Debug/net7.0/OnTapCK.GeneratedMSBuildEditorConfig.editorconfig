@@ -16,16 +16,20 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = E:\DAFW_IS220\OnTapCK
 build_property._RazorSourceGeneratorDebug = 
 
-[E:/DAFW_IS220/OnTapCK/Views/ChuyenBay/AddHK.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuQmF5XEFkZEhLLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [E:/DAFW_IS220/OnTapCK/Views/ChuyenBay/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuQmF5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/DAFW_IS220/OnTapCK/Views/ChuyenBay/Show_Info_CB.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuQmF5XFNob3dfSW5mb19DQi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/DAFW_IS220/OnTapCK/Views/CT_CB/AddHK.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1RfQ0JcQWRkSEsuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/DAFW_IS220/OnTapCK/Views/CT_CB/ShowUpdateHK.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1RfQ0JcU2hvd1VwZGF0ZUhLLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/DAFW_IS220/OnTapCK/Views/HanhKhach/Index.cshtml]

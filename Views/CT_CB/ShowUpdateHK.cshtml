@@ -1,0 +1,16 @@
+@using CK_Model;
+@using DB_CK;
+@model CT_CB
+@{
+    var HanhKhach = ViewBag.HANHKHACH as HANHKHACH;
+}
+
+<form >
+    <input type="text" name="MAHK" value="@Model.MAHK">
+    <input type="text" name="HOTEN" value="@HanhKhach.HOTEN">
+    <select name="LOAIGHE">
+        <option value="false" selected="@(Model.LOAIGHE == false)">Thuong</option>
+        <option value="true" selected="@(Model.LOAIGHE == true)">VIP</option>
+    </select>
+    <input type="text" name="SOGHE" value="@Model.SOGHE">
+</form>

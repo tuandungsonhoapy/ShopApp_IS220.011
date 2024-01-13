@@ -72,6 +72,14 @@ public class OnTapCKContext : DbContext
         this.SaveChanges();
     }
 
+    public HANHKHACH GetHANHKHACH(string MAHK){
+        return this.HANHKHACH.Find(MAHK);
+    }
+
+    public CT_CB GetCT_CB(string MACH, string MAHK){
+        return this.CT_CB.Where(ct => ct.MACH == MACH && MAHK == MAHK).FirstOrDefault();
+    }
+
     DbSet<HANHKHACH> HANHKHACH { set; get; }
 
     DbSet<MAYBAY> MAYBAY { set; get; }
