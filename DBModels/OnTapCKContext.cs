@@ -85,6 +85,11 @@ public class OnTapCKContext : DbContext
         this.SaveChanges();
     }
 
+    public void DeleteHK_CB(CT_CB cT_CB){
+        this.Remove(cT_CB);
+        this.SaveChanges();
+    }
+
     DbSet<HANHKHACH> HANHKHACH { set; get; }
 
     DbSet<MAYBAY> MAYBAY { set; get; }
