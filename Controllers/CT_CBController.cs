@@ -36,4 +36,10 @@ public class CT_CBController : Controller
         var model = onTap.GetCT_CB(MACH, MAHK);
         return View(model);
     }
+
+    public IActionResult UpdateHK_CB(CT_CB cT_CB){
+        OnTapCKContext onTap = new OnTapCKContext();
+        onTap.UpdateHK_CB(cT_CB);
+        return RedirectToAction("Show_Info_CB", "ChuyenBay", new { MACH = cT_CB.MACH });
+    }
 }

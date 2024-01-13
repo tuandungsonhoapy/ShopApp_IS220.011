@@ -5,7 +5,8 @@
     var HanhKhach = ViewBag.HANHKHACH as HANHKHACH;
 }
 
-<form >
+<form asp-action="UpdateHK_CB">
+    <input type="hidden" name="MACH" value="@Model.MACH">
     <input type="text" name="MAHK" value="@Model.MAHK">
     <input type="text" name="HOTEN" value="@HanhKhach.HOTEN">
     <select name="LOAIGHE">
@@ -13,4 +14,5 @@
         <option value="true" selected="@(Model.LOAIGHE == true)">VIP</option>
     </select>
     <input type="text" name="SOGHE" value="@Model.SOGHE">
+    <input type="submit" value="Cập nhật">
 </form>
