@@ -1,0 +1,15 @@
+@using DB_CK;
+@model List<NHANVIEN>
+
+<form asp-action="LietKeTB">
+    <select name="MaNhanVien">
+        @{
+            if(Model != null){
+                foreach(var item in Model){
+                    <option value="@item.MaNhanVien">@item.TenNhanVien</option>
+                }
+            }
+        }
+    </select>
+    <input type="submit" value="Liệt kê">
+</form>

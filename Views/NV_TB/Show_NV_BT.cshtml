@@ -1,0 +1,10 @@
+@using DB_CK;
+@model NV_BT
+<form asp-action="UpdateNV_BT">
+    <input type="hidden" name="MaNhanVien" value="@Model.MaNhanVien">
+    <input type="text" name="MaThietBi" value="@Model.MaThietBi">
+    <input type="text" name="MaCanHo" value="@Model.MaCanHo">
+    <input type="text" name="LanThu" value="@Model.LanThu">
+    <input type="datetime" name="NgayBaoTri" value="@Model.NgayBaoTri">
+    <input type="submit" value="Update">
+</form>

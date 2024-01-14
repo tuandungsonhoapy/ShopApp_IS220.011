@@ -1,0 +1,32 @@
+@using DB_CK;
+@model List<NV_BT>
+
+<table>
+    <thead>
+        <tr>
+            <th>Mã thiết bị</th>
+            <th>Mã căn hộ</th>
+            <th>Lần thứ</th>
+            <th>Ngày bảo trì</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if(Model != null){
+                foreach(var item in Model){
+                    <tr>
+                        <td>@item.MaThietBi</td>
+                        <td>@item.MaCanHo</td>
+                        <td>@item.LanThu</td>
+                        <td>@item.NgayBaoTri</td>
+                        <td>
+                            <a asp-action="DeleteNV_TB" asp-route-MaNhanVien="@item.MaNhanVien" asp-route-MaThietBi="@item.MaThietBi" asp-route-MaCanHo="@item.MaCanHo" asp-route-LanThu="@item.LanThu">Delete</a>
+                            <a asp-action="Show_NV_BT" asp-route-MaNhanVien="@item.MaNhanVien" asp-route-MaThietBi="@item.MaThietBi" asp-route-MaCanHo="@item.MaCanHo" asp-route-LanThu="@item.LanThu">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
