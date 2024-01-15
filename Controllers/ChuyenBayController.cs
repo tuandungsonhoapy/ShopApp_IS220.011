@@ -27,7 +27,7 @@ public class ChuyenBayController : Controller
         ViewBag.CHUYENBAY = onTap.GetCHUYENBAY(MACH);
         ViewBag.THUONG = onTap.GetChoThuong(MACH);
         ViewBag.VIP = onTap.GetChoVIP(MACH);
-        var HKs = onTap.GetHanhKhachs(MACH);
+        var HKs = onTap.GetHanhKhachs(MACH); 
         return View(HKs);
     }
 }

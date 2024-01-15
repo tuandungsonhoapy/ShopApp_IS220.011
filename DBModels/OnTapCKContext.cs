@@ -37,6 +37,9 @@ public class OnTapCKContext : DbContext
 
     public void InsertHK(HANHKHACH hANHKHACH){
         this.Add(hANHKHACH);
+        //this.Add
+        //this.Update
+        //this.Remove
         this.SaveChanges();
     }
 
@@ -52,18 +55,8 @@ public class OnTapCKContext : DbContext
         return this.CT_CB.Where(ct => ct.MACH == MACH).Count(ct => ct.LOAIGHE);
     }
 
-    public List<HK_CB> GetHanhKhachs(string MACH){
-        var HKs = (from HK in this.HANHKHACH
-                   join detail in this.CT_CB
-                   on HK.MAHK equals detail.MAHK
-                   where detail.MACH == MACH
-                   select new HK_CB(){
-                    MAHK = HK.MAHK,
-                    HOTEN = HK.HOTEN,
-                    SDT = HK.DIENTHOAI,
-                    LOAIGHE = (detail.LOAIGHE == false) ? "Thuong" : "VIP",
-                    SOGHE = detail.SOGHE
-                   }).ToList();
+    public List<CT_CB> GetHanhKhachs(string MACH){
+        var HKs = this.CT_CB.Include(ct => ct.HANHKHACH).Where(ct => ct.MACH == MACH).ToList();
         return HKs;
     }
 
