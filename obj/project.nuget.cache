@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "H4ex7vB3cC+MN7+YbbJWhUrUoKP1qSTHJRn6Oso3fjqFJIDTPJ8lsTV0z5ggP71snJQhLHfsHxkJRV+OX4STEQ==",
+  "dgSpecHash": "H7902gy16qvA4DjWgp7kdpqMDpEWeGJhVyRJO1hlOYOFD8OPM+ZUVETFyA0+UFL2mdXMDwLpe3mUN96DZFSSMA==",
   "success": true,
-  "projectFilePath": "E:\\DAFW_IS220\\OnTapCK2021_2022\\OnTapCK2021_2022.csproj",
+  "projectFilePath": "E:\\DAFW_IS220\\OnTapCK\\OnTapCK2021_2022.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Le Anh Tuan Dung\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Le Anh Tuan Dung\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

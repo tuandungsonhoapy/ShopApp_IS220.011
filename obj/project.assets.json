@@ -4570,11 +4570,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\DAFW_IS220\\OnTapCK2021_2022\\OnTapCK2021_2022.csproj",
+      "projectUniqueName": "E:\\DAFW_IS220\\OnTapCK\\OnTapCK2021_2022.csproj",
       "projectName": "OnTapCK2021_2022",
-      "projectPath": "E:\\DAFW_IS220\\OnTapCK2021_2022\\OnTapCK2021_2022.csproj",
+      "projectPath": "E:\\DAFW_IS220\\OnTapCK\\OnTapCK2021_2022.csproj",
       "packagesPath": "C:\\Users\\Le Anh Tuan Dung\\.nuget\\packages\\",
-      "outputPath": "E:\\DAFW_IS220\\OnTapCK2021_2022\\obj\\",
+      "outputPath": "E:\\DAFW_IS220\\OnTapCK\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
